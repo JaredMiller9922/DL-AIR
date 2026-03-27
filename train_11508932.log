@@ -1,0 +1,102 @@
+Device: cuda
+Dataset size: 5000
+Model: HybridSeparator
+Loss: mse_loss
+Epoch    1 | train loss = 0.50068100 | val loss = 0.50095675
+Epoch   10 | train loss = 0.49996053 | val loss = 0.50019375
+Epoch   20 | train loss = 0.49934839 | val loss = 0.50077424
+Epoch   30 | train loss = 0.49392397 | val loss = 0.50409874
+Epoch   40 | train loss = 0.48442625 | val loss = 0.51266078
+Epoch   50 | train loss = 0.47559053 | val loss = 0.52316107
+Epoch   60 | train loss = 0.46835072 | val loss = 0.52782098
+Epoch   70 | train loss = 0.45889709 | val loss = 0.53449897
+Epoch   80 | train loss = 0.44502701 | val loss = 0.54641981
+Epoch   90 | train loss = 0.42861392 | val loss = 0.56396913
+Epoch  100 | train loss = 0.41439537 | val loss = 0.57583836
+Epoch  110 | train loss = 0.40326396 | val loss = 0.58344225
+Epoch  120 | train loss = 0.39547254 | val loss = 0.58379936
+Epoch  130 | train loss = 0.38874570 | val loss = 0.59429415
+Epoch  140 | train loss = 0.38368608 | val loss = 0.60518387
+Epoch  150 | train loss = 0.38015276 | val loss = 0.60022289
+Epoch  160 | train loss = 0.37729699 | val loss = 0.60330826
+Epoch  170 | train loss = 0.37187155 | val loss = 0.61347101
+Epoch  180 | train loss = 0.37063547 | val loss = 0.61235412
+Epoch  190 | train loss = 0.36851427 | val loss = 0.61152414
+Epoch  200 | train loss = 0.36620692 | val loss = 0.61816829
+Epoch  210 | train loss = 0.36403041 | val loss = 0.61797215
+Epoch  220 | train loss = 0.36278165 | val loss = 0.61760255
+Epoch  230 | train loss = 0.36126732 | val loss = 0.62486059
+Epoch  240 | train loss = 0.35991570 | val loss = 0.62131092
+Epoch  250 | train loss = 0.35917673 | val loss = 0.61792434
+Epoch  260 | train loss = 0.35696975 | val loss = 0.62196715
+Epoch  270 | train loss = 0.35596428 | val loss = 0.63085723
+Epoch  280 | train loss = 0.35471661 | val loss = 0.63716287
+Epoch  290 | train loss = 0.35504475 | val loss = 0.63245680
+Epoch  300 | train loss = 0.35486920 | val loss = 0.62472509
+Device: cuda
+Dataset size: 5000
+Model: LinearSeparator
+Loss: mse_loss
+Epoch    1 | train loss = 0.52814420 | val loss = 0.50770903
+Epoch   10 | train loss = 0.50012681 | val loss = 0.50021780
+Epoch   20 | train loss = 0.50014653 | val loss = 0.50018163
+Epoch   30 | train loss = 0.50015201 | val loss = 0.50021718
+Epoch   40 | train loss = 0.50011228 | val loss = 0.50025676
+Epoch   50 | train loss = 0.50014678 | val loss = 0.50040752
+Epoch   60 | train loss = 0.50012119 | val loss = 0.50016420
+Epoch   70 | train loss = 0.50015884 | val loss = 0.50045386
+Epoch   80 | train loss = 0.50011918 | val loss = 0.50022661
+Epoch   90 | train loss = 0.50013719 | val loss = 0.50020955
+Epoch  100 | train loss = 0.50008482 | val loss = 0.50036953
+Epoch  110 | train loss = 0.50012620 | val loss = 0.50020064
+Epoch  120 | train loss = 0.50012122 | val loss = 0.50030374
+Epoch  130 | train loss = 0.50014404 | val loss = 0.50031417
+Epoch  140 | train loss = 0.50011768 | val loss = 0.50038222
+Epoch  150 | train loss = 0.50011032 | val loss = 0.50030057
+Epoch  160 | train loss = 0.50014340 | val loss = 0.50032534
+Epoch  170 | train loss = 0.50011863 | val loss = 0.50015498
+Epoch  180 | train loss = 0.50013443 | val loss = 0.50038018
+Epoch  190 | train loss = 0.50013878 | val loss = 0.50040175
+Epoch  200 | train loss = 0.50015389 | val loss = 0.50029471
+Epoch  210 | train loss = 0.50013058 | val loss = 0.50034525
+Epoch  220 | train loss = 0.50011543 | val loss = 0.50058486
+Epoch  230 | train loss = 0.50010052 | val loss = 0.50047859
+Epoch  240 | train loss = 0.50010994 | val loss = 0.50030292
+Epoch  250 | train loss = 0.50013301 | val loss = 0.50033140
+Epoch  260 | train loss = 0.50014051 | val loss = 0.50031433
+Epoch  270 | train loss = 0.50011950 | val loss = 0.50024456
+Epoch  280 | train loss = 0.50011320 | val loss = 0.50037983
+Epoch  290 | train loss = 0.50011968 | val loss = 0.50037049
+Epoch  300 | train loss = 0.50016230 | val loss = 0.50036053
+Device: cuda
+Dataset size: 5000
+Model: LSTMSeparator
+Loss: mse_loss
+Epoch    1 | train loss = 0.50016682 | val loss = 0.50020284
+Epoch   10 | train loss = 0.49998283 | val loss = 0.50003690
+Epoch   20 | train loss = 0.49992652 | val loss = 0.50045494
+Epoch   30 | train loss = 0.49990640 | val loss = 0.50032316
+Epoch   40 | train loss = 0.49966865 | val loss = 0.50025193
+Epoch   50 | train loss = 0.49835583 | val loss = 0.50039910
+Epoch   60 | train loss = 0.49192584 | val loss = 0.50587144
+Epoch   70 | train loss = 0.47419840 | val loss = 0.51689294
+Epoch   80 | train loss = 0.42542674 | val loss = 0.57030233
+Epoch   90 | train loss = 0.39560823 | val loss = 0.60733579
+Epoch  100 | train loss = 0.32972807 | val loss = 0.63711237
+Epoch  110 | train loss = 0.32452039 | val loss = 0.63450067
+Epoch  120 | train loss = 0.27447264 | val loss = 0.67120298
+Epoch  130 | train loss = 0.22894434 | val loss = 0.69163915
+Epoch  140 | train loss = 0.21034232 | val loss = 0.70052043
+Epoch  150 | train loss = 0.21549381 | val loss = 0.70006010
+Epoch  160 | train loss = 0.17005043 | val loss = 0.72634404
+Epoch  170 | train loss = 0.14749628 | val loss = 0.75605690
+Epoch  180 | train loss = 0.17459328 | val loss = 0.74468643
+Epoch  190 | train loss = 0.15021827 | val loss = 0.73425742
+Epoch  200 | train loss = 0.16293589 | val loss = 0.72471171
+Epoch  210 | train loss = 0.10417943 | val loss = 0.77280688
+Epoch  220 | train loss = 0.09836626 | val loss = 0.77667481
+Epoch  230 | train loss = 0.08830078 | val loss = 0.76816383
+Epoch  240 | train loss = 0.07993933 | val loss = 0.76206664
+Epoch  250 | train loss = 0.07524705 | val loss = 0.77408196
+Epoch  260 | train loss = 0.07612883 | val loss = 0.76029630
+Epoch  270 | train loss = 0.11761588 | val loss = 0.76872704

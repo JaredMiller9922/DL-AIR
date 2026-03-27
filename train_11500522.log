@@ -1,0 +1,8 @@
+Device: cuda
+Dataset size: 5000
+Model: HybridSeparator
+Loss: mse_loss
+Epoch    1 | loss = 0.50082777
+Epoch   10 | loss = 0.50001485
+Epoch   20 | loss = 0.49986034
+slurmstepd: error: *** JOB 11500522 ON notch366 CANCELLED AT 2026-03-26T17:59:59 ***

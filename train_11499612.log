@@ -1,0 +1,63 @@
+Device: cuda
+Dataset size: 5000
+Model: HybridSeparator
+Epoch    1 | loss = 0.46178744
+Epoch   10 | loss = 0.45514464
+Epoch   20 | loss = 0.45397849
+Epoch   30 | loss = 0.45326962
+Epoch   40 | loss = 0.45296077
+Epoch   50 | loss = 0.45287424
+Epoch   60 | loss = 0.45268667
+Epoch   70 | loss = 0.45271884
+Epoch   80 | loss = 0.45259231
+Epoch   90 | loss = 0.45275865
+Epoch  100 | loss = 0.45269275
+Epoch  110 | loss = 0.45250900
+Epoch  120 | loss = 0.45263249
+Epoch  130 | loss = 0.45262148
+Epoch  140 | loss = 0.45249657
+Epoch  150 | loss = 0.45251454
+Epoch  160 | loss = 0.45256284
+Epoch  170 | loss = 0.45244952
+Epoch  180 | loss = 0.45241103
+Epoch  190 | loss = 0.45257941
+Epoch  200 | loss = 0.45242507
+Epoch  210 | loss = 0.45252004
+Epoch  220 | loss = 0.45252781
+Epoch  230 | loss = 0.45245589
+Epoch  240 | loss = 0.45251090
+Epoch  250 | loss = 0.45242483
+Epoch  260 | loss = 0.45242629
+Epoch  270 | loss = 0.45246805
+Epoch  280 | loss = 0.45234063
+Epoch  290 | loss = 0.45243295
+Epoch  300 | loss = 0.45231477
+Device: cuda
+Dataset size: 5000
+Model: LinearSeparator
+Epoch    1 | loss = 0.48610000
+Epoch   10 | loss = 0.45709270
+Epoch   20 | loss = 0.45686469
+Epoch   30 | loss = 0.45687744
+Epoch   40 | loss = 0.45680917
+Epoch   50 | loss = 0.45676999
+Epoch   60 | loss = 0.45675167
+Epoch   70 | loss = 0.45675187
+Epoch   80 | loss = 0.45673351
+Epoch   90 | loss = 0.45673939
+Epoch  100 | loss = 0.45676643
+Epoch  110 | loss = 0.45673051
+Epoch  120 | loss = 0.45673706
+Epoch  130 | loss = 0.45676024
+Epoch  140 | loss = 0.45675570
+Epoch  150 | loss = 0.45673608
+Epoch  160 | loss = 0.45675211
+Epoch  170 | loss = 0.45675510
+Epoch  180 | loss = 0.45673989
+Epoch  190 | loss = 0.45675424
+Epoch  200 | loss = 0.45675970
+Epoch  210 | loss = 0.45676614
+Epoch  220 | loss = 0.45676154
+Epoch  230 | loss = 0.45674443
+Epoch  240 | loss = 0.45678278
+slurmstepd: error: *** JOB 11499612 ON notch366 CANCELLED AT 2026-03-26T17:46:20 ***
