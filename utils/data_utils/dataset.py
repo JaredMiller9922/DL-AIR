@@ -8,7 +8,19 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 from utils.model_utils.conversion_helpers import *
+from torch.utils.data import DataLoader
 
+def make_loader(data_dir, batch_size=4, shuffle=False):
+    ds = SavedRFDataset(data_dir)
+    loader = DataLoader(
+        ds,
+        batch_size=batch_size,
+        shuffle=shuffle,
+        num_workers=4,
+        pin_memory=True,
+        persistent_workers=True
+    )
+    return loader, ds
 
 class SyntheticRFDataset(Dataset):
     """

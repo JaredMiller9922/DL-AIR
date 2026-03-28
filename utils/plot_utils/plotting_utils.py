@@ -11,12 +11,13 @@ class BeautifulRFPlotter:
         plt.style.use('seaborn-v0_8-whitegrid')
         self.colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
-    def plot_data_pipeline(self, x, y, batch_idx=0, num_samples=200):
+    def plot_data_pipeline(self, x, y, batch_idx=0, num_samples=200, device = torch.device("cuda" if torch.cuda.is_available() else "cpu")):
         """
         Plots the raw mixture against the true sources for a subset of time.
         x: (B, 2*n_rx, T) - Received mixtures
         y: (B, 4, T) - True sources [srcA_I, srcA_Q, srcB_I, srcB_Q]
         """
+
         # Extract the first sequence in the batch and limit the time dimension for visibility
         x_np = x[batch_idx, :, :num_samples].cpu().numpy()
         y_np = y[batch_idx, :, :num_samples].cpu().numpy()

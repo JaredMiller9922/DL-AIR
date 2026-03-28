@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from utils.model_utils.losses import calculate_sdr, mse_loss
 
 class ModelEvaluator:
-    def __init__(self, val_loader, plotter, device="cpu", log_dir="logs"):
+    def __init__(self, val_loader, plotter, device = "cuda" if torch.cuda.is_available() else "cpu", log_dir="../logs"):
         self.val_loader = val_loader
         self.plotter = plotter
         self.device = device
@@ -55,7 +55,7 @@ class ModelEvaluator:
         plt.xlabel("Epoch")
         plt.ylabel("MSE")
         plt.legend()
-        plt.savefig(os.path.join(self.log_dir, "model_comparison.png"))
+        plt.savefig("../visualizations/model_comparison.png")
         plt.close()
 
     def print_latex_table(self, all_metrics):
