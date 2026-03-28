@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 38, in <module>
+    main()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 13, in main
+    train_loader, _ = make_loader("data/train", batch_size=16, shuffle=True)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/utils/data_utils/dataset.py", line 14, in make_loader
+    ds = SavedRFDataset(data_dir)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/utils/data_utils/dataset.py", line 160, in __init__
+    raise ValueError(f"No .npz files found in {split_dir}")
+ValueError: No .npz files found in data/train

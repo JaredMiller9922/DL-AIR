@@ -1,0 +1,45 @@
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Epoch 5: Train MSE 0.4554 | Val MSE 0.4526
+Epoch 10: Train MSE 0.4542 | Val MSE 0.4524
+Epoch 15: Train MSE 0.4540 | Val MSE 0.4537
+Epoch 20: Train MSE 0.4526 | Val MSE 0.4531
+Epoch 25: Train MSE 0.4520 | Val MSE 0.4515
+Epoch 30: Train MSE 0.4507 | Val MSE 0.4514
+Epoch 35: Train MSE 0.4496 | Val MSE 0.4521
+Epoch 40: Train MSE 0.4482 | Val MSE 0.4529
+Epoch 45: Train MSE 0.4461 | Val MSE 0.4536
+Epoch 50: Train MSE 0.4442 | Val MSE 0.4566
+Matplotlib is building the font cache; this may take a moment.
+--- Training LSTM ---
+Epoch 5: Train MSE 0.4545 | Val MSE 0.4534
+Epoch 10: Train MSE 0.4546 | Val MSE 0.4518
+Epoch 15: Train MSE 0.4545 | Val MSE 0.4546
+Epoch 20: Train MSE 0.4525 | Val MSE 0.4518
+Epoch 25: Train MSE 0.4505 | Val MSE 0.4514
+Epoch 30: Train MSE 0.4500 | Val MSE 0.4514
+Epoch 35: Train MSE 0.4472 | Val MSE 0.4516
+Epoch 40: Train MSE 0.4465 | Val MSE 0.4518
+Epoch 45: Train MSE 0.4439 | Val MSE 0.4550
+Epoch 50: Train MSE 0.4413 | Val MSE 0.4562
+--- Training Linear ---
+Epoch 5: Train MSE 0.4573 | Val MSE 0.4575
+Epoch 10: Train MSE 0.4568 | Val MSE 0.4592
+Epoch 15: Train MSE 0.4567 | Val MSE 0.4596
+Epoch 20: Train MSE 0.4567 | Val MSE 0.4592
+Epoch 25: Train MSE 0.4566 | Val MSE 0.4594
+Epoch 30: Train MSE 0.4567 | Val MSE 0.4594
+Epoch 35: Train MSE 0.4566 | Val MSE 0.4594
+Epoch 40: Train MSE 0.4567 | Val MSE 0.4595
+Epoch 45: Train MSE 0.4567 | Val MSE 0.4594
+Epoch 50: Train MSE 0.4567 | Val MSE 0.4595
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lcc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} \\ \hline
+Hybrid & 0.55849 & -0.38 \\
+LSTM & 0.56011 & -0.40 \\
+Linear & 0.54368 & -0.28 \\
+\hline \end{tabular} \end{table}

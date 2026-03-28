@@ -1,0 +1,25 @@
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 42, in <module>
+    main()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 32, in main
+    trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, epochs=50, device=device)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/train.py", line 13, in train_model
+    pred = model(x)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/networks/hybrid_separator.py", line 63, in forward
+    x = self.in_proj(x)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 375, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 370, in _conv_forward
+    return F.conv1d(
+RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
