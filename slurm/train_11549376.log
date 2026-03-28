@@ -1,0 +1,44 @@
+Device: cuda
+Dataset size: 5000
+Model: HybridSeparator
+Loss: mse_loss
+Epoch    1 | train loss = 0.50079847 | val loss = 0.50001589
+Epoch   10 | train loss = 0.50001288 | val loss = 0.50000149
+Epoch   20 | train loss = 0.50000565 | val loss = 0.50000202
+Epoch   30 | train loss = 0.50001251 | val loss = 0.50000375
+Epoch   40 | train loss = 0.49999275 | val loss = 0.50000309
+Epoch   50 | train loss = 0.49992074 | val loss = 0.50001897
+Epoch   60 | train loss = 0.49910770 | val loss = 0.50054277
+Epoch   70 | train loss = 0.49617159 | val loss = 0.50335388
+Epoch   80 | train loss = 0.49283657 | val loss = 0.50589690
+Epoch   90 | train loss = 0.49017475 | val loss = 0.50740635
+Epoch  100 | train loss = 0.48816570 | val loss = 0.50952848
+Epoch  110 | train loss = 0.48663482 | val loss = 0.51066415
+Epoch  120 | train loss = 0.48546339 | val loss = 0.51261082
+Epoch  130 | train loss = 0.48439471 | val loss = 0.51323612
+Epoch  140 | train loss = 0.48349935 | val loss = 0.51426153
+Epoch  150 | train loss = 0.48284364 | val loss = 0.51402504
+Epoch  160 | train loss = 0.48214073 | val loss = 0.51508422
+Epoch  170 | train loss = 0.48154043 | val loss = 0.51492011
+Epoch  180 | train loss = 0.48106631 | val loss = 0.51667905
+Epoch  190 | train loss = 0.48067220 | val loss = 0.51724867
+Epoch  200 | train loss = 0.48022505 | val loss = 0.51801290
+Epoch  210 | train loss = 0.47978031 | val loss = 0.51676712
+Epoch  220 | train loss = 0.47940994 | val loss = 0.51782085
+Epoch  230 | train loss = 0.47910947 | val loss = 0.51840335
+Epoch  240 | train loss = 0.47883488 | val loss = 0.51969445
+Epoch  250 | train loss = 0.47853620 | val loss = 0.51852633
+Epoch  260 | train loss = 0.47824380 | val loss = 0.52023847
+Epoch  270 | train loss = 0.47798573 | val loss = 0.51939267
+Epoch  280 | train loss = 0.47784937 | val loss = 0.51936301
+Epoch  290 | train loss = 0.47756420 | val loss = 0.52069176
+Epoch  300 | train loss = 0.47744955 | val loss = 0.52086292
+
+--- Validation ---
+/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../train_and_validate.py:115: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model.load_state_dict(torch.load(model_path, map_location=device))
+Device: cuda
+Validation set size: 500
+Model: HybridSeparator
+Validation MSE loss: 0.52086292
+Saved plot to validation_curve.png
