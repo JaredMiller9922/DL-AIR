@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from utils.data_utils.dataset import SavedRFDataset
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 from models.models import *
-from utils.losses import *
+from utils.model_utils.losses import *
 
 def make_loader(data_dir, batch_size=4, shuffle=False):
     ds = SavedRFDataset(data_dir)

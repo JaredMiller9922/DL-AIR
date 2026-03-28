@@ -2,7 +2,7 @@ import torch
 import json
 import os
 import matplotlib.pyplot as plt
-from utils.losses import calculate_sdr, mse_loss
+from utils.model_utils.losses import calculate_sdr, mse_loss
 
 class ModelEvaluator:
     def __init__(self, val_loader, plotter, device="cpu", log_dir="logs"):

@@ -1,5 +1,5 @@
 import torch
-from utils.losses import pit_mse_loss
+from utils.model_utils.losses import pit_mse_loss
 
 def train_model(model, train_loader, val_loader, epochs=50, device="cpu"):
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
