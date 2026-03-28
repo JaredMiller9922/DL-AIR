@@ -150,7 +150,7 @@ if __name__ == "__main__":
         val_dir="../data/val",
         epochs=300,
         lr=1e-3,
-        save_path="hybrid_model.pt",
+        save_path="../models/hybrid_model.pt",
     )
 
     linear_model, linear_val = train(
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         val_dir="../data/val",
         epochs=300,
         lr=1e-3,
-        save_path="linear_model.pt",
+        save_path="../models/linear_model.pt",
     )
     
     lstm_model, lstm_val = train(
@@ -168,7 +168,7 @@ if __name__ == "__main__":
         val_dir="../data/val",
         epochs=300,
         lr=1e-3,
-        save_path="lstm_model.pt",
+        save_path="../models/lstm_model.pt",
     )
 
     # tiny_model, tiny_val = train(
@@ -177,32 +177,32 @@ if __name__ == "__main__":
         # val_dir="data/val",
         # epochs=300,
         # lr=1e-3,
-        # save_path="tiny_model.pt",
+        # save_path="../models/tiny_model.pt",
     # )
 
     print("\n--- Validation ---")
     evaluate(
         model=HybridSeparator(in_ch=8, out_ch=4),
-        model_path="hybrid_model.pt",
+        model_path="../models/hybrid_model.pt",
         val_dir="../data/val",
     )
 
     evaluate(
         model=LinearSeparator(in_ch=8, out_ch=4),
-        model_path="linear_model.pt",
+        model_path="../models/linear_model.pt",
         val_dir="../data/val",
     )
 
     evaluate(
         model=LSTMSeparator(in_ch=8, out_ch=4),
-        model_path="lstm_model.pt",
+        model_path="../models/lstm_model.pt",
         val_dir="../data/val",
     )
 
 
     # evaluate(
         # model=TinySeparator(in_ch=8, hidden=64, out_ch=4),
-        # model_path="tiny_model.pt",
+        # model_path="../models/tiny_model.pt",
         # val_dir="data/val",
     # )
 
@@ -216,6 +216,6 @@ plt.title("Validation MSE Across Epochs")
 plt.legend()
 plt.grid(True)
 
-plt.savefig("validation_curve.png", dpi=300)
+plt.savefig("../visualizations/validation_curve.png", dpi=300)
 print("Saved plot to validation_curve.png")
 plt.close()
