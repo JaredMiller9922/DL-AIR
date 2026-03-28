@@ -2,7 +2,9 @@ import torch
 
 from train import train_model
 from evaluate import ModelEvaluator
-from models.models import HybridSeparator, LSTMSeparator, LinearSeparator
+from networks.hybrid_separator import HybridSeparator
+from networks.lstm_separator import LSTMSeparator
+from networks.linear_separator import LinearSeparator
 from utils.data_utils.dataset import make_loader
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 
