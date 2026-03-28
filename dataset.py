@@ -145,6 +145,9 @@ class SavedRFDataset(Dataset):
         self.files = sorted(self.split_dir.glob("*.npz"))
 
         if not self.files:
+            print("------------------")
+            print(self.split_dir)
+            print("------------------")
             raise ValueError(f"No .npz files found in {split_dir}")
 
     def __len__(self) -> int:

@@ -1,0 +1,6 @@
+Device: cuda
+Dataset size: 5000
+Model: HybridSeparator
+Loss: mse_loss
+Epoch    1 | train loss = 0.50092717 | val loss = 0.50003437
+slurmstepd: error: *** JOB 11549313 ON notch366 CANCELLED AT 2026-03-28T13:43:09 ***

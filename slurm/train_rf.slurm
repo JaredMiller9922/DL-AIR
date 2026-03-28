@@ -18,4 +18,4 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate FastICA
 
 # 3. Execute code
-python -u train_and_validate.py
+python -u ../train_and_validate.py

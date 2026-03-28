@@ -146,8 +146,8 @@ if __name__ == "__main__":
 
     hybrid_model, hybrid_val = train(
         model=hybird_model,
-        train_dir="data/train",
-        val_dir="data/val",
+        train_dir="../data/train",
+        val_dir="../data/val",
         epochs=300,
         lr=1e-3,
         save_path="hybrid_model.pt",
@@ -155,8 +155,8 @@ if __name__ == "__main__":
 
     linear_model, linear_val = train(
         model=linear_model,
-        train_dir="data/train",
-        val_dir="data/val",
+        train_dir="../data/train",
+        val_dir="../data/val",
         epochs=300,
         lr=1e-3,
         save_path="linear_model.pt",
@@ -164,8 +164,8 @@ if __name__ == "__main__":
     
     lstm_model, lstm_val = train(
         model=lstm_model,
-        train_dir="data/train",
-        val_dir="data/val",
+        train_dir="../data/train",
+        val_dir="../data/val",
         epochs=300,
         lr=1e-3,
         save_path="lstm_model.pt",
@@ -184,19 +184,19 @@ if __name__ == "__main__":
     evaluate(
         model=HybridSeparator(in_ch=8, out_ch=4),
         model_path="hybrid_model.pt",
-        val_dir="data/val",
+        val_dir="../data/val",
     )
 
     evaluate(
         model=LinearSeparator(in_ch=8, out_ch=4),
         model_path="linear_model.pt",
-        val_dir="data/val",
+        val_dir="../data/val",
     )
 
     evaluate(
         model=LSTMSeparator(in_ch=8, out_ch=4),
         model_path="lstm_model.pt",
-        val_dir="data/val",
+        val_dir="../data/val",
     )
 
 

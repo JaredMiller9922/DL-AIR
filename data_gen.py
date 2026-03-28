@@ -38,6 +38,6 @@ if __name__ == "__main__":
         train_size=5000,
         val_size=500,
         test_size=500,
-        root_dir="data",
+        root_dir="../data",
         overwrite=True,
     )
