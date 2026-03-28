@@ -7,7 +7,7 @@ from typing import Optional
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-from conversion_helpers import *
+from utils.model_utils.conversion_helpers import *
 
 
 class SyntheticRFDataset(Dataset):
