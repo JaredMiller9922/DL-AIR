@@ -23,7 +23,8 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
         for batch in train_loader:
             x, y, y_alt = batch["x"].to(device), batch["y"].to(device), batch["y_alt"].to(device)
             pred = model(x)
-            loss = mse_loss(pred, y, y_alt)
+            # loss = pit_mse_loss(pred, y, y_alt)
+            loss = pit_mse_loss(pred, y)
             
             optimizer.zero_grad()
             loss.backward()
@@ -39,13 +40,14 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
             for v_batch in val_loader:
                 vx, vy, vy_alt = v_batch["x"].to(device), v_batch["y"].to(device), v_batch["y_alt"].to(device)
                 v_pred = model(vx)
-                total_val += mse_loss(v_pred, vy, vy_alt).item()
+                #total_val += mse_loss(v_pred, vy, vy_alt).item()
+                total_val += mse_loss(v_pred, vy).item()
         
         avg_val = total_val / len(val_loader)
         train_hist.append(avg_train)
         val_hist.append(avg_val)
         
-        if epoch % 5 == 0:
+        if epoch % 10 == 0:
             print(f"Epoch {epoch}: Train MSE {avg_train:.4f} | Val MSE {avg_val:.4f}")
 
     return model, train_hist, val_hist
