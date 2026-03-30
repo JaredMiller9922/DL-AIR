@@ -3,3 +3,8 @@ mit_challenge/mixtureData
 mit_challenge/sepOutput
 mit_challenge/soiParamFiles
 *.pt
+__pycache__/
+*.pyc
+checkpoints/
+search_runs/
+experiments/*/data/

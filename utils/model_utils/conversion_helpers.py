@@ -1,5 +1,36 @@
 import numpy as np
 
+
+def channels_to_iq_view(x):
+    if x.shape[-2] % 2 != 0:
+        raise ValueError(f"Expected even number of channels, got {x.shape[-2]}")
+
+    n_streams = x.shape[-2] // 2
+    leading = x.shape[:-2]
+    time = x.shape[-1]
+    reshaped = x.reshape(*leading, n_streams, 2, time)
+
+    if hasattr(reshaped, "permute"):
+        return reshaped.permute(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1).contiguous()
+
+    return np.transpose(reshaped, axes=(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1)).copy()
+
+
+def iq_view_to_channels(x):
+    if x.shape[-1] != 2:
+        raise ValueError(f"Expected final IQ dimension of size 2, got {x.shape[-1]}")
+
+    leading = x.shape[:-3]
+    n_streams = x.shape[-3]
+    time = x.shape[-2]
+
+    if hasattr(x, "permute"):
+        reordered = x.permute(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1).contiguous()
+        return reordered.reshape(*leading, n_streams * 2, time)
+
+    reordered = np.transpose(x, axes=(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1))
+    return reordered.reshape(*leading, n_streams * 2, time).copy()
+
 def complex_to_2ch(x: np.ndarray) -> np.ndarray:
     """
     Convert complex vector of shape (T,) to real array of shape (2, T):

@@ -23,8 +23,13 @@ class LSTMSeparator(nn.Module):
         self.out_ch = out_ch
         self.num_layers = num_layers
         self.bidirectional = bidirectional
+        self.dropout_rate = dropout
 
-        self.input_proj = nn.Linear(in_ch, hidden_size)
+        self.input_proj = nn.Sequential(
+            nn.Linear(in_ch, hidden_size),
+            nn.LayerNorm(hidden_size),
+            nn.Dropout(dropout),
+        )
 
         self.lstm = nn.LSTM(
             input_size=hidden_size,
@@ -40,6 +45,7 @@ class LSTMSeparator(nn.Module):
         self.output_proj = nn.Sequential(
             nn.Linear(lstm_out_dim, hidden_size),
             nn.ReLU(),
+            nn.Dropout(dropout),
             nn.Linear(hidden_size, out_ch),
         )
 
