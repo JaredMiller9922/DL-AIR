@@ -1,0 +1,13 @@
+{
+    "base_channels": 48,
+    "dropout": 0.08,
+    "lr": 0.0016886827584225638,
+    "weight_decay": 0.00013153477417331963,
+    "input_noise_std": 0.005,
+    "receiver_drop_prob": 0.1,
+    "grad_clip": 2.0,
+    "scheduler_name": "plateau",
+    "batch_size": 8,
+    "optimizer_name": "adamw",
+    "normalize_batches": false
+}

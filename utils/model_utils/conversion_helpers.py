@@ -1,5 +1,10 @@
 import numpy as np
 
+
+def _validate_even_channels(num_channels: int, kind: str) -> None:
+    if num_channels % 2 != 0:
+        raise ValueError(f"Expected an even number of {kind} channels, got {num_channels}")
+
 def complex_to_2ch(x: np.ndarray) -> np.ndarray:
     """
     Convert complex vector of shape (T,) to real array of shape (2, T):
@@ -60,3 +65,45 @@ def stacked_sources_to_iq(source_a: np.ndarray, source_b: np.ndarray) -> np.ndar
     a = complex_to_2ch(source_a)
     b = complex_to_2ch(source_b)
     return np.concatenate([a, b], axis=0).astype(np.float32)
+
+
+def channels_to_iq_view(x):
+    """
+    Convert tensor/array shape (..., 2*C, T) to (..., C, T, 2).
+    """
+    if x.ndim < 2:
+        raise ValueError(f"Expected at least 2 dims, got {x.shape}")
+
+    channels = x.shape[-2]
+    _validate_even_channels(channels, "input")
+    n_streams = channels // 2
+
+    leading = x.shape[:-2]
+    time = x.shape[-1]
+    reshaped = x.reshape(*leading, n_streams, 2, time)
+
+    if hasattr(reshaped, "permute"):
+        return reshaped.permute(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1).contiguous()
+
+    return np.transpose(reshaped, axes=(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1)).copy()
+
+
+def iq_view_to_channels(x):
+    """
+    Convert tensor/array shape (..., C, T, 2) to (..., 2*C, T).
+    """
+    if x.ndim < 3:
+        raise ValueError(f"Expected at least 3 dims, got {x.shape}")
+    if x.shape[-1] != 2:
+        raise ValueError(f"Expected final IQ dim of size 2, got {x.shape[-1]}")
+
+    leading = x.shape[:-3]
+    streams = x.shape[-3]
+    time = x.shape[-2]
+
+    if hasattr(x, "permute"):
+        reordered = x.permute(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1).contiguous()
+        return reordered.reshape(*leading, streams * 2, time)
+
+    reordered = np.transpose(x, axes=(*range(len(leading)), len(leading), len(leading) + 2, len(leading) + 1))
+    return reordered.reshape(*leading, streams * 2, time).copy()
