@@ -1,11 +1,23 @@
 import torch
 from utils.model_utils.losses import pit_mse_loss
 
-def train_model(model, train_loader, val_loader, epochs=10, device = "cuda" if torch.cuda.is_available() else "cpu"):
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    train_hist, val_hist = [], []
+def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu", lr=1e-3):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    train_hist, val_hist = [] , []
 
     for epoch in range(1, epochs + 1):
+        # --- Snapshot Logic ---
+        if epoch == 1 or epoch == epochs:
+            model.eval()
+            with torch.no_grad():
+                # Take one batch for the training snapshot
+                sample = next(iter(train_loader))
+                x_snap, y_snap = sample["x"].to(device), sample["y"].to(device)
+                pred_snap = model(x_snap)
+                # Now plotter is in scope!
+                plotter.plot_separation_performance(y_snap, pred_snap, 
+                    model_name=f"{model.__class__.__name__}_Train_Epoch_{epoch}")
+        
         model.train()
         total_train = 0
         for batch in train_loader:

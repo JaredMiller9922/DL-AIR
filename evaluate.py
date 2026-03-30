@@ -25,6 +25,13 @@ class ModelEvaluator:
             
             self.plotter.plot_data_pipeline(x, y) 
             self.plotter.plot_separation_performance(y, pred, model_name=model_name)
+            if "meta" in batch and "srcA_symbols" in batch["meta"]:
+                # We need to convert from torch/tensor back to numpy for the plotter
+                syms = batch["meta"]["srcA_symbols"][0].cpu().numpy() 
+                wave = y[0, :2, :].cpu().numpy() # Taking first 2 channels (I/Q) of Source A
+                # Convert I/Q back to complex for the function
+                complex_wave = wave[0] + 1j*wave[1]
+                self.plotter.plot_modulation_process(syms, complex_wave, model_name=model_name)
 
         # 2. Calculate Final Metrics (JSON Logs)
         with torch.no_grad():
