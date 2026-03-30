@@ -9,14 +9,7 @@ from utils.data_utils.dataset import make_loader
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 from cross_validator import GridSearchManager
 
-
-
-
-
-DO_CROSS_VAL = True #SET TO FALSE IF YOU DO NOT WANT CROSS VALIDATION TO OCCUR
-
-
-
+DO_CROSS_VAL = False #SET TO FALSE IF YOU DO NOT WANT CROSS VALIDATION TO OCCUR
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"

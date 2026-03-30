@@ -1,5 +1,5 @@
 import torch
-from utils.model_utils.losses import pit_mse_loss
+from utils.model_utils.losses import pit_mse_loss, mse_loss
 
 def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu", lr=1e-3):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -23,7 +23,7 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
         for batch in train_loader:
             x, y, y_alt = batch["x"].to(device), batch["y"].to(device), batch["y_alt"].to(device)
             pred = model(x)
-            loss = pit_mse_loss(pred, y, y_alt)
+            loss = mse_loss(pred, y, y_alt)
             
             optimizer.zero_grad()
             loss.backward()
@@ -39,7 +39,7 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
             for v_batch in val_loader:
                 vx, vy, vy_alt = v_batch["x"].to(device), v_batch["y"].to(device), v_batch["y_alt"].to(device)
                 v_pred = model(vx)
-                total_val += pit_mse_loss(v_pred, vy, vy_alt).item()
+                total_val += mse_loss(v_pred, vy, vy_alt).item()
         
         avg_val = total_val / len(val_loader)
         train_hist.append(avg_train)
