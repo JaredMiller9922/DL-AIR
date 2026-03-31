@@ -1,0 +1,54 @@
+{
+    "LSTM": [
+        {
+            "lr": 0.0012,
+            "best_val_pit_mse": 2.1993476890382313,
+            "best_epoch": 1,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\LSTM\\lr_0p0012.pt"
+        },
+        {
+            "lr": 0.0014,
+            "best_val_pit_mse": 2.1942673524220786,
+            "best_epoch": 4,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\LSTM\\lr_0p0014.pt"
+        },
+        {
+            "lr": 0.0017,
+            "best_val_pit_mse": 2.2020231958419556,
+            "best_epoch": 42,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\LSTM\\lr_0p0017.pt"
+        },
+        {
+            "lr": 0.002,
+            "best_val_pit_mse": 2.1903929937453497,
+            "best_epoch": 47,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\LSTM\\lr_0p002.pt"
+        }
+    ],
+    "IQ_CNN": [
+        {
+            "lr": 0.0012,
+            "best_val_pit_mse": 2.1876537383548795,
+            "best_epoch": 24,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\IQ_CNN\\lr_0p0012.pt"
+        },
+        {
+            "lr": 0.0014,
+            "best_val_pit_mse": 2.1988612091730513,
+            "best_epoch": 26,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\IQ_CNN\\lr_0p0014.pt"
+        },
+        {
+            "lr": 0.0017,
+            "best_val_pit_mse": 2.1773292602054655,
+            "best_epoch": 3,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\IQ_CNN\\lr_0p0017.pt"
+        },
+        {
+            "lr": 0.002,
+            "best_val_pit_mse": 2.1952837194715227,
+            "best_epoch": 34,
+            "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\checkpoints\\lr_search\\IQ_CNN\\lr_0p002.pt"
+        }
+    ]
+}

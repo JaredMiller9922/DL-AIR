@@ -3,3 +3,11 @@ mit_challenge/mixtureData
 mit_challenge/sepOutput
 mit_challenge/soiParamFiles
 *.pt
+__pycache__/
+*.pyc
+checkpoints/
+experiments/*/data/
+*.aux
+*.log
+*.out
+rf_separation_demo_report.pdf
