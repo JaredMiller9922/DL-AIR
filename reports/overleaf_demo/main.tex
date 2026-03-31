@@ -1,0 +1,289 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+
+\title{RF Source Separation Demo Report}
+\author{DL-AIR Project Demo Summary}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+This report summarizes the RF source separation work completed across model comparison, hyperparameter search, regularization, and controlled enclosed experiments. The goals were to identify a strong model family, tune it with broad and focused searches, and verify that the training pipeline can learn progressively more RF-like separation problems under controlled conditions.
+
+The main metric used in the tuning runs was permutation-invariant mean squared error (PIT-MSE), since source ordering may swap while still representing a correct separation. Signal-to-distortion ratio (SDR) is also reported in decibels.
+
+\section{Model Selection for Cross-Validation}
+Earlier comparison runs showed that \texttt{IQ\_CNN} and \texttt{LSTM} were the strongest candidates. \texttt{IQ\_CNN} was selected as the main cross-validation target because it slightly outperformed the alternatives while remaining competitive in separation quality.
+
+On this branch, a narrow learning-rate sweep was also run for \texttt{LSTM} and \texttt{IQ\_CNN}. Lower PIT-MSE is better.
+
+\begin{table}[H]
+\centering
+\caption{Learning-rate search used to compare the strongest model candidates.}
+\begin{tabular}{|l|c|c|c|}
+\hline
+Model & Learning Rate & Best Val PIT-MSE & Best Epoch \\
+\hline
+LSTM & 0.0012 & 2.19935 & 1 \\
+LSTM & 0.0014 & 2.19427 & 4 \\
+LSTM & 0.0017 & 2.20202 & 42 \\
+LSTM & 0.0020 & 2.19039 & 47 \\
+\hline
+IQ\_CNN & 0.0012 & 2.18765 & 24 \\
+IQ\_CNN & 0.0014 & 2.19886 & 26 \\
+IQ\_CNN & 0.0017 & 2.17733 & 3 \\
+IQ\_CNN & 0.0020 & 2.19528 & 34 \\
+\hline
+\end{tabular}
+\end{table}
+
+These runs reinforced the decision to keep \texttt{IQ\_CNN} as the primary cross-validation target. Although \texttt{LSTM} remained competitive, the best \texttt{IQ\_CNN} score was slightly lower.
+
+\section{Broad Cross-Validation}
+The broad search was designed as an exploratory pass over a large hyperparameter space for \texttt{IQ\_CNN}. The run used a 12-hour budget, completed 46 trials, and used 5-fold cross-validation over the combined train/validation pool.
+
+\subsection{Broad Search Space}
+The broad search varied:
+\begin{itemize}
+    \item base channel width
+    \item dropout
+    \item learning rate
+    \item weight decay
+    \item input noise standard deviation
+    \item receiver dropout probability
+    \item gradient clipping threshold
+    \item scheduler type
+    \item batch size
+    \item normalization toggle
+\end{itemize}
+
+This broad search was useful for locating a promising region, but it spread the 12-hour budget over many configurations, so each individual configuration was not trained as deeply as desired.
+
+\subsection{Best Broad Search Result}
+The best broad-search trial was Trial 29.
+
+\begin{table}[H]
+\centering
+\caption{Best result from the broad 12-hour cross-validation run.}
+\begin{tabular}{|p{0.42\linewidth}|p{0.42\linewidth}|}
+\hline
+Setting & Value \\
+\hline
+Trials completed & 46 \\
+Time budget & 12.0 hours \\
+Best trial index & 29 \\
+Folds & 5 \\
+base\_channels & 48 \\
+dropout & 0.08 \\
+learning rate & 0.0016886827584225638 \\
+weight decay & 0.00013153477417331963 \\
+input noise std & 0.005 \\
+receiver drop prob & 0.1 \\
+grad clip & 2.0 \\
+scheduler & plateau \\
+batch size & 8 \\
+optimizer & adamw \\
+normalize batches & false \\
+Mean CV PIT-MSE & 0.45105 \\
+Mean CV PIT-SDR & 0.4734 dB \\
+Final retrain holdout PIT-MSE & 0.45152 \\
+Final retrain test PIT-MSE & 0.45073 \\
+Final retrain test PIT-SDR & 0.4757 dB \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Focused Narrow Cross-Validation}
+After the broad run, the hyperparameter search was narrowed around the best region. The focused deep search fixed the search around \texttt{base\_channels = 48} and used much longer runs, up to 200 epochs per configuration, with validation-based model selection.
+
+\subsection{Best Focused Search Result}
+The best focused run was \texttt{deep\_cfg\_03}.
+
+\begin{table}[H]
+\centering
+\caption{Best result from the focused deep-search run.}
+\begin{tabular}{|p{0.42\linewidth}|p{0.42\linewidth}|}
+\hline
+Setting & Value \\
+\hline
+Trials completed & 8 \\
+Epochs per config & 200 \\
+Best trial name & deep\_cfg\_03 \\
+base\_channels & 48 \\
+dropout & 0.08 \\
+learning rate & 0.0016886827584225638 \\
+weight decay & 0.00013153477417331963 \\
+input noise std & 0.005 \\
+receiver drop prob & 0.1 \\
+grad clip & 2.0 \\
+scheduler & plateau \\
+batch size & 8 \\
+optimizer & adamw \\
+normalize batches & false \\
+Best validation PIT-MSE & 0.44605 \\
+Best validation PIT-SDR & 0.5195 dB \\
+Best epoch & 54 \\
+Stopped after epoch & 94 \\
+Best checkpoint test PIT-MSE & 0.44570 \\
+Best checkpoint test PIT-SDR & 0.5215 dB \\
+\hline
+\end{tabular}
+\end{table}
+
+The focused search improved clearly over the broad search. Once a good parameter neighborhood had been located, deeper training on fewer configurations produced more useful results than another broad sweep.
+
+\section{Enclosed Experiment 1: Simple Wave Separation}
+The first enclosed experiment was intentionally very easy. Two clean sine waves were mixed through a fixed 4-receiver mixing matrix with light additive noise. The purpose of this experiment was to verify that the model and training loop can learn a simple separation task end-to-end.
+
+\subsection{Result Summary}
+\begin{itemize}
+    \item Best epoch: 38
+    \item Validation PIT-MSE: 0.0005981
+    \item Test PIT-MSE: 0.0005654
+    \item Validation SDR: 27.54 dB
+    \item Test SDR: 27.85 dB
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/simple_wave/01_sources.png}
+    \caption{Ground-truth clean source waves for the simplest enclosed experiment. These are the target signals the model is asked to recover.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/simple_wave/02_mixture.png}
+    \caption{Received mixture on one receiver. This is the observed signal after the two sources are combined and light noise is added.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/simple_wave/03_outputs.png}
+    \caption{Separated outputs overlaid with the clean source targets. Agreement between the dashed prediction and the solid target indicates accurate recovery.}
+\end{figure}
+
+\section{Enclosed Experiment 2: Structured RF Bridge}
+The second enclosed experiment moved one step closer to RF by using two clean complex narrowband sources with random amplitude, random phase, slight chirp, random active windows, fixed complex receiver mixing, and light additive noise. The targets remained clean; only the received mixtures contained noise.
+
+The source plots show the ideal transmitted signals before mixing and noise. The received-mixture plots show what a receiver would observe. The output plots overlay the separated model output with the clean source to show whether the recovered waveform aligns with the original signal. The frequency plot highlights the narrowband structure, and the metadata/randomness plots summarize how per-sample variability was injected into the received signal.
+
+\subsection{Result Summary}
+\begin{itemize}
+    \item Best epoch: 39
+    \item Validation PIT-MSE: 0.0016659
+    \item Test PIT-MSE: 0.0015684
+    \item Validation SDR: 24.74 dB
+    \item Test SDR: 25.15 dB
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/structured_rf_bridge/00_dataset_randomness.png}
+    \caption{Dataset-level view of the structured randomness used in the bridge experiment. These histograms and scatter plots summarize frequency, amplitude, and noise variability.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/structured_rf_bridge/01_clean_sources.png}
+    \caption{Clean complex source signals before channel mixing and noise. The real and imaginary parts are shown separately.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/structured_rf_bridge/02_received_mixture.png}
+    \caption{Received mixture on two example receivers. This is the actual observed signal after source mixing and additive noise.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/structured_rf_bridge/03_model_outputs.png}
+    \caption{Separated outputs plotted directly against the clean sources. Close overlap indicates successful separation.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/structured_rf_bridge/04_frequency_view.png}
+    \caption{Frequency-domain view of the clean sources, received mixture, and separated outputs. This helps connect the time-domain separation task to RF-style spectral structure.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/structured_rf_bridge/05_sample_metadata.png}
+    \caption{Per-sample metadata used to generate the displayed received mixture. This panel makes the controlled randomness explicit and interpretable.}
+\end{figure}
+
+\section{Enclosed Experiment 3: QPSK RF Step}
+The third enclosed experiment was the strongest RF-like controlled experiment. It used two pulse-shaped QPSK packets with distinct carrier bands, random timing, random phase, random carrier-frequency offset, random amplitude, fixed complex receiver mixing, and light additive noise. This setup is much closer to real RF data because the payload symbols are random but the waveform family remains highly structured.
+
+\subsection{Result Summary}
+\begin{itemize}
+    \item Best epoch: 48
+    \item Validation PIT-MSE: 0.0001473
+    \item Test PIT-MSE: 0.0001472
+    \item Validation SDR: 20.79 dB
+    \item Test SDR: 20.71 dB
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/qpsk_rf_step/00_dataset_randomness.png}
+    \caption{Dataset-level view of the random timing offsets, amplitudes, carrier offsets, and noise used in the QPSK RF step experiment.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/qpsk_rf_step/01_clean_sources.png}
+    \caption{Ground-truth QPSK-derived source waveforms. These remain clean and noise-free even though the received signal is corrupted.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/qpsk_rf_step/02_received_mixture.png}
+    \caption{Received mixture from two example receivers. This is the signal the model actually receives and must separate.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/qpsk_rf_step/03_model_outputs.png}
+    \caption{Separated outputs compared directly against the clean source targets. The close overlap indicates that the structured QPSK packets were successfully recovered.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/qpsk_rf_step/04_frequency_view.png}
+    \caption{Frequency-domain comparison of the sources, mixture, and separated outputs in the QPSK RF step experiment. Distinct carrier-band structure is visible.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/qpsk_rf_step/05_sample_metadata.png}
+    \caption{Per-sample RF-like randomness used in the QPSK experiment, including packet timing, amplitudes, CFO, and channel coefficients.}
+\end{figure}
+
+\section{Discussion and Value of the Results}
+The work produced several useful outcomes:
+\begin{enumerate}
+    \item Model selection was justified. \texttt{IQ\_CNN} and \texttt{LSTM} were the strongest families, and later tuning confirmed that \texttt{IQ\_CNN} was the best focus for deeper search.
+    \item Broad cross-validation was useful for exploration. It identified a strong parameter neighborhood around a medium-width \texttt{IQ\_CNN} with moderate dropout and nonzero regularization, but also showed that too-large a search space can dilute training depth.
+    \item Focused cross-validation produced a clearly better result. Narrowing the search around the best broad-search region yielded a stronger and more defensible best configuration.
+    \item The training pipeline can learn when the structure is controlled. The three enclosed experiments demonstrated consistent learning from very simple waves up through a pulse-shaped QPSK RF-like task.
+    \item The controlled experiment ladder was informative. Each experiment added complexity while preserving learnability, creating a bridge from trivial toy signals to more realistic RF-style data.
+\end{enumerate}
+
+\section{Conclusion}
+The most important practical outcomes are:
+\begin{itemize}
+    \item \texttt{IQ\_CNN} was selected as the strongest model family for deeper tuning.
+    \item A broad 12-hour cross-validation run found a useful hyperparameter region but was too diffuse for final tuning.
+    \item A focused deep search improved performance and produced the best tuned \texttt{IQ\_CNN} configuration.
+    \item Three enclosed experiments verified that the training code and model can learn progressively more RF-like structured separation problems.
+\end{itemize}
+
+Overall, the results support the conclusion that the project has a viable source-separation pipeline, that the best model family has been identified, and that controlled bridge experiments can help diagnose the gap between easy learnable tasks and the full RF separation problem.
+
+\end{document}
