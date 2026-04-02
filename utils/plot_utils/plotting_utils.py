@@ -108,3 +108,36 @@ class BeautifulRFPlotter:
         plt.tight_layout()
         plt.savefig(os.path.join(self.save_dir, f"{model_name}_modulation.png"))
         plt.close()
+
+
+    def plot_symbol_recovery(self, true_symbols, recovered_symbols, model_name="model", num_symbols=40):
+        """
+        true_symbols: complex ndarray, shape (N,)
+        recovered_symbols: complex ndarray, shape (N,)
+        """
+        n = min(num_symbols, len(true_symbols), len(recovered_symbols))
+        t = np.arange(n)
+
+        fig, axes = plt.subplots(2, 1, figsize=(10, 8))
+
+        # 1. Constellation plot
+        axes[0].scatter(true_symbols.real, true_symbols.imag, label="True Symbols", alpha=0.7)
+        axes[0].scatter(recovered_symbols.real, recovered_symbols.imag, label="Recovered Symbols", alpha=0.7, marker="x")
+        axes[0].set_title(f"{model_name}: Symbol Recovery Constellation")
+        axes[0].set_xlabel("In-Phase")
+        axes[0].set_ylabel("Quadrature")
+        axes[0].legend()
+        axes[0].grid(True)
+
+        # 2. Symbol sequence plot (I channel)
+        axes[1].step(t, true_symbols[:n].real, where="post", label="True Symbol I", linewidth=2)
+        axes[1].step(t, recovered_symbols[:n].real, where="post", label="Recovered Symbol I", linewidth=2, linestyle="--")
+        axes[1].set_title(f"{model_name}: First {n} Symbol Decisions")
+        axes[1].set_xlabel("Symbol Index")
+        axes[1].set_ylabel("I Value")
+        axes[1].legend()
+        axes[1].grid(True)
+
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.save_dir, f"{model_name}_symbol_recovery.png"), dpi=300)
+        plt.close()

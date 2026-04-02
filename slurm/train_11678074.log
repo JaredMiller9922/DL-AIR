@@ -1,0 +1,14 @@
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x14bdeaad6570>
+Epoch 10: Train MSE 0.2867 | Val MSE 0.3100
+Epoch 20: Train MSE 0.2551 | Val MSE 0.2526
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 81, in <module>
+    main()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 74, in main
+    all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/evaluate.py", line 44, in run_full_evaluation
+    true_sym_a = batch["symbols_a"].cpu().numpy()
+KeyError: 'symbols_a'

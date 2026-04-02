@@ -1,6 +1,7 @@
 import numpy as np
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
+from utils.model_utils.symbol_utils import rrc_taps
 
 
 @dataclass
@@ -154,7 +155,7 @@ class RFMixtureGenerator:
         syms /= np.sqrt(2.0)
         return syms
 
-    # Apply the pulse shape defined by _rrc_taps
+    # Apply the pulse shape defined by rrc_taps
     def _pulse_shape_rrc(
         self,
         symbols: np.ndarray,
@@ -162,42 +163,13 @@ class RFMixtureGenerator:
         rolloff: float,
         span_symbols: int,
     ) -> np.ndarray:
-        taps = self._rrc_taps(sps=sps, beta=rolloff, span_symbols=span_symbols)
+        taps = rrc_taps(sps=sps, beta=rolloff, span_symbols=span_symbols)
 
         up = np.zeros(len(symbols) * sps, dtype=np.complex128)
         up[::sps] = symbols
 
         shaped = np.convolve(up, taps, mode="same")
         return shaped
-
-    # Define the pulse shape
-    def _rrc_taps(self, sps: int, beta: float, span_symbols: int) -> np.ndarray:
-        N = span_symbols * sps
-        t = np.arange(-N, N + 1, dtype=np.float64) / sps
-
-        taps = np.zeros_like(t)
-        for i, ti in enumerate(t):
-            if np.isclose(ti, 0.0):
-                taps[i] = 1.0 - beta + (4 * beta / np.pi)
-            elif beta > 0 and np.isclose(abs(ti), 1 / (4 * beta)):
-                taps[i] = (
-                    beta
-                    / np.sqrt(2)
-                    * (
-                        (1 + 2 / np.pi) * np.sin(np.pi / (4 * beta))
-                        + (1 - 2 / np.pi) * np.cos(np.pi / (4 * beta))
-                    )
-                )
-            else:
-                num = (
-                    np.sin(np.pi * ti * (1 - beta))
-                    + 4 * beta * ti * np.cos(np.pi * ti * (1 + beta))
-                )
-                den = np.pi * ti * (1 - (4 * beta * ti) ** 2)
-                taps[i] = num / (den + 1e-12)
-
-        taps /= np.sqrt(np.sum(taps ** 2) + 1e-12)
-        return taps
 
     def _normalize_complex_power(self, x: np.ndarray) -> np.ndarray:
         p = np.mean(np.abs(x) ** 2) + 1e-12

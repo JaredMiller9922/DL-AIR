@@ -1,0 +1,30 @@
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x14fe4948ae30>
+Epoch 10: Train MSE 0.2788 | Val MSE 0.3066
+Epoch 20: Train MSE 0.2509 | Val MSE 0.2495
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x14fe490ba500>
+Epoch 10: Train MSE 0.3193 | Val MSE 0.2930
+Epoch 20: Train MSE 0.2598 | Val MSE 0.2400
+--- Training Linear ---
+Model: Linear and parameters: <generator object Module.parameters at 0x14fe490ba500>
+Epoch 10: Train MSE 0.5716 | Val MSE 0.5719
+Epoch 20: Train MSE 0.5606 | Val MSE 0.5600
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x14fe490ba500>
+Epoch 10: Train MSE 0.3029 | Val MSE 0.2796
+Epoch 20: Train MSE 0.2638 | Val MSE 0.2428
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Sym Acc} \\ \hline
+Hybrid & 0.24947 & 3.02 & 0.6050 \\
+LSTM & 0.24003 & 3.19 & 0.6462 \\
+Linear & 0.55997 & -0.49 & 0.2687 \\
+IQ_CNN & 0.24285 & 3.14 & 0.6188 \\
+\hline
+\end{tabular}
+\end{table}
