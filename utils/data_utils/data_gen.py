@@ -44,9 +44,9 @@ if __name__ == "__main__":
     )
 
     dataset.save_splits(
-        train_size=10,
-        val_size=1,
-        test_size=1,
+        train_size=20000,
+        val_size=2000,
+        test_size=2000,
         root_dir="data",
         overwrite=True,
     )
