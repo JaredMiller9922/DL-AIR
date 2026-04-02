@@ -27,9 +27,9 @@ class SyntheticRFDataset(Dataset):
     On-the-fly synthetic RF dataset.
 
     Returns each sample as:
-      x: (2*n_rx, T) float32
-      y: (4, T)      float32
-      meta: dict
+        x: (2, T)
+        mixture: (T,) complex
+
 
     where:
       x = I/Q channels for the received mixture
@@ -40,15 +40,17 @@ class SyntheticRFDataset(Dataset):
         self,
         num_examples: int,
         generator,
-        qpsk_cfg,
-        int_cfg,
+        qpsk_cfg_soi,
+        qpsk_cfg_int,
+        noise_cfg,
         mix_cfg,
         permutation_invariant_targets: bool = False,
     ):
         self.num_examples = num_examples
         self.generator = generator
-        self.qpsk_cfg = qpsk_cfg
-        self.int_cfg = int_cfg
+        self.qpsk_cfg_soi = qpsk_cfg_soi
+        self.qpsk_cfg_int = qpsk_cfg_int
+        self.noise_cfg = noise_cfg
         self.mix_cfg = mix_cfg
         self.permutation_invariant_targets = permutation_invariant_targets
 
@@ -56,9 +58,10 @@ class SyntheticRFDataset(Dataset):
         return self.num_examples
 
     def __getitem__(self, idx: int):
-        ex = self.generator.generate_example(
-            qpsk_cfg=self.qpsk_cfg,
-            int_cfg=self.int_cfg,
+        ex = self.generator.generate_mixture(
+            qpsk_cfg_soi=self.qpsk_cfg_soi,
+            qpsk_cfg_int=self.qpsk_cfg_int,
+            noise_cfg = self.noise_cfg,
             mix_cfg=self.mix_cfg,
         )
 
@@ -66,7 +69,7 @@ class SyntheticRFDataset(Dataset):
         source_a = ex["source_a"]    # (T,) complex
         source_b = ex["source_b"]    # (T,) complex
 
-        x = complex_matrix_to_iq_channels(mixture)     # (2*n_rx, T)
+        x = complex_to_2ch(mixture)     # (2*n_rx, T)
         y = stacked_sources_to_iq(source_a, source_b)  # (4, T)
 
         sample = {

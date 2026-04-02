@@ -9,26 +9,18 @@ class QPSKConfig:
     samples_per_symbol: int = 2
     rolloff: float = 0.25
     rrc_span_symbols: int = 12
-    include_preamble: bool = False
-    preamble_symbols: int = 50
     normalize_power: bool = True
 
 
 @dataclass
-class InterfererConfig:
-    mode: str = "bandlimited_noise"
-    normalize_power: bool = True
-    fir_len: int = 33
+class NoiseConfig:
+    enabled: bool = False
 
 
 @dataclass
 class MixtureConfig:
-    n_rx: int = 4
     alpha: float = 1.0
     snr_db: Optional[float] = None
-    random_phase: bool = True
-    normalize_mixture: bool = False
-
 
 class RFMixtureGenerator:
     """
@@ -54,45 +46,43 @@ class RFMixtureGenerator:
     # --------------------------
     # Public API
     # --------------------------
-    def generate_example(
+    def generate_mixture(
         self,
-        qpsk_cfg: QPSKConfig,
-        int_cfg: InterfererConfig,
+        qpsk_cfg_soi: QPSKConfig,
+        qpsk_cfg_int: QPSKConfig,
+        noise_cfg: NoiseConfig,
         mix_cfg: MixtureConfig,
     ) -> Dict[str, Any]:
         """
         Method: generate_example
         inputs: qpsk_cfg - config parameters for qpsk generation,
-                int_cfg - config parameters for interference signal generation,
+                noise_cf - config parameters for interference signal generation,
                 mix_cfg - config parameters for the mixed signals,
         """
-        s_soi, soi_meta = self.generate_qpsk(qpsk_cfg)
-        s_int, int_meta = self.generate_interferer(len(s_soi), int_cfg)
+        s_soi, s_soi_symbols, soi_meta = self.generate_qpsk(qpsk_cfg_soi)
+        s_int, s_int_symbols, int_meta = self.generate_qpsk(qpsk_cfg_int)
 
-        H = self._sample_mixing_matrix(
-            n_rx=mix_cfg.n_rx,
-            random_phase=mix_cfg.random_phase,
-        )
 
-        sources = np.vstack([s_soi, mix_cfg.alpha * s_int])  # shape (2, T)
-        mixture = H @ sources  # shape (n_rx, T)
-
-        if mix_cfg.snr_db is not None:
-            mixture = self._add_receiver_noise(mixture, mix_cfg.snr_db)
-
-        if mix_cfg.normalize_mixture:
-            mixture = self._normalize_complex_power(mixture)
+        # Mix signals s_soi + α * s_int + noise
+        signal = s_soi + mix_cfg.alpha * s_int
+        if noise_cfg.enabled:
+            noise = self.generate_noise(signal, mix_cfg.snr_db)
+            mixture = signal + noise
+        else:
+            noise = np.zeros_like(signal)
+            mixture = signal + noise
 
         return {
             "mixture": mixture.astype(np.complex64),
             "source_a": s_soi.astype(np.complex64),
+            "symbols_a": s_soi_symbols.astype(np.complex64),
             "source_b": s_int.astype(np.complex64),
-            "H": H.astype(np.complex64),
+            "symbols_b": s_int_symbols.astype(np.complex64),
+            "noise": noise.astype(np.complex64),
             "meta": {
-                "qpsk": soi_meta,
-                "interferer": int_meta,
+                "qpsk_soi": soi_meta,
+                "qpsk_int": int_meta,
                 "alpha": mix_cfg.alpha,
-                "n_rx": mix_cfg.n_rx,
                 "snr_db": mix_cfg.snr_db,
             },
         }
@@ -102,8 +92,6 @@ class RFMixtureGenerator:
     # --------------------------
     def generate_qpsk(self, cfg: QPSKConfig):
         total_symbols = cfg.n_symbols
-        if cfg.include_preamble:
-            total_symbols += cfg.preamble_symbols
 
         bits = self.rng.integers(0, 2, size=(2 * total_symbols,), endpoint=False)
 
@@ -125,91 +113,25 @@ class RFMixtureGenerator:
             "samples_per_symbol": cfg.samples_per_symbol,
             "rolloff": cfg.rolloff,
             "rrc_span_symbols": cfg.rrc_span_symbols,
-            "include_preamble": cfg.include_preamble,
-            "preamble_symbols": cfg.preamble_symbols,
         }
-        return shaped, meta
+        return shaped, symbols, meta
+    
+    def generate_noise(self, signal: np.ndarray, snr_db: Optional[float]) -> np.ndarray:
+        if snr_db is None:
+            return np.zeros_like(signal)
 
-    def generate_interferer(self, n_samples: int, cfg: InterfererConfig):
-        if cfg.mode == "bandlimited_noise":
-            x = (
-                self.rng.standard_normal(n_samples)
-                + 1j * self.rng.standard_normal(n_samples)
-            ) / np.sqrt(2.0)
+        signal_power = np.mean(np.abs(signal) ** 2)
+        snr_linear = 10 ** (snr_db / 10.0)
+        noise_power = signal_power / snr_linear
 
-            # crude bandlimiting to make it more structured than white noise
-            taps = (
-                self.rng.standard_normal(cfg.fir_len)
-                + 1j * self.rng.standard_normal(cfg.fir_len)
-            ) / np.sqrt(2.0 * cfg.fir_len)
-            x = np.convolve(x, taps, mode="same")
-
-        elif cfg.mode == "bursty_bandlimited_noise":
-            x = (
-                self.rng.standard_normal(n_samples)
-                + 1j * self.rng.standard_normal(n_samples)
-            ) / np.sqrt(2.0)
-
-            taps = (
-                self.rng.standard_normal(cfg.fir_len)
-                + 1j * self.rng.standard_normal(cfg.fir_len)
-            ) / np.sqrt(2.0 * cfg.fir_len)
-            x = np.convolve(x, taps, mode="same")
-
-            envelope = np.zeros(n_samples, dtype=np.float64)
-            idx = 0
-            while idx < n_samples:
-                on = self.rng.integers(20, 120)
-                off = self.rng.integers(10, 80)
-                envelope[idx:idx + on] = 1.0
-                idx += on + off
-            x *= envelope[:n_samples]
-
-        else:
-            raise ValueError(f"Unsupported interferer mode: {cfg.mode}")
-
-        if cfg.normalize_power:
-            x = self._normalize_complex_power(x)
-
-        meta = {
-            "mode": cfg.mode,
-            "fir_len": cfg.fir_len,
-        }
-        return x, meta
-
-    # --------------------------
-    # Mixing / channel model
-    # --------------------------
-    def _sample_mixing_matrix(self, n_rx: int, random_phase: bool = True) -> np.ndarray:
-        """
-        Returns H of shape (n_rx, 2).
-        Simple flat-fading narrowband complex mixing matrix.
-        """
-        H = (
-            self.rng.standard_normal((n_rx, 2))
-            + 1j * self.rng.standard_normal((n_rx, 2))
-        ) / np.sqrt(2.0)
-
-        if random_phase:
-            phase = np.exp(1j * self.rng.uniform(0, 2 * np.pi, size=(n_rx, 2)))
-            H = np.abs(H) * phase
-
-        # Normalize each column so source power scaling is controlled mostly by alpha
-        for k in range(H.shape[1]):
-            col_norm = np.linalg.norm(H[:, k]) + 1e-12
-            H[:, k] /= col_norm
-
-        return H
-
-    def _add_receiver_noise(self, mixture: np.ndarray, snr_db: float) -> np.ndarray:
-        sig_power = np.mean(np.abs(mixture) ** 2)
-        noise_power = sig_power / (10 ** (snr_db / 10.0))
         noise = (
-            self.rng.standard_normal(mixture.shape)
-            + 1j * self.rng.standard_normal(mixture.shape)
+            self.rng.standard_normal(signal.shape)
+            + 1j * self.rng.standard_normal(signal.shape)
         ) / np.sqrt(2.0)
+
         noise *= np.sqrt(noise_power)
-        return mixture + noise
+
+        return noise
 
     # --------------------------
     # DSP helpers
@@ -232,6 +154,7 @@ class RFMixtureGenerator:
         syms /= np.sqrt(2.0)
         return syms
 
+    # Apply the pulse shape defined by _rrc_taps
     def _pulse_shape_rrc(
         self,
         symbols: np.ndarray,
@@ -247,6 +170,7 @@ class RFMixtureGenerator:
         shaped = np.convolve(up, taps, mode="same")
         return shaped
 
+    # Define the pulse shape
     def _rrc_taps(self, sps: int, beta: float, span_symbols: int) -> np.ndarray:
         N = span_symbols * sps
         t = np.arange(-N, N + 1, dtype=np.float64) / sps
