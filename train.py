@@ -6,7 +6,7 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
     train_hist, val_hist = [] , []
 
     for epoch in range(1, epochs + 1):
-        # --- Snapshot Logic ---
+        # --- Snapshot ---
         if epoch == 1 or epoch == epochs:
             model.eval()
             with torch.no_grad():

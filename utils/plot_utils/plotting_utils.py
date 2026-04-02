@@ -27,19 +27,19 @@ class BeautifulRFPlotter:
         fig, axes = plt.subplots(3, 1, figsize=(12, 10), sharex=True)
         fig.suptitle("Synthetic RF Pipeline: Mixture vs. Sources", fontsize=16, fontweight='bold')
 
-        # 1. Plot Mixture (Antenna 0 only for clarity)
+        # 1) Plot Mixture
         axes[0].plot(time, x_np[0], label="Antenna 0 Mixture (I)", color='purple', alpha=0.8)
         axes[0].plot(time, x_np[1], label="Antenna 0 Mixture (Q)", color='purple', linestyle='--', alpha=0.6)
         axes[0].set_title("Received Mixture")
         axes[0].legend(loc="upper right")
 
-        # 2. Plot Source A
+        # 2) Plot Source A
         axes[1].plot(time, y_np[0], label="Source A (I)", color=self.colors[0], linewidth=2)
         axes[1].plot(time, y_np[1], label="Source A (Q)", color=self.colors[0], linestyle='--', linewidth=2)
         axes[1].set_title("Ground Truth: Source A (QPSK)")
         axes[1].legend(loc="upper right")
 
-        # 3. Plot Source B
+        # 3) Plot Source B
         axes[2].plot(time, y_np[2], label="Source B (I)", color=self.colors[1], linewidth=2)
         axes[2].plot(time, y_np[3], label="Source B (Q)", color=self.colors[1], linestyle='--', linewidth=2)
         axes[2].set_title("Ground Truth: Source B (Interferer)")
@@ -91,7 +91,7 @@ class BeautifulRFPlotter:
 
         fig, ax = plt.subplots(2, 1, figsize=(12, 8))
         
-        # 1. Digital Symbols (In-Phase)
+        # 1) Digital Symbols (In-Phase)
         ax[0].step(time_syms, symbols[:num_symbols].real, where='post', 
                    label="Digital Symbols (I)", color='red', alpha=0.5, linewidth=2)
         ax[0].plot(time_wave, wave[:num_symbols*sps].real, 
@@ -99,7 +99,7 @@ class BeautifulRFPlotter:
         ax[0].set_title(f"{model_name}: Digital Symbols to Pulse-Shaped Wave")
         ax[0].legend()
 
-        # 2. Constellation Diagram (The "Proof" of QPSK)
+        # 2) Constellation Diagram
         ax[1] = fig.add_subplot(2, 2, 3) # Re-arranging for a constellation spot
         ax[1].scatter(symbols.real, symbols.imag, c='red', label="Symbols")
         ax[1].scatter(wave.real, wave.imag, c=self.colors[0], alpha=0.1, s=1, label="Wave Samples")
