@@ -13,10 +13,13 @@ class ResidualBlock(nn.Module):
         self.conv2 = nn.Conv1d(channels, channels, kernel_size=kernel_size, padding=pad)
         self.act2 = nn.ReLU()
 
+        self.norm = nn.BatchNorm1d(channels)
+
     def forward(self, x):
         residual = x
 
         out = self.conv1(x)
+        out = self.norm(out)
         out = self.act1(out)
 
         out = self.dropout(out)
@@ -27,6 +30,7 @@ class ResidualBlock(nn.Module):
         out = self.act2(out)
 
         return out
+    
 class HybridSeparator(nn.Module):
     """
     Linear spatial front-end + residual temporal refinement.

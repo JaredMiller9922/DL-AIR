@@ -67,6 +67,10 @@ def stacked_sources_to_iq(source_a: np.ndarray, source_b: np.ndarray) -> np.ndar
     return np.concatenate([a, b], axis=0).astype(np.float32)
 
 
+def _validate_even_channels(num_channels: int, kind: str) -> None:
+    if num_channels % 2 != 0:
+        raise ValueError(f"Expected an even number of {kind} channels, got {num_channels}")
+
 def channels_to_iq_view(x):
     """
     Convert tensor/array shape (..., 2*C, T) to (..., C, T, 2).

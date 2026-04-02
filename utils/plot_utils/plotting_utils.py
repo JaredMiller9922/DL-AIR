@@ -30,7 +30,7 @@ class BeautifulRFPlotter:
         # 1. Plot Mixture (Antenna 0 only for clarity)
         axes[0].plot(time, x_np[0], label="Antenna 0 Mixture (I)", color='purple', alpha=0.8)
         axes[0].plot(time, x_np[1], label="Antenna 0 Mixture (Q)", color='purple', linestyle='--', alpha=0.6)
-        axes[0].set_title("Received Mixture (Antenna 0)")
+        axes[0].set_title("Received Mixture")
         axes[0].legend(loc="upper right")
 
         # 2. Plot Source A
@@ -76,4 +76,35 @@ class BeautifulRFPlotter:
         plt.xlabel("Time Samples")
         plt.tight_layout()
         plt.savefig(os.path.join(self.save_dir, f"{model_name}_separation.png"), dpi=300)
+        plt.close()
+
+    def plot_modulation_process(self, symbols, wave, model_name="QPSK"):
+        """
+        Plots the mapping from digital symbols to the analog I/Q wave.
+        symbols: complex ndarray (the raw QPSK points)
+        wave: complex ndarray (the pulse-shaped wave)
+        """
+        num_symbols = 20
+        sps = len(wave) // len(symbols)
+        time_wave = np.arange(num_symbols * sps)
+        time_syms = np.arange(0, num_symbols * sps, sps)
+
+        fig, ax = plt.subplots(2, 1, figsize=(12, 8))
+        
+        # 1. Digital Symbols (In-Phase)
+        ax[0].step(time_syms, symbols[:num_symbols].real, where='post', 
+                   label="Digital Symbols (I)", color='red', alpha=0.5, linewidth=2)
+        ax[0].plot(time_wave, wave[:num_symbols*sps].real, 
+                   label="Modulated Wave (I)", color=self.colors[0], linewidth=2)
+        ax[0].set_title(f"{model_name}: Digital Symbols to Pulse-Shaped Wave")
+        ax[0].legend()
+
+        # 2. Constellation Diagram (The "Proof" of QPSK)
+        ax[1] = fig.add_subplot(2, 2, 3) # Re-arranging for a constellation spot
+        ax[1].scatter(symbols.real, symbols.imag, c='red', label="Symbols")
+        ax[1].scatter(wave.real, wave.imag, c=self.colors[0], alpha=0.1, s=1, label="Wave Samples")
+        ax[1].set_title("Constellation Mapping")
+        
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.save_dir, f"{model_name}_modulation.png"))
         plt.close()
