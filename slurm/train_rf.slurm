@@ -8,7 +8,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --time=08:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=train_%j.log
 
 # 1. Source the conda profile to make the 'conda' command work

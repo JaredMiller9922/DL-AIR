@@ -1,0 +1,6 @@
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x14e7c6d16880>
+Epoch 10: Train MSE 0.0004 | Val MSE 0.0002
+slurmstepd: error: *** JOB 11683196 ON notch366 CANCELLED AT 2026-04-02T15:26:13 ***
