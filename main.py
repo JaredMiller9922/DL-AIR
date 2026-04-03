@@ -10,6 +10,8 @@ from networks.linear_separator import LinearSeparator
 from networks.lstm_separator import LSTMSeparator
 from train import train_model
 from utils.data_utils.dataset import make_loader
+from utils.model_utils.symbol_utils import rrc_taps
+from utils.data_utils.generator import QPSKConfig
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 
 
@@ -42,7 +44,20 @@ def main():
     val_loader, _ = make_loader(str(data_root / "val"), batch_size=batch_size)
 
     plotter = BeautifulRFPlotter(save_dir=str(viz_dir))
-    evaluator = ModelEvaluator(val_loader, plotter, device=device, log_dir=str(logs_dir))
+    qpsk_cfg_soi = QPSKConfig(n_symbols=400, samples_per_symbol=2, rolloff=0.25, rrc_span_symbols=12)
+    rrc = rrc_taps(
+        sps=qpsk_cfg_soi.samples_per_symbol,
+        beta=qpsk_cfg_soi.rolloff,
+        span_symbols=qpsk_cfg_soi.rrc_span_symbols,
+    )
+    evaluator = ModelEvaluator(
+        val_loader,
+        plotter,
+        rrc_taps=rrc,
+        sps=qpsk_cfg_soi.samples_per_symbol,
+        device=device,
+        log_dir=str(logs_dir),
+    )
 
     all_results = {}
     model_registry = build_model_registry()

@@ -106,6 +106,7 @@ def train_model(
     model,
     train_loader,
     val_loader,
+    plotter=None,
     epochs=10,
     device="cuda" if torch.cuda.is_available() else "cpu",
     lr=1e-3,

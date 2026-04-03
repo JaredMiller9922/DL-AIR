@@ -75,6 +75,12 @@ class SyntheticRFDataset(Dataset):
         sample = {
             "x": torch.from_numpy(x),
             "y": torch.from_numpy(y),
+            "symbols_a": torch.from_numpy(
+                np.stack([ex["symbols_a"].real, ex["symbols_a"].imag], axis=0).astype(np.float32)
+            ),
+            "symbols_b": torch.from_numpy(
+                np.stack([ex["symbols_b"].real, ex["symbols_b"].imag], axis=0).astype(np.float32)
+            ),
             "meta": ex["meta"],
         }
 
@@ -145,6 +151,9 @@ class SyntheticRFDataset(Dataset):
                 dtype=np.float32
             )
 
+            save_dict["symbols_a"] = sample["symbols_a"].numpy().astype(np.float32)
+            save_dict["symbols_b"] = sample["symbols_b"].numpy().astype(np.float32)
+
             np.savez_compressed(
                 split_dir / f"sample_{idx:06d}.npz",
                 **save_dict
@@ -182,6 +191,11 @@ class SavedRFDataset(Dataset):
         if "snr_db" in data:
             val = float(data["snr_db"])
             meta["snr_db"] = None if val == -999.0 else val
+        
+        if "symbols_a" in data:
+            sample["symbols_a"] = torch.from_numpy(data["symbols_a"]).float()
+        if "symbols_b" in data:
+            sample["symbols_b"] = torch.from_numpy(data["symbols_b"]).float()
 
         sample["meta"] = meta
         return sample
