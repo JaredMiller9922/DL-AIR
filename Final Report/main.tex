@@ -1,0 +1,85 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{DL-AIR Final Report Placeholder}
+
+\author{\IEEEauthorblockN{Placeholder Author List}
+\IEEEauthorblockA{Project draft prepared for final reporting}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This is placeholder content for the final report draft. The final version will summarize RF source separation using learned models and a FastICA baseline, including symbol recovery, wave recovery, and robustness to interference strength and noise.
+\end{abstract}
+
+\section{Introduction}
+Placeholder: introduce the RF source separation problem, the mixture model $s_{mix} = s_{soi} + \alpha s_{int} + noise$, and the motivation for comparing symbol recovery with waveform recovery.
+
+\section{Related Work}
+Placeholder: summarize prior work on blind source separation, learned waveform separation, symbol recovery, and RF-specific evaluation metrics. Cite FastICA, SDR-style metrics, and any model-specific references used in the final study.
+
+\section{Models Used, Sources, and Modifications}
+Placeholder: list the evaluated systems such as Linear, Hybrid, LSTM, IQ\_CNN, FastICA, and a placeholder line for Demucs. Briefly describe any architecture changes, regularization, or implementation notes.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\columnwidth]{figures/simple_wave_output.png}
+    \caption{Placeholder comparison figure from a controlled separation experiment. In the final report this section will compare predicted separated waves against clean targets.}
+    \label{fig:placeholder_output}
+\end{figure}
+
+\section{Data Generation / Parameters}
+Placeholder: describe the two-QPSK-source synthetic data generator, channel mixing assumptions, alpha and noise sweeps, the symbol alphabet mapping $\{0,1,2,3\}$, pulse shaping, and receiver assumptions.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\columnwidth]{figures/structured_rf_mixture.png}
+    \caption{Placeholder received-mixture figure. In the final report this figure will help explain what the receiver actually observes before separation.}
+    \label{fig:placeholder_mixture}
+\end{figure}
+
+\section{Evaluation and Final Results}
+Placeholder: define PIT-MSE, SDR, symbol accuracy, and symbol error rate. This section will include model comparison tables on identical data, alpha robustness plots, noise robustness plots, and analysis of how waveform degradation relates to symbol failures.
+
+\begin{table}[t]
+    \centering
+    \caption{Placeholder model comparison table.}
+    \begin{tabular}{lccc}
+        \toprule
+        Model & Wave Error & SOI Acc & Interference Acc \\
+        \midrule
+        FastICA & TBD & TBD & TBD \\
+        Linear & TBD & TBD & TBD \\
+        Hybrid & TBD & TBD & TBD \\
+        LSTM & TBD & TBD & TBD \\
+        IQ\_CNN & TBD & TBD & TBD \\
+        Demucs & TBD & TBD & TBD \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:model_comparison_placeholder}
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\columnwidth]{figures/qpsk_frequency_view.png}
+    \caption{Placeholder spectral view. In the final report this type of figure will help explain why the signals remain structured and learnable even when the payload symbols are random.}
+    \label{fig:placeholder_frequency}
+\end{figure}
+
+\section{Conclusion}
+Placeholder: summarize the strongest model, the value of the FastICA baseline, the robustness trends with respect to alpha and noise, and the relationship between wave recovery error and symbol recovery failure.
+
+\section*{References}
+\bibliographystyle{IEEEtran}
+\bibliography{references/references}
+
+\appendices
+\section{Appendix}
+Placeholder: include the QPSK symbol alphabet, extra plots, dataset parameter tables, and any supplemental robustness figures that do not fit in the main body.
+
+\end{document}

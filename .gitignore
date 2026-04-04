@@ -11,3 +11,8 @@ experiments/*/data/
 *.log
 *.out
 rf_separation_demo_report.pdf
+reporting_pipeline/outputs/
+Final Report/*.aux
+Final Report/*.log
+Final Report/*.out
+Final Report/*.pdf
