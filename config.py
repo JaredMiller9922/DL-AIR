@@ -37,7 +37,7 @@ class ExperimentConfig:
     # Config parameters that Jared needed
 
     # ----- QPSKConfig -------- #
-    n_symbols: int
+    n_symbols: int = 400
     samples_per_symbol: int = 2
     rolloff: float = 0.25
     rrc_span_symbols: int = 12
@@ -50,5 +50,5 @@ class ExperimentConfig:
     # ----- MixtureConfig -------- #
     alpha: float = 1.0
     snr_db: Optional[float] = None
-    n_rx: 4
+    n_rx: int = 4
     random_phase: bool = True
