@@ -1,0 +1,62 @@
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x151214742960>
+Epoch 10: Train MSE 0.4999 | Val MSE 0.5005
+Epoch 20: Train MSE 0.4992 | Val MSE 0.5002
+Epoch 30: Train MSE 0.4979 | Val MSE 0.5028
+Epoch 40: Train MSE 0.4959 | Val MSE 0.5042
+Epoch 50: Train MSE 0.4897 | Val MSE 0.5097
+Epoch 60: Train MSE 0.4781 | Val MSE 0.5189
+Epoch 70: Train MSE 0.4583 | Val MSE 0.5414
+Epoch 80: Train MSE 0.4352 | Val MSE 0.5584
+Epoch 90: Train MSE 0.4130 | Val MSE 0.5763
+Epoch 100: Train MSE 0.3950 | Val MSE 0.5939
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x1511a9def0d0>
+Epoch 10: Train MSE 0.4996 | Val MSE 0.5003
+Epoch 20: Train MSE 0.4978 | Val MSE 0.5013
+Epoch 30: Train MSE 0.4890 | Val MSE 0.5140
+Epoch 40: Train MSE 0.4563 | Val MSE 0.5541
+Epoch 50: Train MSE 0.3646 | Val MSE 0.6217
+Epoch 60: Train MSE 0.3410 | Val MSE 0.6501
+Epoch 70: Train MSE 0.2610 | Val MSE 0.7261
+Epoch 80: Train MSE 0.2321 | Val MSE 0.7450
+Epoch 90: Train MSE 0.1865 | Val MSE 0.7655
+Epoch 100: Train MSE 0.1401 | Val MSE 0.7947
+--- Training Linear ---
+Model: Linear and parameters: <generator object Module.parameters at 0x1511a9708dd0>
+Epoch 10: Train MSE 0.5000 | Val MSE 0.4997
+Epoch 20: Train MSE 0.4994 | Val MSE 0.5001
+Epoch 30: Train MSE 0.4993 | Val MSE 0.4999
+Epoch 40: Train MSE 0.4994 | Val MSE 0.4999
+Epoch 50: Train MSE 0.4994 | Val MSE 0.4998
+Epoch 60: Train MSE 0.4993 | Val MSE 0.5000
+Epoch 70: Train MSE 0.4994 | Val MSE 0.4997
+Epoch 80: Train MSE 0.4993 | Val MSE 0.5001
+Epoch 90: Train MSE 0.4993 | Val MSE 0.5002
+Epoch 100: Train MSE 0.4994 | Val MSE 0.4998
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x1512161dec00>
+Epoch 10: Train MSE 0.4995 | Val MSE 0.5000
+Epoch 20: Train MSE 0.4991 | Val MSE 0.5006
+Epoch 30: Train MSE 0.4968 | Val MSE 0.5027
+Epoch 40: Train MSE 0.4915 | Val MSE 0.5025
+Epoch 50: Train MSE 0.4700 | Val MSE 0.5151
+Epoch 60: Train MSE 0.4427 | Val MSE 0.5655
+Epoch 70: Train MSE 0.4205 | Val MSE 0.5655
+Epoch 80: Train MSE 0.4046 | Val MSE 0.5726
+Epoch 90: Train MSE 0.3952 | Val MSE 0.6020
+Epoch 100: Train MSE 0.3808 | Val MSE 0.6200
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Sym Acc} \\ \hline
+Hybrid & 0.59391 & -0.73 & 0.2482 \\
+LSTM & 0.79474 & -1.82 & 0.2359 \\
+Linear & 0.49977 & 0.00 & 0.2582 \\
+IQ_CNN & 0.61998 & -0.80 & 0.2314 \\
+\hline
+\end{tabular}
+\end{table}

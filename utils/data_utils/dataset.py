@@ -44,7 +44,6 @@ class SyntheticRFDataset(Dataset):
         qpsk_cfg_int,
         noise_cfg,
         mix_cfg,
-        permutation_invariant_targets: bool = False,
     ):
         self.num_examples = num_examples
         self.generator = generator
@@ -52,7 +51,6 @@ class SyntheticRFDataset(Dataset):
         self.qpsk_cfg_int = qpsk_cfg_int
         self.noise_cfg = noise_cfg
         self.mix_cfg = mix_cfg
-        self.permutation_invariant_targets = permutation_invariant_targets
 
     def __len__(self) -> int:
         return self.num_examples
@@ -83,12 +81,8 @@ class SyntheticRFDataset(Dataset):
             "symbols_b": torch.from_numpy(
                 np.stack([ex["symbols_b"].real, ex["symbols_b"].imag], axis=0).astype(np.float32)
             ),
-            "meta": ex["meta"],
+            # "meta": ex["meta"],
         }
-
-        if self.permutation_invariant_targets:
-            y_swapped = stacked_sources_to_iq(source_b, source_a)
-            sample["y_alt"] = torch.from_numpy(y_swapped)
 
         return sample
 
@@ -124,7 +118,6 @@ class SyntheticRFDataset(Dataset):
             "train_size": train_size,
             "val_size": val_size,
             "test_size": test_size,
-            "permutation_invariant_targets": self.permutation_invariant_targets,
         }
 
         with open(root / "manifest.json", "w") as f:
@@ -141,17 +134,8 @@ class SyntheticRFDataset(Dataset):
                 "y": sample["y"].numpy().astype(np.float32),
             }
 
-            if "y_alt" in sample:
-                save_dict["y_alt"] = sample["y_alt"].numpy().astype(np.float32)
-
-            meta = sample["meta"]
-            save_dict["alpha"] = np.array(meta.get("alpha", -1), dtype=np.float32)
-
-            snr_db = meta.get("snr_db", None)
-            save_dict["snr_db"] = np.array(
-                -999.0 if snr_db is None else snr_db,
-                dtype=np.float32
-            )
+            save_dict["alpha"] = np.array(self.mix_cfg.alpha, dtype=np.float32)
+            save_dict["snr_db"] = np.array(self.mix_cfg.snr_db, dtype=np.float32)
 
             save_dict["symbols_a"] = sample["symbols_a"].numpy().astype(np.float32)
             save_dict["symbols_b"] = sample["symbols_b"].numpy().astype(np.float32)
@@ -184,20 +168,9 @@ class SavedRFDataset(Dataset):
             "y": torch.from_numpy(data["y"]).float(),
         }
 
-        if "y_alt" in data:
-            sample["y_alt"] = torch.from_numpy(data["y_alt"]).float()
-
-        meta = {}
-        if "alpha" in data:
-            meta["alpha"] = float(data["alpha"])
-        if "snr_db" in data:
-            val = float(data["snr_db"])
-            meta["snr_db"] = None if val == -999.0 else val
-        
         if "symbols_a" in data:
             sample["symbols_a"] = torch.from_numpy(data["symbols_a"]).float()
         if "symbols_b" in data:
             sample["symbols_b"] = torch.from_numpy(data["symbols_b"]).float()
 
-        sample["meta"] = meta
         return sample

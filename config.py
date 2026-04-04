@@ -49,6 +49,6 @@ class ExperimentConfig:
 
     # ----- MixtureConfig -------- #
     alpha: float = 1.0
-    snr_db: Optional[float] = None
+    snr_db: Optional[float] = 100 # Default value of 100 makes no changes
     n_rx: int = 4
     random_phase: bool = True

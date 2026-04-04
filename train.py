@@ -21,9 +21,8 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
         model.train()
         total_train = 0
         for batch in train_loader:
-            x, y, y_alt = batch["x"].to(device), batch["y"].to(device), batch["y_alt"].to(device)
+            x, y = batch["x"].to(device), batch["y"].to(device)
             pred = model(x)
-            # loss = pit_mse_loss(pred, y, y_alt)
             loss = pit_mse_loss(pred, y)
             
             optimizer.zero_grad()
@@ -38,9 +37,8 @@ def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu
         total_val = 0
         with torch.no_grad():
             for v_batch in val_loader:
-                vx, vy, vy_alt = v_batch["x"].to(device), v_batch["y"].to(device), v_batch["y_alt"].to(device)
+                vx, vy = v_batch["x"].to(device), v_batch["y"].to(device)
                 v_pred = model(vx)
-                #total_val += mse_loss(v_pred, vy, vy_alt).item()
                 total_val += mse_loss(v_pred, vy).item()
         
         avg_val = total_val / len(val_loader)

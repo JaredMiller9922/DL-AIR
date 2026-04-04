@@ -41,7 +41,6 @@ if __name__ == "__main__":
         qpsk_cfg_int=qpsk_cfg_int,
         noise_cfg=noise_cfg,
         mix_cfg=mix_cfg,
-        permutation_invariant_targets=True,
     )
 
     dataset.save_splits(

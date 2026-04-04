@@ -62,7 +62,7 @@ def main():
         for name, model in models_to_test.items():
             print(f"--- Training {name} ---")
             print(f"Model: {name} and parameters: {model.parameters()}")
-            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=20, device=device)
+            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=100, device=device)
             
             # This saves the JSON, plots the waves, and logs SDR
             all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
