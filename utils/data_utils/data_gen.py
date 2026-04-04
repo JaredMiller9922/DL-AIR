@@ -3,32 +3,33 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 
 from generator import RFMixtureGenerator, QPSKConfig, MixtureConfig, NoiseConfig
 from utils.data_utils.dataset import SyntheticRFDataset
+from config import ExperimentConfig
 
 
 if __name__ == "__main__":
     generator = RFMixtureGenerator(seed = 0)
 
     qpsk_cfg_soi = QPSKConfig(
-        n_symbols=400,
-        samples_per_symbol=2,
-        rolloff=0.25,
-        rrc_span_symbols=12,
+        n_symbols=ExperimentConfig.n_symbols,
+        samples_per_symbol=ExperimentConfig.samples_per_symbol,
+        rolloff=ExperimentConfig.rolloff,
+        rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
     )
 
     qpsk_cfg_int = QPSKConfig(
-        n_symbols=400,
-        samples_per_symbol=2,
-        rolloff=0.25,
-        rrc_span_symbols=12,
+        n_symbols=ExperimentConfig.n_symbols,
+        samples_per_symbol=ExperimentConfig.samples_per_symbol,
+        rolloff=ExperimentConfig.rolloff,
+        rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
     )
 
     noise_cfg = NoiseConfig(
-        enabled=True
+        enabled=ExperimentConfig.noise_enabled
     )
 
     mix_cfg = MixtureConfig(
-        alpha=0.8,
-        snr_db=25.0,
+        alpha=ExperimentConfig.alpha,
+        snr_db=ExperimentConfig.snr_db,
     )
 
     gen = RFMixtureGenerator(seed=0)

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 @dataclass
+# TODO: Is there a name that is more expressive than ExperimentConfig?
 class ExperimentConfig:
     # Core mode
     mode: str  # "train" or "inference"
@@ -19,6 +20,7 @@ class ExperimentConfig:
 
     # Signal params
     modulation: str = "QPSK"
+    # TODO: This variable shouldn't exist mixture = s1 + \alpha * s2 + noise. alpha is defined in MixtureConfig below
     noise_alpha: float = 0.5
     noise_sigma: float = 0.1
     num_symbols: int = 1000
@@ -30,3 +32,23 @@ class ExperimentConfig:
 
     # Advanced
     use_cross_val: bool = False
+
+
+    # Config parameters that Jared needed
+
+    # ----- QPSKConfig -------- #
+    n_symbols: int
+    samples_per_symbol: int = 2
+    rolloff: float = 0.25
+    rrc_span_symbols: int = 12
+    normalize_power: bool = True
+    num_channels: int = 4
+
+    # ----- NoiseConfig -------- #
+    noise_enabled: bool = False
+
+    # ----- MixtureConfig -------- #
+    alpha: float = 1.0
+    snr_db: Optional[float] = None
+    n_rx: 4
+    random_phase: bool = True

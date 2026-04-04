@@ -2,26 +2,29 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
 from utils.model_utils.symbol_utils import rrc_taps
-
+from config import ExperimentConfig
 
 @dataclass
 class QPSKConfig:
-    n_symbols: int
-    samples_per_symbol: int = 2
-    rolloff: float = 0.25
-    rrc_span_symbols: int = 12
-    normalize_power: bool = True
+    n_symbols: int = ExperimentConfig.n_symbols
+    samples_per_symbol: int = ExperimentConfig.samples_per_symbol
+    rolloff: float = ExperimentConfig.rolloff
+    rrc_span_symbols: int = ExperimentConfig.rrc_span_symbols
+    normalize_power: bool = ExperimentConfig.normalize_power
+    num_channels: int = ExperimentConfig.num_channels
 
 
 @dataclass
 class NoiseConfig:
-    enabled: bool = False
+    enabled: bool = ExperimentConfig.noise_enabled
 
 
 @dataclass
 class MixtureConfig:
-    alpha: float = 1.0
-    snr_db: Optional[float] = None
+    alpha: float = ExperimentConfig.alpha
+    snr_db: Optional[float] = ExperimentConfig.snr_db
+    n_rx: int = ExperimentConfig.n_rx
+    random_phase: bool = ExperimentConfig.random_phase
 
 class RFMixtureGenerator:
     """
@@ -63,15 +66,43 @@ class RFMixtureGenerator:
         s_soi, s_soi_symbols, soi_meta = self.generate_qpsk(qpsk_cfg_soi)
         s_int, s_int_symbols, int_meta = self.generate_qpsk(qpsk_cfg_int)
 
-
-        # Mix signals s_soi + α * s_int + noise
-        signal = s_soi + mix_cfg.alpha * s_int
-        if noise_cfg.enabled:
-            noise = self.generate_noise(signal, mix_cfg.snr_db)
-            mixture = signal + noise
+        # The simple case where there is only 1 antenna
+        if mix_cfg.n_rx == 1:
+            # Mix signals s_soi + α * s_int + noise
+            signal = s_soi + mix_cfg.alpha * s_int
+            if noise_cfg.enabled:
+                noise = self.generate_noise(signal, mix_cfg.snr_db)
+                mixture = signal + noise
+            else:
+                noise = np.zeros_like(signal)
+                mixture = signal + noise
+            
+            # Dummy matrix 
+            H = np.array([[1.0, mix_cfg.alpha]], dtype=np.complex128)
         else:
-            noise = np.zeros_like(signal)
-            mixture = signal + noise
+            # Multi-channel receive case
+            H = self._sample_mixing_matrix(
+                n_rx=mix_cfg.n_rx,
+                random_phase=mix_cfg.random_phase,
+            )  # shape (n_rx, 2)
+
+            # Stack sources as (2, T)
+            sources = np.vstack([
+                s_soi,
+                mix_cfg.alpha * s_int,
+            ])
+
+            # Linear mixture at all receivers: (n_rx, 2) @ (2, T) -> (n_rx, T)
+            signal = H @ sources
+
+            if noise_cfg.enabled:
+                noise = self.generate_noise(signal, mix_cfg.snr_db)
+                mixture = signal + noise
+            else:
+                noise = np.zeros_like(signal)
+                mixture = signal
+
+
 
         return {
             "mixture": mixture.astype(np.complex64),
@@ -80,6 +111,7 @@ class RFMixtureGenerator:
             "source_b": s_int.astype(np.complex64),
             "symbols_b": s_int_symbols.astype(np.complex64),
             "noise": noise.astype(np.complex64),
+            "H": H.astype(np.complex64),
             "meta": {
                 "qpsk_soi": soi_meta,
                 "qpsk_int": int_meta,
@@ -174,3 +206,17 @@ class RFMixtureGenerator:
     def _normalize_complex_power(self, x: np.ndarray) -> np.ndarray:
         p = np.mean(np.abs(x) ** 2) + 1e-12
         return x / np.sqrt(p)
+
+    # Allows us to simulate four different antennas receiving the signal at different phase shifts
+    def _sample_mixing_matrix(self, n_rx: int, random_phase: bool = True) -> np.ndarray:
+        mags = self.rng.uniform(0.8, 1.2, size=(n_rx, 2))
+
+        if random_phase:
+            phases = self.rng.uniform(0.0, 2.0 * np.pi, size=(n_rx, 2))
+            H = mags * np.exp(1j * phases)
+        else:
+            H = mags.astype(np.complex128)
+
+        # Normalize each source column so source power stays controlled
+        H /= np.linalg.norm(H, axis=0, keepdims=True) + 1e-12
+        return H

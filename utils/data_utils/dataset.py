@@ -69,7 +69,9 @@ class SyntheticRFDataset(Dataset):
         source_a = ex["source_a"]    # (T,) complex
         source_b = ex["source_b"]    # (T,) complex
 
-        x = complex_to_2ch(mixture)     # (2*n_rx, T)
+        # 1 channel case
+        # x = complex_to_2ch(mixture)     # (2*n_rx, T)
+        x = complex_matrix_to_iq_channels(mixture)
         y = stacked_sources_to_iq(source_a, source_b)  # (4, T)
 
         sample = {

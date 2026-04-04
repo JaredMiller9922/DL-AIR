@@ -11,6 +11,8 @@ from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 from cross_validator import GridSearchManager
 from utils.model_utils.symbol_utils import rrc_taps
 from utils.data_utils.generator import QPSKConfig
+from config import ExperimentConfig
+
 
 DO_CROSS_VAL = False #SET TO FALSE IF YOU DO NOT WANT CROSS VALIDATION TO OCCUR
 
@@ -21,36 +23,28 @@ def main():
     
     plotter = BeautifulRFPlotter(save_dir="../visualizations")
 
-    qpsk_cfg_soi = QPSKConfig(
-        n_symbols=400,
-        samples_per_symbol=2,
-        rolloff=0.25,
-        rrc_span_symbols=12,
-    )
-
     rrc = rrc_taps(
-        sps=qpsk_cfg_soi.samples_per_symbol,
-        beta=qpsk_cfg_soi.rolloff,
-        span_symbols=qpsk_cfg_soi.rrc_span_symbols,
+        sps=ExperimentConfig.samples_per_symbol,
+        beta=ExperimentConfig.rolloff,
+        span_symbols=ExperimentConfig.rrc_span_symbols,
     )
 
     evaluator = ModelEvaluator(
         val_loader,
         plotter,
         rrc_taps=rrc,
-        sps=qpsk_cfg_soi.samples_per_symbol,
+        sps=ExperimentConfig.samples_per_symbol,
         device=device,
     )
 
-    
     all_results = {}
     print("WE MADE IT BEFORE THE Separator")
 
     models_to_test = {
-        "Hybrid": HybridSeparator(in_ch=2, out_ch=4).to(device),
-        "LSTM": LSTMSeparator(in_ch=2, out_ch=4).to(device),
-        "Linear": LinearSeparator(in_ch=2, out_ch=4).to(device),
-        "IQ_CNN": IQCNNSeparator(in_ch=2, out_ch=4).to(device)
+        "Hybrid": HybridSeparator(in_ch=8, out_ch=4).to(device),
+        "LSTM": LSTMSeparator(in_ch=8, out_ch=4).to(device),
+        "Linear": LinearSeparator(in_ch=8, out_ch=4).to(device),
+        "IQ_CNN": IQCNNSeparator(in_ch=8, out_ch=4).to(device)
     }
 
     print("MOdels were tested")
