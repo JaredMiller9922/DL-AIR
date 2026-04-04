@@ -15,7 +15,7 @@ class ExperimentConfig:
 
     # Training params
     batch_size: int = 16
-    epochs: int = 50
+    epochs: int = 100
     lr: float = 1e-3
 
     # Signal params

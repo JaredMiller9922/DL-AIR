@@ -55,7 +55,7 @@ def main():
             'lr': [1e-3, 5e-4],
             'dropout': [0, 0.2],
             'hidden': [64, 128],
-            'epochs': [20]
+            'epochs': [100]
         }
         manager.run_grid_search(grid)
     else:

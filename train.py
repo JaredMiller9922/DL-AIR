@@ -1,7 +1,7 @@
 import torch
 from utils.model_utils.losses import pit_mse_loss, mse_loss
 
-def train_model(model, train_loader, val_loader, plotter, epochs=10, device="cpu", lr=1e-3):
+def train_model(model, train_loader, val_loader, plotter, epochs=100, device="cpu", lr=1e-3):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     train_hist, val_hist = [] , []
 
