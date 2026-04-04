@@ -46,6 +46,7 @@ def train_model(model, train_loader, val_loader, plotter, epochs=100, device="cp
         val_hist.append(avg_val)
         
         if epoch % 10 == 0:
-            print(f"Epoch {epoch}: Train MSE {avg_train:.4f} | Val MSE {avg_val:.4f}")
+            # print(f"Epoch {epoch}: Train MSE {avg_train:.4f} | Val MSE {avg_val:.4f}")
+            print(f"Epoch {epoch}: Train MSE {avg_train:.8f} | Val MSE {avg_val:.8f}")
 
     return model, train_hist, val_hist
