@@ -15,7 +15,7 @@ class ExperimentConfig:
 
     # Training params
     batch_size: int = 16
-    epochs: int = 100
+    epochs: int = 300
     lr: float = 1e-3
 
     # Signal params
@@ -52,3 +52,5 @@ class ExperimentConfig:
     snr_db: Optional[float] = 100 # Default value of 100 makes no changes
     n_rx: int = 4
     random_phase: bool = True
+
+    use_on_the_fly_data = True

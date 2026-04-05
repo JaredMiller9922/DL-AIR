@@ -12,14 +12,67 @@ from cross_validator import GridSearchManager
 from utils.model_utils.symbol_utils import rrc_taps
 from utils.data_utils.generator import QPSKConfig
 from config import ExperimentConfig
+from utils.data_utils.generator import RFMixtureGenerator, QPSKConfig, NoiseConfig, MixtureConfig
+from utils.data_utils.dataset import SyntheticRFDataset
+from torch.utils.data import DataLoader
 
 
 DO_CROSS_VAL = False #SET TO FALSE IF YOU DO NOT WANT CROSS VALIDATION TO OCCUR
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    train_loader, _ = make_loader("../data/train", batch_size=16, shuffle=True)
-    val_loader, _ = make_loader("../data/val", batch_size=16)
+    if ExperimentConfig.use_on_the_fly_data:
+        print("Using on-the-fly data generation")
+
+        gen = RFMixtureGenerator(seed=0)
+
+        qpsk_cfg_soi = QPSKConfig(
+            n_symbols=ExperimentConfig.n_symbols,
+            samples_per_symbol=ExperimentConfig.samples_per_symbol,
+            rolloff=ExperimentConfig.rolloff,
+            rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
+        )
+
+        qpsk_cfg_int = QPSKConfig(
+            n_symbols=ExperimentConfig.n_symbols,
+            samples_per_symbol=ExperimentConfig.samples_per_symbol,
+            rolloff=ExperimentConfig.rolloff,
+            rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
+        )
+
+        noise_cfg = NoiseConfig(
+            enabled=ExperimentConfig.noise_enabled
+        )
+
+        mix_cfg = MixtureConfig(
+            alpha=ExperimentConfig.alpha,
+            snr_db=ExperimentConfig.snr_db,
+        )
+
+        train_ds = SyntheticRFDataset(
+            num_examples=20000,  # controls "epoch size"
+            generator=gen,
+            qpsk_cfg_soi=qpsk_cfg_soi,
+            qpsk_cfg_int=qpsk_cfg_int,
+            noise_cfg=noise_cfg,
+            mix_cfg=mix_cfg,
+        )
+
+        train_loader = DataLoader(
+            train_ds,
+            batch_size=ExperimentConfig.batch_size,
+            shuffle=True,
+            num_workers=4,
+            pin_memory=True,
+            persistent_workers=True,
+        )
+
+        # KEEP validation FIXED
+        val_loader, _ = make_loader("../data/val", batch_size=ExperimentConfig.batch_size)
+    
+    else:
+        train_loader, _ = make_loader("../data/train", batch_size=16, shuffle=True)
+        val_loader, _ = make_loader("../data/val", batch_size=16)
     
     plotter = BeautifulRFPlotter(save_dir="../visualizations")
 
@@ -62,7 +115,7 @@ def main():
         for name, model in models_to_test.items():
             print(f"--- Training {name} ---")
             print(f"Model: {name} and parameters: {model.parameters()}")
-            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=100, device=device)
+            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=300, device=device)
             
             # This saves the JSON, plots the waves, and logs SDR
             all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
