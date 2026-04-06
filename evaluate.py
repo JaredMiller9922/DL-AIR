@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from utils.model_utils.losses import calculate_sdr, mse_loss
 from utils.model_utils.symbol_utils import symbol_accuracy, recover_symbols_from_waveform
+from networks.htdemucs import RFHTDemucsWrapper
 
 class ModelEvaluator:
     def __init__(
@@ -89,7 +90,7 @@ class ModelEvaluator:
             for batch in self.val_loader:
                 x, y = batch["x"].to(self.device), batch["y"].to(self.device)
                 pred = model(x)
-
+                pred = model(x)
                 pred_np = pred.cpu().numpy()
 
                 # True transmitted symbols

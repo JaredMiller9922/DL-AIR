@@ -2,6 +2,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+def match_length(a, b):
+    """
+    Crop both tensors along the last dimension to the same minimum length.
+    Assumes shape (B, C, L).
+    """
+    L = min(a.shape[-1], b.shape[-1])
+    return a[..., :L], b[..., :L]
+
 class RFConvBlock(nn.Module):
     """
     Standard Demucs Convolutional Block: Conv1d -> GLU -> LayerNorm -> ReLU
@@ -143,19 +151,65 @@ class RFHTDemucs(nn.Module):
         x_time = x_time.permute(0, 2, 1) # (B, C, T)
         
         # --- DECODER FORWARD ---
+#         for i in range(self.depth):
+            # # Pop the matching skip connection
+            # skip_time = time_skips.pop()
+            # skip_freq = freq_skips.pop()
+            
+            # # Concatenate skip connection (Channel dim)
+            # x_time = torch.cat([x_time, skip_time], dim=1)
+            # x_freq = torch.cat([x_freq, skip_freq], dim=1)
+            
+            # x_time = self.time_decoders[i](x_time)
+            # x_freq = self.freq_decoders[i](x_freq)
+        
+        # TODO: Tyler review added to help with dimension mismatch
         for i in range(self.depth):
-            # Pop the matching skip connection
             skip_time = time_skips.pop()
             skip_freq = freq_skips.pop()
-            
-            # Concatenate skip connection (Channel dim)
+
+            x_time, skip_time = match_length(x_time, skip_time)
+            x_freq, skip_freq = match_length(x_freq, skip_freq)
+
             x_time = torch.cat([x_time, skip_time], dim=1)
             x_freq = torch.cat([x_freq, skip_freq], dim=1)
-            
+
             x_time = self.time_decoders[i](x_time)
             x_freq = self.freq_decoders[i](x_freq)
             
         # Recombine branches (Assume an ISTFT will eventually process x_freq)
         # For now, we concatenate the branches to output the final separated sources
+        
+        # out = torch.cat([x_time, x_freq], dim=1)
+        # return self.final_proj(out)
+
+        # TODO: Tyler review added to help with dimension mismatch
+        x_time, x_freq = match_length(x_time, x_freq)
         out = torch.cat([x_time, x_freq], dim=1)
         return self.final_proj(out)
+
+# TODO: Tyler review added to help with dimension mimatch
+class RFHTDemucsWrapper(nn.Module):
+    def __init__(self, **htdemucs_kwargs):
+        super().__init__()
+        self.net = RFHTDemucs(**htdemucs_kwargs)
+
+    def forward(self, x):
+        """
+        x: (B, 2, T)
+        returns: (B, 4, T)
+        """
+        T_target = x.shape[-1]
+
+        x_time = x
+
+        x_freq = torch.fft.rfft(x, dim=-1)
+        x_freq = torch.cat([x_freq.real, x_freq.imag], dim=1)
+
+        out = self.net(x_time, x_freq)
+
+        # Force output back to original time length
+        if out.shape[-1] != T_target:
+            out = F.interpolate(out, size=T_target, mode="linear", align_corners=False)
+
+        return out

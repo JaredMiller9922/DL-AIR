@@ -1,0 +1,145 @@
+Using data stored in data folder
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x153caa396e30>
+Epoch 10: Train MSE 0.50000515 | Val MSE 0.50000814
+Epoch 20: Train MSE 0.50000450 | Val MSE 0.50000203
+Epoch 30: Train MSE 0.50000463 | Val MSE 0.50000070
+Epoch 40: Train MSE 0.50000463 | Val MSE 0.50000502
+Epoch 50: Train MSE 0.50000449 | Val MSE 0.50000281
+Epoch 60: Train MSE 0.50000387 | Val MSE 0.50000701
+Epoch 70: Train MSE 0.50000455 | Val MSE 0.50000339
+Epoch 80: Train MSE 0.50000447 | Val MSE 0.50000037
+Epoch 90: Train MSE 0.50000416 | Val MSE 0.50000841
+Epoch 100: Train MSE 0.50000407 | Val MSE 0.50000321
+Epoch 110: Train MSE 0.50000351 | Val MSE 0.49999929
+Epoch 120: Train MSE 0.50000522 | Val MSE 0.50000674
+Epoch 130: Train MSE 0.50000418 | Val MSE 0.50000364
+Epoch 140: Train MSE 0.50000465 | Val MSE 0.50000058
+Epoch 150: Train MSE 0.50000465 | Val MSE 0.50000160
+Epoch 160: Train MSE 0.50000405 | Val MSE 0.50000339
+Epoch 170: Train MSE 0.50000405 | Val MSE 0.50001302
+Epoch 180: Train MSE 0.50000398 | Val MSE 0.50000351
+Epoch 190: Train MSE 0.50000390 | Val MSE 0.50001041
+Epoch 200: Train MSE 0.50000403 | Val MSE 0.50000451
+Epoch 210: Train MSE 0.50000446 | Val MSE 0.50000221
+Epoch 220: Train MSE 0.50000423 | Val MSE 0.50001653
+Epoch 230: Train MSE 0.50000392 | Val MSE 0.50000269
+Epoch 240: Train MSE 0.50000458 | Val MSE 0.50000117
+Epoch 250: Train MSE 0.50000392 | Val MSE 0.50000204
+Epoch 260: Train MSE 0.50000443 | Val MSE 0.50001502
+Epoch 270: Train MSE 0.50000417 | Val MSE 0.50000469
+Epoch 280: Train MSE 0.50000495 | Val MSE 0.49999945
+Epoch 290: Train MSE 0.50000458 | Val MSE 0.50000127
+Epoch 300: Train MSE 0.50000424 | Val MSE 0.50000311
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x153c72cef6f0>
+Epoch 10: Train MSE 0.50000498 | Val MSE 0.50000966
+Epoch 20: Train MSE 0.50000432 | Val MSE 0.50000188
+Epoch 30: Train MSE 0.50000416 | Val MSE 0.49999985
+Epoch 40: Train MSE 0.50000365 | Val MSE 0.50000193
+Epoch 50: Train MSE 0.50000475 | Val MSE 0.50000806
+Epoch 60: Train MSE 0.50000442 | Val MSE 0.50000775
+Epoch 70: Train MSE 0.50000468 | Val MSE 0.50000064
+Epoch 80: Train MSE 0.50000462 | Val MSE 0.50000136
+Epoch 90: Train MSE 0.50000450 | Val MSE 0.50000769
+Epoch 100: Train MSE 0.50000397 | Val MSE 0.50000001
+Epoch 110: Train MSE 0.50000349 | Val MSE 0.50000603
+Epoch 120: Train MSE 0.50000439 | Val MSE 0.49999990
+Epoch 130: Train MSE 0.50000432 | Val MSE 0.50000713
+Epoch 140: Train MSE 0.50000385 | Val MSE 0.50001061
+Epoch 150: Train MSE 0.50000390 | Val MSE 0.50000875
+Epoch 160: Train MSE 0.50000476 | Val MSE 0.50000419
+Epoch 170: Train MSE 0.50000467 | Val MSE 0.50000610
+Epoch 180: Train MSE 0.50000357 | Val MSE 0.50000627
+Epoch 190: Train MSE 0.50000408 | Val MSE 0.50000249
+Epoch 200: Train MSE 0.50000370 | Val MSE 0.49999929
+Epoch 210: Train MSE 0.50000437 | Val MSE 0.49999968
+Epoch 220: Train MSE 0.50000489 | Val MSE 0.50000317
+Epoch 230: Train MSE 0.50000371 | Val MSE 0.50000894
+Epoch 240: Train MSE 0.50000418 | Val MSE 0.50000628
+Epoch 250: Train MSE 0.50000434 | Val MSE 0.50000984
+Epoch 260: Train MSE 0.50000432 | Val MSE 0.50000545
+Epoch 270: Train MSE 0.50000442 | Val MSE 0.50000072
+Epoch 280: Train MSE 0.50000440 | Val MSE 0.50000216
+Epoch 290: Train MSE 0.50000493 | Val MSE 0.50000050
+Epoch 300: Train MSE 0.50000463 | Val MSE 0.50000415
+--- Training Linear ---
+Model: Linear and parameters: <generator object Module.parameters at 0x153cabe36ff0>
+Epoch 10: Train MSE 0.50019151 | Val MSE 0.50017784
+Epoch 20: Train MSE 0.50020680 | Val MSE 0.50020743
+Epoch 30: Train MSE 0.50021026 | Val MSE 0.50004638
+Epoch 40: Train MSE 0.50018286 | Val MSE 0.50003849
+Epoch 50: Train MSE 0.50022527 | Val MSE 0.50026219
+Epoch 60: Train MSE 0.50019942 | Val MSE 0.50021191
+Epoch 70: Train MSE 0.50017990 | Val MSE 0.50046535
+Epoch 80: Train MSE 0.50019228 | Val MSE 0.50013644
+Epoch 90: Train MSE 0.50017232 | Val MSE 0.50035494
+Epoch 100: Train MSE 0.50020636 | Val MSE 0.50001347
+Epoch 110: Train MSE 0.50019844 | Val MSE 0.50010482
+Epoch 120: Train MSE 0.50021268 | Val MSE 0.50001266
+Epoch 130: Train MSE 0.50020505 | Val MSE 0.49997446
+Epoch 140: Train MSE 0.50021937 | Val MSE 0.50035899
+Epoch 150: Train MSE 0.50020677 | Val MSE 0.50004219
+Epoch 160: Train MSE 0.50019556 | Val MSE 0.50023686
+Epoch 170: Train MSE 0.50015317 | Val MSE 0.50049875
+Epoch 180: Train MSE 0.50020734 | Val MSE 0.50042301
+Epoch 190: Train MSE 0.50025194 | Val MSE 0.50029817
+Epoch 200: Train MSE 0.50019909 | Val MSE 0.50000537
+Epoch 210: Train MSE 0.50018268 | Val MSE 0.50024270
+Epoch 220: Train MSE 0.50018043 | Val MSE 0.50024509
+Epoch 230: Train MSE 0.50022402 | Val MSE 0.50027684
+Epoch 240: Train MSE 0.50020066 | Val MSE 0.50015439
+Epoch 250: Train MSE 0.50017933 | Val MSE 0.50062469
+Epoch 260: Train MSE 0.50019044 | Val MSE 0.50013462
+Epoch 270: Train MSE 0.50019450 | Val MSE 0.50020310
+Epoch 280: Train MSE 0.50021355 | Val MSE 0.50029147
+Epoch 290: Train MSE 0.50018436 | Val MSE 0.50013898
+Epoch 300: Train MSE 0.50018296 | Val MSE 0.50027783
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x153cabe36d50>
+Epoch 10: Train MSE 0.50001429 | Val MSE 0.50004830
+Epoch 20: Train MSE 0.49999386 | Val MSE 0.50008729
+Epoch 30: Train MSE 0.49998835 | Val MSE 0.50013809
+Epoch 40: Train MSE 0.49996195 | Val MSE 0.50014476
+Epoch 50: Train MSE 0.49989443 | Val MSE 0.50040057
+Epoch 60: Train MSE 0.49980193 | Val MSE 0.50040262
+Epoch 70: Train MSE 0.49968995 | Val MSE 0.50063703
+Epoch 80: Train MSE 0.49944518 | Val MSE 0.50066366
+Epoch 90: Train MSE 0.49858526 | Val MSE 0.50137924
+Epoch 100: Train MSE 0.47087244 | Val MSE 0.51934616
+Epoch 110: Train MSE 0.44869772 | Val MSE 0.52429788
+Epoch 120: Train MSE 0.44411541 | Val MSE 0.53705675
+Epoch 130: Train MSE 0.42907630 | Val MSE 0.54834206
+Epoch 140: Train MSE 0.41720831 | Val MSE 0.55797764
+Epoch 150: Train MSE 0.41191363 | Val MSE 0.56003974
+Epoch 160: Train MSE 0.40800872 | Val MSE 0.55674932
+Epoch 170: Train MSE 0.40422244 | Val MSE 0.55829536
+Epoch 180: Train MSE 0.40114118 | Val MSE 0.56967314
+Epoch 190: Train MSE 0.39708172 | Val MSE 0.56590835
+Epoch 200: Train MSE 0.39284339 | Val MSE 0.58614475
+Epoch 210: Train MSE 0.38320949 | Val MSE 0.58819872
+Epoch 220: Train MSE 0.36375144 | Val MSE 0.61411183
+Epoch 230: Train MSE 0.35117823 | Val MSE 0.63185082
+Epoch 240: Train MSE 0.34137498 | Val MSE 0.63918742
+Epoch 250: Train MSE 0.33335762 | Val MSE 0.65158315
+Epoch 260: Train MSE 0.32628124 | Val MSE 0.66519149
+Epoch 270: Train MSE 0.32167635 | Val MSE 0.65847231
+Epoch 280: Train MSE 0.31723550 | Val MSE 0.66143715
+Epoch 290: Train MSE 0.31311199 | Val MSE 0.67454413
+Epoch 300: Train MSE 0.30955545 | Val MSE 0.67915820
+--- Training HTDemucs ---
+Model: HTDemucs and parameters: <generator object Module.parameters at 0x153cabe37990>
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 131, in <module>
+    main()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 121, in main
+    trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=300, device=device)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/train.py", line 17, in train_model
+    pred_snap = model(x_snap)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+TypeError: RFHTDemucs.forward() missing 1 required positional argument: 'x_freq'

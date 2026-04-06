@@ -1,5 +1,6 @@
 import torch
 from utils.model_utils.losses import mse_loss
+from networks.htdemucs import RFHTDemucs
 
 def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cpu", lr=1e-3):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)

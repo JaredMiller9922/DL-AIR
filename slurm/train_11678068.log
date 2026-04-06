@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 81, in <module>
-    main()
-  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 31, in main
-    rrc = rrc_taps(
-TypeError: rrc_taps() missing 1 required positional argument: 'self'
