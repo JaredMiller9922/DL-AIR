@@ -22,7 +22,7 @@ DO_CROSS_VAL = False #SET TO FALSE IF YOU DO NOT WANT CROSS VALIDATION TO OCCUR
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     if ExperimentConfig.use_on_the_fly_data:
-        print("Using on-the-fly data generation")
+        print("Using on the fly data generation")
 
         gen = RFMixtureGenerator(seed=0)
 
@@ -71,6 +71,7 @@ def main():
         val_loader, _ = make_loader("../data/val", batch_size=ExperimentConfig.batch_size)
     
     else:
+        print("Using data stored in data folder")
         train_loader, _ = make_loader("../data/train", batch_size=16, shuffle=True)
         val_loader, _ = make_loader("../data/val", batch_size=16)
     

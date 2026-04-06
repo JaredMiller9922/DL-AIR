@@ -1,5 +1,5 @@
 import torch
-from utils.model_utils.losses import pit_mse_loss, mse_loss
+from utils.model_utils.losses import mse_loss
 
 def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cpu", lr=1e-3):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -23,7 +23,7 @@ def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cp
         for batch in train_loader:
             x, y = batch["x"].to(device), batch["y"].to(device)
             pred = model(x)
-            loss = pit_mse_loss(pred, y)
+            loss = mse_loss(pred, y)
             
             optimizer.zero_grad()
             loss.backward()

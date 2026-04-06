@@ -53,4 +53,4 @@ class ExperimentConfig:
     n_rx: int = 4
     random_phase: bool = True
 
-    use_on_the_fly_data = True
+    use_on_the_fly_data: bool = True
