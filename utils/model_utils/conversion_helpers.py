@@ -1,5 +1,10 @@
 import numpy as np
 
+
+def _validate_even_channels(num_channels: int, kind: str) -> None:
+    if num_channels % 2 != 0:
+        raise ValueError(f"Expected an even number of {kind} channels, got {num_channels}")
+
 def complex_to_2ch(x: np.ndarray) -> np.ndarray:
     """
     Convert complex vector of shape (T,) to real array of shape (2, T):
