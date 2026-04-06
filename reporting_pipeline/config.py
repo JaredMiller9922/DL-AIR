@@ -41,7 +41,7 @@ class ReportEvalConfig:
     use_amp: bool = True
     force_retrain: bool = False
 
-    active_models: tuple = ("FastICA", "Linear", "Hybrid", "LSTM", "IQ_CNN")
+    active_models: tuple = ("FastICA", "Tiny", "Linear", "Hybrid", "LSTM", "IQ_CNN")
 
     def __post_init__(self):
         self.outputs_dir = self.project_root / "reporting_pipeline" / "outputs"

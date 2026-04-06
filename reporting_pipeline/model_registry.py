@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable
 
 import torch
 
@@ -7,6 +8,7 @@ from networks.hybrid_separator import HybridSeparator
 from networks.iq_cnn_separator import IQCNNSeparator
 from networks.linear_separator import LinearSeparator
 from networks.lstm_separator import LSTMSeparator
+from networks.tiny_separator import TinySeparator
 from reporting_pipeline.baselines import FastICABaseline
 
 
@@ -14,7 +16,7 @@ from reporting_pipeline.baselines import FastICABaseline
 class ModelSpec:
     name: str
     kind: str
-    builder: callable
+    builder: Callable
     checkpoint_name: str | None = None
     train_kwargs: dict | None = None
 
@@ -33,6 +35,13 @@ def build_registry():
             kind="learned",
             builder=lambda: LinearSeparator(in_ch=8, out_ch=4),
             checkpoint_name="linear_separator.pt",
+            train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
+        ),
+        "Tiny": ModelSpec(
+            name="Tiny",
+            kind="learned",
+            builder=lambda: TinySeparator(in_ch=8, out_ch=4, hidden=64),
+            checkpoint_name="tiny_separator.pt",
             train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
         ),
         "Hybrid": ModelSpec(
@@ -68,6 +77,9 @@ def load_trained_model(spec: ModelSpec, checkpoint_dir: Path, device: str):
     model = spec.builder()
     if spec.kind == "baseline":
         return model
+
+    if spec.checkpoint_name is None:
+        raise ValueError(f"No checkpoint configured for learned model {spec.name}")
 
     checkpoint_path = checkpoint_dir / spec.checkpoint_name
     checkpoint = torch.load(checkpoint_path, map_location=device)
