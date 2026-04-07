@@ -1,0 +1,36 @@
+Using data stored in data folder
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x14eba0647990>
+Epoch 10: Train MSE 0.50001200 | Val MSE 0.50000720
+Epoch 20: Train MSE 0.50000398 | Val MSE 0.50000036
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x14eba028b3e0>
+Epoch 10: Train MSE 0.50000500 | Val MSE 0.50000106
+Epoch 20: Train MSE 0.50000448 | Val MSE 0.50000186
+--- Training Linear ---
+Model: Linear and parameters: <generator object Module.parameters at 0x14eba02d6f80>
+Epoch 10: Train MSE 0.50021594 | Val MSE 0.50040100
+Epoch 20: Train MSE 0.50017449 | Val MSE 0.50020461
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x14eba02d5ee0>
+Epoch 10: Train MSE 0.50001274 | Val MSE 0.50004611
+Epoch 20: Train MSE 0.49999602 | Val MSE 0.50009602
+--- Training HTDemucs ---
+Model: HTDemucs and parameters: <generator object Module.parameters at 0x14eba02d7920>
+Epoch 10: Train MSE 0.49947850 | Val MSE 0.50051774
+Epoch 20: Train MSE 0.48919805 | Val MSE 0.50880158
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Sym Acc} \\ \hline
+Hybrid & 0.50000 & -0.00 & 0.2502 \\
+LSTM & 0.50000 & -0.00 & 0.2496 \\
+Linear & 0.50020 & -0.00 & 0.2530 \\
+IQ_CNN & 0.50010 & -0.00 & 0.2476 \\
+HTDemucs & 0.50880 & -0.08 & 0.2496 \\
+\hline
+\end{tabular}
+\end{table}

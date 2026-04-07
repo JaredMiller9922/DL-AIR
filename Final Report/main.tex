@@ -4,27 +4,69 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{hyperref}
-
-\title{DL-AIR Final Report Placeholder}
-
-\author{\IEEEauthorblockN{Placeholder Author List}
-\IEEEauthorblockA{Project draft prepared for final reporting}}
+\usepackage{float}
 
 \begin{document}
+
+\title{Team 7 RF Separation Final Report\\
+}
+
+\author{
+\IEEEauthorblockN{Jared Miller}
+\IEEEauthorblockA{\textit{University of Utah} \\
+\textit{u1321655@umail.utah.edu}}
+\and
+\IEEEauthorblockN{Tyler Trotter}
+\IEEEauthorblockA{\textit{University of Utah} \\
+\textit{u1321655@umail.utah.edu}}
+\and
+\IEEEauthorblockN{Hyrum Bailey}
+\IEEEauthorblockA{\textit{University of Utah} \\
+\textit{u1321655@umail.utah.edu}}
+}
+
 \maketitle
 
 \begin{abstract}
-This is placeholder content for the final report draft. The final version will summarize RF source separation using learned models and a FastICA baseline, including symbol recovery, wave recovery, and robustness to interference strength and noise.
+This is placeholder citation \cite{hyvarinen1999fastica} content for the final report draft. The final version will summarize RF source separation using learned models and a FastICA baseline, including symbol recovery, wave recovery, and robustness to interference strength and noise.
 \end{abstract}
 
 \section{Introduction}
-Placeholder: introduce the RF source separation problem, the mixture model $s_{mix} = s_{soi} + \alpha s_{int} + noise$, and the motivation for comparing symbol recovery with waveform recovery.
+Placeholder: introduce the RF source separation problem, the mixture model $s_{\text{mix}} = s_{\text{soi}} + \alpha s_{\text{int}} + \text{noise}$, and the motivation for comparing symbol recovery with waveform recovery.
 
 \section{Related Work}
 Placeholder: summarize prior work on blind source separation, learned waveform separation, symbol recovery, and RF-specific evaluation metrics. Cite FastICA, SDR-style metrics, and any model-specific references used in the final study.
 
+\section{Data Generation / Parameters}
+Placeholder: describe the synthetic data generator, channel mixing assumptions, alpha and noise sweeps, the symbol alphabet mapping $\{0,1,2,3\}$, pulse shaping, and receiver assumptions.
+
+\subsection{1 Channel Separation Problem}
+Some Text
+
+\subsection{4 Channel Separation Problem}
+Some text
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\columnwidth]{figures/structured_rf_mixture.png}
+    \caption{Placeholder received-mixture figure. In the final report this figure will help explain what the receiver actually observes before separation.}
+    \label{fig:placeholder_mixture}
+\end{figure}
+
 \section{Models Used, Sources, and Modifications}
-Placeholder: list the evaluated systems such as Linear, Hybrid, LSTM, IQ\_CNN, FastICA, and a placeholder line for Demucs. Briefly describe any architecture changes, regularization, or implementation notes.
+To solve the problem of RF source separation there were five different network architectures that were used. The five architectures were Linear, Hybrid, LSTM, IQ\_CNN, and HTDemucs. Below is a detailed explanation of each network.
+
+\subsection{Linear Separator}
+    The linear separator was inspired by the blind source separation technique independant component analysis. It uses a kernel\_size of $1$ and goes over the entirety of $x$. This convolution is equivalent to $y(t) = W * x(t)$. This network does well on the single channel case but doesn't learn anything meaningful in the $4$ channel case. This is as expected because once you have more than a single channel for both signals it is no longer a linear separation problem.
+\subsection{Hybrid Separator}
+    The hybrid separator expands on the stucture of the linear separator and adds a deep temporal model. It start by doing input projection. The idea is to learn a better representation of the mixture before we attempt to separate it. In this model we use a more standard convolution with a kernel size of 9. This allows us to learn structure over time which is critical for the multi-channel separation problem. This model acted as our baseline for the multi-channel separation problem.
+\subsection{LSTM Separator}
+    This network was adapted and upgraded from the Matlab LSTM network provided by Professor Tom Henderson. In this network for every example in the batch we look at the I and Q values received at each antenna. This allows the model to see the full instantaneous observation across all antennas. We then do a simple transpose to make time the sequence dimension. Without this transpose the network wouldn't be able to utilize it's memory effectively. We then do an input projection like above and pass it into an LSTM. An LSTM does the following at each time step. It takes the current input, the previous hidden state, and the previous cell state and updates it's internal memory. This allows us to get an understanding that becomes more rich over time. We use a bidrectional LSTM which allows us to learn information from before the sample and information after the sample. we also incorporate a little bit of dropout between LSTM layers to allow for better generalization.
+\subsection{IQ\_CNN Separator}
+Some text
+\subsection{HTDemucs Separator}
+Some text
+
 
 \begin{figure}[t]
     \centering
@@ -33,15 +75,7 @@ Placeholder: list the evaluated systems such as Linear, Hybrid, LSTM, IQ\_CNN, F
     \label{fig:placeholder_output}
 \end{figure}
 
-\section{Data Generation / Parameters}
-Placeholder: describe the two-QPSK-source synthetic data generator, channel mixing assumptions, alpha and noise sweeps, the symbol alphabet mapping $\{0,1,2,3\}$, pulse shaping, and receiver assumptions.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.95\columnwidth]{figures/structured_rf_mixture.png}
-    \caption{Placeholder received-mixture figure. In the final report this figure will help explain what the receiver actually observes before separation.}
-    \label{fig:placeholder_mixture}
-\end{figure}
 
 \section{Evaluation and Final Results}
 Placeholder: define PIT-MSE, SDR, symbol accuracy, and symbol error rate. This section will include model comparison tables on identical data, alpha robustness plots, noise robustness plots, and analysis of how waveform degradation relates to symbol failures.
@@ -74,12 +108,13 @@ Placeholder: define PIT-MSE, SDR, symbol accuracy, and symbol error rate. This s
 \section{Conclusion}
 Placeholder: summarize the strongest model, the value of the FastICA baseline, the robustness trends with respect to alpha and noise, and the relationship between wave recovery error and symbol recovery failure.
 
-\section*{References}
 \bibliographystyle{IEEEtran}
 \bibliography{references/references}
+\newpage
 
+\section{Appendix A: Music Source Separation}
 \appendices
-\section{Appendix}
 Placeholder: include the QPSK symbol alphabet, extra plots, dataset parameter tables, and any supplemental robustness figures that do not fit in the main body.
+\section{Appendix B: }
 
 \end{document}

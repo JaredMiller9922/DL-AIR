@@ -1,6 +1,0 @@
-Using data stored in data folder
-WE MADE IT BEFORE THE Separator
-MOdels were tested
---- Training HTDemucs ---
-Model: HTDemucs and parameters: <generator object Module.parameters at 0x14fece3bef80>
-slurmstepd: error: *** JOB 11780636 ON notch366 CANCELLED AT 2026-04-06T10:31:59 ***
