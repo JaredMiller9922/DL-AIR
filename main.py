@@ -67,14 +67,14 @@ def main():
         )
 
         # KEEP validation FIXED
-        val_loader, _ = make_loader("../data/val", batch_size=ExperimentConfig.batch_size)
+        val_loader, _ = make_loader("data/val", batch_size=ExperimentConfig.batch_size)
     
     else:
         print("Using data stored in data folder")
-        train_loader, _ = make_loader("../data/train", batch_size=16, shuffle=True)
-        val_loader, _ = make_loader("../data/val", batch_size=16)
+        train_loader, _ = make_loader("data/train", batch_size=16, shuffle=True)
+        val_loader, _ = make_loader("data/val", batch_size=16)
     
-    plotter = BeautifulRFPlotter(save_dir="../visualizations")
+    plotter = BeautifulRFPlotter(save_dir="visualizations")
 
     rrc = rrc_taps(
         sps=ExperimentConfig.samples_per_symbol,

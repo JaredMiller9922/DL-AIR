@@ -15,7 +15,7 @@ class ModelEvaluator:
         rrc_taps,
         sps,
         device="cuda" if torch.cuda.is_available() else "cpu",
-        log_dir="../logs",
+        log_dir="logs",
     ):
         self.train_loader = train_loader
         self.val_loader = val_loader
@@ -184,7 +184,7 @@ class ModelEvaluator:
         plt.xlabel("Epoch")
         plt.ylabel("MSE")
         plt.legend()
-        plt.savefig("../visualizations/model_comparison.png")
+        plt.savefig("/visualizations/model_comparison.png")
         plt.close()
 
     def print_latex_table(self, all_metrics):
