@@ -2,6 +2,7 @@ import os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 class BeautifulRFPlotter:
     def __init__(self, save_dir="visualizations"):
@@ -141,3 +142,43 @@ class BeautifulRFPlotter:
         plt.tight_layout()
         plt.savefig(os.path.join(self.save_dir, f"{model_name}_symbol_recovery.png"), dpi=300)
         plt.close()
+
+# --- UI Specific Plotting Helpers ---
+
+def plot_3d_wave(signal, title="Wave"):
+    """
+    signal: complex ndarray
+    """
+    t = np.arange(len(signal))
+
+    fig = go.Figure(data=[go.Scatter3d(
+        x=t,
+        y=signal.real,
+        z=signal.imag,
+        mode='lines',
+        line=dict(color=t, colorscale='Viridis', width=4)
+    )])
+
+    fig.update_layout(
+        title=title,
+        scene=dict(
+            xaxis_title='Time',
+            yaxis_title='In-Phase (I)',
+            zaxis_title='Quadrature (Q)'
+        )
+    )
+    return fig
+
+
+def plot_spectrogram(signal, fs=1.0):
+    """
+    signal: complex ndarray
+    """
+    fig, ax = plt.subplots()
+
+    ax.specgram(signal.real, NFFT=256, Fs=fs, cmap='magma')
+    ax.set_title("Signal Spectrogram (Real Component)")
+    ax.set_ylabel("Frequency")
+    ax.set_xlabel("Time")
+
+    return fig

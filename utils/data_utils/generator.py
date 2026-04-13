@@ -16,7 +16,10 @@ class QPSKConfig:
 
 @dataclass
 class NoiseConfig:
-    enabled: bool = ExperimentConfig.noise_enabled
+    def __init__(self, enabled=False, snr_db=100.0, variance=None):
+        self.enabled = enabled
+        self.snr_db = snr_db
+        self.variance = variance
 
 
 @dataclass

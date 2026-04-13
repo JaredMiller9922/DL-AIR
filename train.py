@@ -45,9 +45,13 @@ def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cp
         avg_val = total_val / len(val_loader)
         train_hist.append(avg_train)
         val_hist.append(avg_val)
-        
+        if hasattr(model, "ui_callback") and model.ui_callback is not None:
+            model.ui_callback(epoch, avg_train, avg_val)
+            
         if epoch % 10 == 0:
             # print(f"Epoch {epoch}: Train MSE {avg_train:.4f} | Val MSE {avg_val:.4f}")
             print(f"Epoch {epoch}: Train MSE {avg_train:.8f} | Val MSE {avg_val:.8f}")
+
+        
 
     return model, train_hist, val_hist
