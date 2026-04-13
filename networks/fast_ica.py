@@ -2,7 +2,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 from sklearn.decomposition import FastICA as SkFastICA
-from config import ExperimentConfig
 
 class FastICABaseline(nn.Module):
     """
@@ -33,11 +32,12 @@ class FastICABaseline(nn.Module):
                 n_components=4,
                 algorithm="parallel",
                 whiten="unit-variance",
-                fun="logcosh",
+                fun="cube",
                 random_state=self.random_state,
                 max_iter=self.max_iter,
             )
 
+            # Reshape data to be in desired output format
             S = ica.fit_transform(X)   # (T, 4)
             outs.append(S.T.astype(np.float32))  # (4, T)
 

@@ -123,10 +123,16 @@ class RFMixtureGenerator:
     # --------------------------
     # Source generation
     # --------------------------
-    def generate_qpsk(self, cfg: QPSKConfig):
-        total_symbols = cfg.n_symbols
-
-        bits = self.rng.integers(0, 2, size=(2 * total_symbols,), endpoint=False)
+    def generate_qpsk(self, cfg: QPSKConfig, message: str = None):
+        if message is None:
+            total_symbols = cfg.n_symbols
+            bits = self.rng.integers(0, 2, size=(2 * total_symbols,), endpoint=False)
+        else:
+            bits = self.symbols_to_bits(message)
+            # make sure even number of bits (QPSK requirement)
+            if len(bits) % 2 != 0:
+                bits = np.append(bits, 0)
+            total_symbols = len(bits) // 2
 
         symbols = self._bits_to_qpsk(bits)
 
@@ -220,3 +226,14 @@ class RFMixtureGenerator:
         # Normalize each source column so source power stays controlled
         H /= np.linalg.norm(H, axis=0, keepdims=True) + 1e-12
         return H
+    
+    # --------------------------
+    # User Defined Alphabet Helpers
+    # --------------------------
+    def symbols_to_bits(symbols):
+        bits = []
+        for s in symbols:
+            ascii_val = ord(s)           # convert char → integer
+            b = format(ascii_val, '08b') # 8-bit binary string
+            bits.extend([int(bit) for bit in b])
+        return np.array(bits)
