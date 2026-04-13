@@ -1,7 +1,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from generator import RFMixtureGenerator, QPSKConfig, MixtureConfig, NoiseConfig
+from utils.data_utils.generator import RFMixtureGenerator, QPSKConfig, MixtureConfig, NoiseConfig
 from utils.data_utils.dataset import SyntheticRFDataset
 from config import ExperimentConfig
 
@@ -30,6 +30,8 @@ if __name__ == "__main__":
     mix_cfg = MixtureConfig(
         alpha=ExperimentConfig.alpha,
         snr_db=ExperimentConfig.snr_db,
+        n_rx=ExperimentConfig.n_rx,
+        random_phase=ExperimentConfig.random_phase,
     )
 
     gen = RFMixtureGenerator(seed=0)
@@ -44,9 +46,9 @@ if __name__ == "__main__":
     )
 
     dataset.save_splits(
-        train_size=20000,
-        val_size=2000,
-        test_size=2000,
-        root_dir="data",
+        train_size=10000,
+        val_size=1000,
+        test_size=1000,
+        root_dir=ExperimentConfig.dataset_path,
         overwrite=True,
     )

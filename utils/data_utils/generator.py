@@ -72,10 +72,12 @@ class RFMixtureGenerator:
             signal = s_soi + mix_cfg.alpha * s_int
             if noise_cfg.enabled:
                 noise = self.generate_noise(signal, mix_cfg.snr_db)
-                mixture = signal + noise
+                mixture = (signal + noise)[np.newaxis, :]
             else:
                 noise = np.zeros_like(signal)
-                mixture = signal + noise
+                mixture = signal[np.newaxis, :]
+
+            noise = noise[np.newaxis, :]
             
             # Dummy matrix 
             H = np.array([[1.0, mix_cfg.alpha]], dtype=np.complex128)

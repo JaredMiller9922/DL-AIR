@@ -49,6 +49,8 @@ def main():
         mix_cfg = MixtureConfig(
             alpha=ExperimentConfig.alpha,
             snr_db=ExperimentConfig.snr_db,
+            n_rx=ExperimentConfig.n_rx,
+            random_phase=ExperimentConfig.random_phase,
         )
 
         train_ds = SyntheticRFDataset(
@@ -70,14 +72,14 @@ def main():
         )
 
         # KEEP validation FIXED
-        val_loader, _ = make_loader("../data/val", batch_size=ExperimentConfig.batch_size)
+        val_loader, _ = make_loader(f"{ExperimentConfig.dataset_path}/val", batch_size=ExperimentConfig.batch_size)
     
     else:
         print("Using data stored in data folder")
-        train_loader, _ = make_loader("../data/train", batch_size=16, shuffle=True)
-        val_loader, _ = make_loader("../data/val", batch_size=16)
+        train_loader, _ = make_loader(f"{ExperimentConfig.dataset_path}/train", batch_size=ExperimentConfig.batch_size, shuffle=True)
+        val_loader, _ = make_loader(f"{ExperimentConfig.dataset_path}/val", batch_size=ExperimentConfig.batch_size)
     
-    plotter = BeautifulRFPlotter(save_dir="../visualizations")
+    plotter = BeautifulRFPlotter(save_dir="visualizations")
 
     rrc = rrc_taps(
         sps=ExperimentConfig.samples_per_symbol,
@@ -96,12 +98,13 @@ def main():
     all_results = {}
     print("WE MADE IT BEFORE THE Separator")
 
+    in_ch = 2 * ExperimentConfig.n_rx
     models_to_test = {
-        "Hybrid": {"model": HybridSeparator(in_ch=8, out_ch=4).to(device), "train": True},
-        "LSTM": {"model": LSTMSeparator(in_ch=8, out_ch=4).to(device), "train": True},
-        "Linear": {"model": LinearSeparator(in_ch=8, out_ch=4).to(device), "train": True},
-        "IQ_CNN": {"model": IQCNNSeparator(in_ch=8, out_ch=4).to(device), "train": True},
-        "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=8, out_ch=4).to(device), "train": True},
+        "Hybrid": {"model": HybridSeparator(in_ch=in_ch, out_ch=4).to(device), "train": True},
+        "LSTM": {"model": LSTMSeparator(in_ch=in_ch, out_ch=4).to(device), "train": True},
+        "Linear": {"model": LinearSeparator(in_ch=in_ch, out_ch=4).to(device), "train": True},
+        "IQ_CNN": {"model": IQCNNSeparator(in_ch=in_ch, out_ch=4).to(device), "train": True},
+        "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=in_ch, out_ch=4).to(device), "train": True},
         "FastICA": {"model": FastICABaseline(), "train": False},
     }
 
