@@ -95,13 +95,11 @@ def main():
     print("WE MADE IT BEFORE THE Separator")
 
     models_to_test = {
-        # "Hybrid": {"model": HybridSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        # "LSTM": {"model": LSTMSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        # "IQ_CNN": {"model": IQCNNSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        # "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=4, out_ch=4).to(device), "train": True},
         "FastICA": {"model": FastICABaseline(), "train": False},
-
-        # "Linear": {"model": LinearSeparator(in_ch=8, out_ch=4).to(device), "train": True},
+        "Hybrid": {"model": HybridSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        "LSTM": {"model": LSTMSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        "IQ_CNN": {"model": IQCNNSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=4, out_ch=4).to(device), "train": True},
     }
 
     print("MOdels were tested")
