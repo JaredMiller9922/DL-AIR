@@ -7,6 +7,7 @@ from networks.lstm_separator import LSTMSeparator
 from networks.linear_separator import LinearSeparator
 from networks.iq_cnn_separator import IQCNNSeparator
 from networks.htdemucs import RFHTDemucsWrapper
+from reporting_pipeline.baselines import FastICABaseline
 from utils.data_utils.dataset import make_loader
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 from cross_validator import GridSearchManager
@@ -96,11 +97,12 @@ def main():
     print("WE MADE IT BEFORE THE Separator")
 
     models_to_test = {
-        "Hybrid": HybridSeparator(in_ch=8, out_ch=4).to(device),
-        "LSTM": LSTMSeparator(in_ch=8, out_ch=4).to(device),
-        "Linear": LinearSeparator(in_ch=8, out_ch=4).to(device),
-        "IQ_CNN": IQCNNSeparator(in_ch=8, out_ch=4).to(device),
-        "HTDemucs": RFHTDemucsWrapper(in_ch=8, out_ch=4).to(device),
+        "Hybrid": {"model": HybridSeparator(in_ch=8, out_ch=4).to(device), "train": True},
+        "LSTM": {"model": LSTMSeparator(in_ch=8, out_ch=4).to(device), "train": True},
+        "Linear": {"model": LinearSeparator(in_ch=8, out_ch=4).to(device), "train": True},
+        "IQ_CNN": {"model": IQCNNSeparator(in_ch=8, out_ch=4).to(device), "train": True},
+        "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=8, out_ch=4).to(device), "train": True},
+        "FastICA": {"model": FastICABaseline(), "train": False},
     }
 
     print("MOdels were tested")
@@ -115,13 +117,16 @@ def main():
         }
         manager.run_grid_search(grid)
     else:
-        for name, model in models_to_test.items():
+        for name, entry in models_to_test.items():
+            model = entry["model"]
             print(f"--- Training {name} ---")
-            print(f"Model: {name} and parameters: {model.parameters()}")
-            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=ExperimentConfig.epochs, device=device)
-            
-            # This saves the JSON, plots the waves, and logs SDR
-            all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
+            if entry["train"]:
+                print(f"Model: {name} and parameters: {model.parameters()}")
+                trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=ExperimentConfig.epochs, device=device)
+                all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
+            else:
+                print(f"Model: {name} baseline (no training step)")
+                all_results[name] = evaluator.run_full_evaluation(model, [], [], name)
 
     # Final visual duties
     evaluator.plot_comparison(all_results)

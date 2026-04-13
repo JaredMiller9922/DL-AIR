@@ -3,3 +3,14 @@ mit_challenge/mixtureData
 mit_challenge/sepOutput
 mit_challenge/soiParamFiles
 *.pt
+reporting_pipeline/outputs/datasets/
+reporting_pipeline/outputs/phase1_fastica
+__pycache__/
+*.pyc
+Final Report/*.aux
+Final Report/*.bbl
+Final Report/*.blg
+Final Report/*.log
+Final Report/*.out
+Final Report/*.pdf
+Final Report/*.synctex.gz

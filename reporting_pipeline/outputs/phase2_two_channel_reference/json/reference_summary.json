@@ -1,0 +1,87 @@
+{
+  "config": {
+    "mode": "phase2_two_channel_reference",
+    "model_name": "reporting_pipeline",
+    "model_path": null,
+    "dropout": 0.0,
+    "batch_size": 32,
+    "epochs": 20,
+    "lr": 0.001,
+    "modulation": "QPSK",
+    "noise_alpha": 0.5,
+    "noise_sigma": 0.1,
+    "num_symbols": 1000,
+    "num_sources": 2,
+    "dataset_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\reporting_pipeline\\outputs\\phase2_two_channel_reference\\data",
+    "generate_new_data": true,
+    "use_cross_val": false,
+    "n_symbols": 400,
+    "samples_per_symbol": 2,
+    "rolloff": 0.25,
+    "rrc_span_symbols": 12,
+    "normalize_power": true,
+    "num_channels": 4,
+    "noise_enabled": true,
+    "alpha": 1.0,
+    "snr_db": 15.0,
+    "n_rx": 2,
+    "random_phase": true,
+    "use_on_the_fly_data": false
+  },
+  "results": [
+    {
+      "pit_mse": 0.45701778400689363,
+      "wave_mse": 0.45701778307557106,
+      "sdr_db": 0.4235761072486639,
+      "soi_symbol_accuracy": 0.63078857421875,
+      "int_symbol_accuracy": 0.63078857421875,
+      "avg_symbol_accuracy": 0.63078857421875,
+      "model": "LSTM"
+    },
+    {
+      "pit_mse": 0.45481052435934544,
+      "wave_mse": 0.45481051597744226,
+      "sdr_db": 0.43965400382876396,
+      "soi_symbol_accuracy": 0.6290576171874995,
+      "int_symbol_accuracy": 0.6290576171874995,
+      "avg_symbol_accuracy": 0.6290576171874995,
+      "model": "Hybrid"
+    },
+    {
+      "pit_mse": 0.4544331291690469,
+      "wave_mse": 0.45443313010036945,
+      "sdr_db": 0.4439678508788347,
+      "soi_symbol_accuracy": 0.625527343750001,
+      "int_symbol_accuracy": 0.625527343750001,
+      "avg_symbol_accuracy": 0.625527343750001,
+      "model": "IQ_CNN"
+    },
+    {
+      "pit_mse": 0.459951545111835,
+      "wave_mse": 0.4599515423178673,
+      "sdr_db": 0.3930816166102886,
+      "soi_symbol_accuracy": 0.6248999023437505,
+      "int_symbol_accuracy": 0.6248999023437505,
+      "avg_symbol_accuracy": 0.6248999023437505,
+      "model": "Linear"
+    },
+    {
+      "pit_mse": 0.45666942559182644,
+      "wave_mse": 0.456669420003891,
+      "sdr_db": 0.42783419974148273,
+      "soi_symbol_accuracy": 0.622077636718751,
+      "int_symbol_accuracy": 0.622077636718751,
+      "avg_symbol_accuracy": 0.622077636718751,
+      "model": "Tiny"
+    },
+    {
+      "pit_mse": 0.87625502794981,
+      "wave_mse": 0.8762550242245197,
+      "sdr_db": -2.3222694247961044,
+      "soi_symbol_accuracy": 0.6211474609375004,
+      "int_symbol_accuracy": 0.6211474609375004,
+      "avg_symbol_accuracy": 0.6211474609375004,
+      "model": "FastICA"
+    }
+  ]
+}

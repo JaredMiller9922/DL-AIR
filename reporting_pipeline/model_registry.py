@@ -21,7 +21,7 @@ class ModelSpec:
     train_kwargs: dict | None = None
 
 
-def build_registry():
+def build_registry(in_ch: int = 8):
     return {
         "FastICA": ModelSpec(
             name="FastICA",
@@ -33,43 +33,43 @@ def build_registry():
         "Linear": ModelSpec(
             name="Linear",
             kind="learned",
-            builder=lambda: LinearSeparator(in_ch=8, out_ch=4),
+            builder=lambda: LinearSeparator(in_ch=in_ch, out_ch=4),
             checkpoint_name="linear_separator.pt",
             train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
         ),
         "Tiny": ModelSpec(
             name="Tiny",
             kind="learned",
-            builder=lambda: TinySeparator(in_ch=8, out_ch=4, hidden=64),
+            builder=lambda: TinySeparator(in_ch=in_ch, out_ch=4, hidden=64),
             checkpoint_name="tiny_separator.pt",
             train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
         ),
         "Hybrid": ModelSpec(
             name="Hybrid",
             kind="learned",
-            builder=lambda: HybridSeparator(in_ch=8, out_ch=4, hidden=64, num_blocks=4, dropout=0.1),
+            builder=lambda: HybridSeparator(in_ch=in_ch, out_ch=4, hidden=64, num_blocks=4, dropout=0.1),
             checkpoint_name="hybrid_separator.pt",
             train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
         ),
         "LSTM": ModelSpec(
             name="LSTM",
             kind="learned",
-            builder=lambda: LSTMSeparator(in_ch=8, out_ch=4, hidden_size=128, num_layers=2, bidirectional=True, dropout=0.15),
+            builder=lambda: LSTMSeparator(in_ch=in_ch, out_ch=4, hidden_size=128, num_layers=2, bidirectional=True, dropout=0.15),
             checkpoint_name="lstm_separator.pt",
             train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
         ),
         "IQ_CNN": ModelSpec(
             name="IQ_CNN",
             kind="learned",
-            builder=lambda: IQCNNSeparator(in_ch=8, out_ch=4, base_channels=48, dropout=0.08),
+            builder=lambda: IQCNNSeparator(in_ch=in_ch, out_ch=4, base_channels=48, dropout=0.08),
             checkpoint_name="iq_cnn_separator.pt",
             train_kwargs={"optimizer_name": "adamw", "scheduler_name": "plateau", "scheduler_patience": 4},
         ),
     }
 
 
-def active_specs(active_names):
-    registry = build_registry()
+def active_specs(active_names, in_ch: int = 8):
+    registry = build_registry(in_ch=in_ch)
     return [registry[name] for name in active_names if name in registry]
 
 

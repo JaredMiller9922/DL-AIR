@@ -1,6 +1,8 @@
 import numpy as np
 import torch
 from sklearn.decomposition import FastICA
+from sklearn.exceptions import ConvergenceWarning
+import warnings
 
 
 def _dominant_bin(signal: np.ndarray) -> int:
@@ -43,15 +45,25 @@ class FastICABaseline:
 
     def _separate_sample(self, sample_iq: np.ndarray) -> np.ndarray:
         X = sample_iq.T
+        n_features = X.shape[1]
+        n_components = min(4, n_features)
         ica = FastICA(
-            n_components=4,
+            n_components=n_components,
             algorithm="parallel",
             whiten="unit-variance",
             fun="logcosh",
             random_state=self.random_state,
             max_iter=1000,
         )
-        S = ica.fit_transform(X).T.astype(np.float32)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", ConvergenceWarning)
+            S = ica.fit_transform(X).T.astype(np.float32)
+
+        if S.shape[0] == 2:
+            z_low = _normalize_complex(S[0]).astype(np.complex64)
+            z_high = _normalize_complex(S[1]).astype(np.complex64)
+            out = np.stack([z_low.real, z_low.imag, z_high.real, z_high.imag], axis=0).astype(np.float32)
+            return out
 
         dom_bins = [_dominant_bin(comp) for comp in S]
         low_indices = sorted(range(4), key=lambda i: abs(dom_bins[i] - self.low_band_hint))[:2]

@@ -1,0 +1,23 @@
+{
+  "loss_name": "mse",
+  "best_epoch": 2,
+  "best_val_pit_mse": 0.4960193783044815,
+  "train_history": [
+    0.5227626636624336,
+    0.5018974542617798
+  ],
+  "val_history": [
+    0.4966941401362419,
+    0.4960193783044815
+  ],
+  "test_metrics": {
+    "pit_mse": 0.49499405175447464,
+    "wave_mse": 0.49499405175447464,
+    "sdr_db": 0.044273979030549526,
+    "soi_symbol_accuracy": 0.6080078124999999,
+    "int_symbol_accuracy": 0.6080078124999999,
+    "avg_symbol_accuracy": 0.6080078124999999
+  },
+  "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\reporting_pipeline\\outputs\\iqcnn_2ch_full_train\\iqcnn_mse.pt",
+  "dataset_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\reporting_pipeline\\outputs\\iqcnn_2ch_full_train\\data"
+}
