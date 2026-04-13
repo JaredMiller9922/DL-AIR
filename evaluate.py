@@ -68,13 +68,21 @@ class ModelEvaluator:
                         n_symbols_b,
                     )
 
-                    n_a = min(len(rec_a), len(true_sym_a_c[i]))
-                    n_b = min(len(rec_b), len(true_sym_b_c[i]))
+                    # direct assignment
+                    n_aa = min(len(rec_a), len(true_sym_a_c[i]))
+                    n_bb = min(len(rec_b), len(true_sym_b_c[i]))
+                    acc_direct_a = symbol_accuracy(rec_a[:n_aa], true_sym_a_c[i][:n_aa])
+                    acc_direct_b = symbol_accuracy(rec_b[:n_bb], true_sym_b_c[i][:n_bb])
+                    direct_score = 0.5 * (acc_direct_a + acc_direct_b)
 
-                    acc_a = symbol_accuracy(rec_a[:n_a], true_sym_a_c[i][:n_a])
-                    acc_b = symbol_accuracy(rec_b[:n_b], true_sym_b_c[i][:n_b])
+                    # swapped assignment removes symbol ambiguity
+                    n_ab = min(len(rec_a), len(true_sym_b_c[i]))
+                    n_ba = min(len(rec_b), len(true_sym_a_c[i]))
+                    acc_swap_a = symbol_accuracy(rec_a[:n_ab], true_sym_b_c[i][:n_ab])
+                    acc_swap_b = symbol_accuracy(rec_b[:n_ba], true_sym_a_c[i][:n_ba])
+                    swap_score = 0.5 * (acc_swap_a + acc_swap_b)
 
-                    total_sym_acc += 0.5 * (acc_a + acc_b)
+                    total_sym_acc += max(direct_score, swap_score)
                     total_examples += 1
 
                 total_mse += mse_loss(pred, y).item()
@@ -132,16 +140,36 @@ class ModelEvaluator:
                 n_symbols_b,
             )
 
-            # Plot Source A recovery
+            # score both assignments for first example
+            n_aa = min(len(rec_a), len(true_sym_a_c[i]))
+            n_bb = min(len(rec_b), len(true_sym_b_c[i]))
+            direct_score = 0.5 * (
+                symbol_accuracy(rec_a[:n_aa], true_sym_a_c[i][:n_aa]) +
+                symbol_accuracy(rec_b[:n_bb], true_sym_b_c[i][:n_bb])
+            )
+
+            n_ab = min(len(rec_a), len(true_sym_b_c[i]))
+            n_ba = min(len(rec_b), len(true_sym_a_c[i]))
+            swap_score = 0.5 * (
+                symbol_accuracy(rec_a[:n_ab], true_sym_b_c[i][:n_ab]) +
+                symbol_accuracy(rec_b[:n_ba], true_sym_a_c[i][:n_ba])
+            )
+
+            if swap_score > direct_score:
+                plot_true_a = true_sym_b_c[i]
+                plot_true_b = true_sym_a_c[i]
+            else:
+                plot_true_a = true_sym_a_c[i]
+                plot_true_b = true_sym_b_c[i]
+
             self.plotter.plot_symbol_recovery(
-                true_symbols=true_sym_a_c[i],
+                true_symbols=plot_true_a,
                 recovered_symbols=rec_a,
                 model_name=f"{model_name}_SourceA"
             )
 
-            # Plot Source B recovery
             self.plotter.plot_symbol_recovery(
-                true_symbols=true_sym_b_c[i],
+                true_symbols=plot_true_b,
                 recovered_symbols=rec_b,
                 model_name=f"{model_name}_SourceB"
             )
@@ -184,7 +212,7 @@ class ModelEvaluator:
         plt.xlabel("Epoch")
         plt.ylabel("MSE")
         plt.legend()
-        plt.savefig("/visualizations/model_comparison.png")
+        plt.savefig("visualizations/model_comparison.png")
         plt.close()
 
     def print_latex_table(self, all_metrics):

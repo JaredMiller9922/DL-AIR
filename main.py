@@ -95,12 +95,13 @@ def main():
     print("WE MADE IT BEFORE THE Separator")
 
     models_to_test = {
-        "Hybrid": {"model": HybridSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        "LSTM": {"model": LSTMSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        # "Linear": {"model": LinearSeparator(in_ch=8, out_ch=4).to(device), "train": True},
-        "IQ_CNN": {"model": IQCNNSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=4, out_ch=4).to(device), "train": True},
+        # "Hybrid": {"model": HybridSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        # "LSTM": {"model": LSTMSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        # "IQ_CNN": {"model": IQCNNSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        # "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=4, out_ch=4).to(device), "train": True},
         "FastICA": {"model": FastICABaseline(), "train": False},
+
+        # "Linear": {"model": LinearSeparator(in_ch=8, out_ch=4).to(device), "train": True},
     }
 
     print("MOdels were tested")
@@ -110,7 +111,18 @@ def main():
         print(f"--- Training {name} ---")
         if entry["train"]:
             print(f"Model: {name} and parameters: {model.parameters()}")
-            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=ExperimentConfig.epochs, device=device)
+
+            save_path = f"pytorch_models/{name}.pt"
+
+            trained_model, t_hist, v_hist = train_model(
+                model,
+                train_loader,
+                val_loader,
+                plotter,
+                epochs=ExperimentConfig.epochs,
+                device=device,
+                save_path=save_path
+            )
             all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
         else:
             print(f"Model: {name} baseline (no training step)")
