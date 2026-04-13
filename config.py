@@ -42,7 +42,7 @@ class ExperimentConfig:
     rolloff: float = 0.25
     rrc_span_symbols: int = 12
     normalize_power: bool = True
-    num_channels: int = 4
+    num_channels: int = 2
 
     # ----- NoiseConfig -------- #
     noise_enabled: bool = False
@@ -50,7 +50,7 @@ class ExperimentConfig:
     # ----- MixtureConfig -------- #
     alpha: float = 1.0
     snr_db: Optional[float] = 100 # Default value of 100 makes no changes
-    n_rx: int = 4
+    n_rx: int = 2
     random_phase: bool = True
 
     use_on_the_fly_data: bool = True
