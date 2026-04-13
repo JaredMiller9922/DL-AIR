@@ -44,7 +44,7 @@ class FastICABaseline(nn.Module):
 
             # Reshape data to be in desired output format
             S = ica.fit_transform(X)   # (T, 4)
-            print(f"FastICA iterations (sample {b}): {ica.n_iter_}")
+            # print(f"FastICA iterations (sample {b}): {ica.n_iter_}")
             outs.append(S.T.astype(np.float32))  # (4, T)
 
         y = np.stack(outs, axis=0)  # (B, 4, T)

@@ -2,7 +2,6 @@ data/
 mit_challenge/mixtureData
 mit_challenge/sepOutput
 mit_challenge/soiParamFiles
-*.pt
 reporting_pipeline/outputs/datasets/
 reporting_pipeline/outputs/phase1_fastica
 __pycache__/
