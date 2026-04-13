@@ -1,0 +1,71 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{mit_rfchallenge}
+\citation{defossez2019demucs}
+\citation{mit_rfchallenge}
+\citation{sklar_digital_communications}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Background}{1}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Method}{1}{section.3}\protected@file@percent }
+\citation{demucs_github}
+\citation{ica_wikipedia}
+\citation{wu2018groupnorm}
+\citation{gelu}
+\citation{defossez2019demucs}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Data Generation}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Source Separation}{2}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Models Used, Sources, and Modifications}{2}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}FastICA}{2}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Hybrid Separator}{2}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}LSTM Separator}{2}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}IQ\_CNN Separator}{2}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}HTDemucs Separator}{2}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Training}{2}{section.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Summary of the two cross-validation stages used to tune the IQ\_CNN family.}}{3}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:cvsummary}{{I}{3}{Summary of the two cross-validation stages used to tune the IQ\_CNN family}{table.caption.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Two-channel IQ\_CNN loss study comparing PIT-MSE and plain MSE on the same fixed dataset. PIT-MSE learned more cleanly in waveform space, while plain MSE produced only a negligible edge in symbol accuracy.}}{3}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:iqcnn_loss_study}{{1}{3}{Two-channel IQ\_CNN loss study comparing PIT-MSE and plain MSE on the same fixed dataset. PIT-MSE learned more cleanly in waveform space, while plain MSE produced only a negligible edge in symbol accuracy}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Experiments}{3}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}A. Single-Channel Separation Problem}{3}{subsection.6.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Single-channel reference comparison at $\alpha =1.0$ and SNR $=15$ dB.}}{3}{table.caption.3}\protected@file@percent }
+\newlabel{tab:singlechannel}{{II}{3}{Single-channel reference comparison at $\alpha =1.0$ and SNR $=15$ dB}{table.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Single-channel reference waveform comparison. Since symbol accuracy was saturated, waveform error was the main discriminative metric.}}{3}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:single_wave}{{2}{3}{Single-channel reference waveform comparison. Since symbol accuracy was saturated, waveform error was the main discriminative metric}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}B. 2-Channel Separation Problem}{3}{subsection.6.2}\protected@file@percent }
+\citation{adam_optimization}
+\bibstyle{IEEEtran}
+\bibdata{references/references}
+\bibcite{mit_rfchallenge}{1}
+\bibcite{defossez2019demucs}{2}
+\bibcite{sklar_digital_communications}{3}
+\bibcite{demucs_github}{4}
+\bibcite{ica_wikipedia}{5}
+\bibcite{wu2018groupnorm}{6}
+\bibcite{gelu}{7}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Single-channel robustness sweeps. Symbol recovery remained saturated across the tested range, confirming that this setting was still relatively easy from the standpoint of hard symbol decisions.}}{4}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:single_sweeps}{{3}{4}{Single-channel robustness sweeps. Symbol recovery remained saturated across the tested range, confirming that this setting was still relatively easy from the standpoint of hard symbol decisions}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Representative single-channel examples showing that waveform quality can differ noticeably even when all methods still recover the correct symbol stream.}}{4}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:single_examples}{{4}{4}{Representative single-channel examples showing that waveform quality can differ noticeably even when all methods still recover the correct symbol stream}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}C. 4-Channel Separation Problem}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Two-channel reference comparison using the main repo generator.}}{4}{table.caption.7}\protected@file@percent }
+\newlabel{tab:twochannel}{{III}{4}{Two-channel reference comparison using the main repo generator}{table.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces FastICA Phase 1 validation: moving from one receive channel to two receive channels greatly improves the baseline. This confirms that ICA should not be treated as a meaningful one-channel baseline for the current problem.}}{4}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:fastica_phase1}{{5}{4}{FastICA Phase 1 validation: moving from one receive channel to two receive channels greatly improves the baseline. This confirms that ICA should not be treated as a meaningful one-channel baseline for the current problem}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{4}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{4}{section*.12}\protected@file@percent }
+\bibcite{adam_optimization}{8}
+\bibcite{d3net}{9}
+\citation{d3net}
+\citation{mit_rfchallenge}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Two-channel reference comparison. The learned models are similar in symbol accuracy, but FastICA remains much worse in waveform quality.}}{5}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:two_channel_reference}{{6}{5}{Two-channel reference comparison. The learned models are similar in symbol accuracy, but FastICA remains much worse in waveform quality}{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Representative two-channel outputs. Even with two observations, the learned models reconstruct cleaner waveforms than the FastICA baseline.}}{5}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:two_channel_examples}{{7}{5}{Representative two-channel outputs. Even with two observations, the learned models reconstruct cleaner waveforms than the FastICA baseline}{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Validation MSE for the four-channel experiments after 300 epochs. The figure shows strong overfitting and poor validation generalization in the most difficult setting.}}{5}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:validation_mse}{{8}{5}{Validation MSE for the four-channel experiments after 300 epochs. The figure shows strong overfitting and poor validation generalization in the most difficult setting}{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  A: Music Source Separation}{5}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  B: MIT Interference Challenge}{5}{section*.14}\protected@file@percent }
+\gdef \@abspage@last{5}

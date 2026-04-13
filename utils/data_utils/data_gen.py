@@ -1,5 +1,12 @@
-from generator import RFMixtureGenerator, QPSKConfig, InterfererConfig, MixtureConfig
-from dataset import SyntheticRFDataset
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from utils.data_utils.generator import RFMixtureGenerator, QPSKConfig, InterfererConfig, MixtureConfig
+from utils.data_utils.dataset import SyntheticRFDataset
 
 if __name__ == "__main__":
     generator = RFMixtureGenerator(seed = 0)
@@ -18,7 +25,7 @@ if __name__ == "__main__":
     )
 
     mix_cfg = MixtureConfig(
-        n_rx=4,
+        n_rx=1,
         alpha=0.8,
         snr_db=25.0,
     )
@@ -35,9 +42,9 @@ if __name__ == "__main__":
     )
 
     dataset.save_splits(
-        train_size=5000,
-        val_size=500,
-        test_size=500,
+        train_size=10000,
+        val_size=1000,
+        test_size=1000,
         root_dir="data",
         overwrite=True,
     )

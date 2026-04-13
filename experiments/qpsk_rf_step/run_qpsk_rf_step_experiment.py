@@ -3,6 +3,7 @@ import math
 import random
 import shutil
 import sys
+import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -99,16 +100,23 @@ def build_source(length, rng, symbol_range, base_freq):
     }
 
 
-def generate_sample(length, rng):
+def receiver_coeffs(n_rx):
+    if n_rx < 1 or n_rx > len(FIXED_H_A):
+        raise ValueError(f"n_rx must be between 1 and {len(FIXED_H_A)}, got {n_rx}")
+    return FIXED_H_A[:n_rx], FIXED_H_B[:n_rx]
+
+
+def generate_sample(length, rng, n_rx=4):
     source_a, meta_a = build_source(length, rng, symbol_range=(20, 28), base_freq=14.0)
     source_b, meta_b = build_source(length, rng, symbol_range=(18, 24), base_freq=36.0)
+    h_a, h_b = receiver_coeffs(n_rx)
 
-    mixture = np.zeros((4, length), dtype=np.complex64)
-    for rx in range(4):
-        mixture[rx] = FIXED_H_A[rx] * source_a + FIXED_H_B[rx] * source_b
+    mixture = np.zeros((n_rx, length), dtype=np.complex64)
+    for rx in range(n_rx):
+        mixture[rx] = h_a[rx] * source_a + h_b[rx] * source_b
 
     noise_std = rng.uniform(0.001, 0.004)
-    noise = noise_std * (rng.standard_normal((4, length)) + 1j * rng.standard_normal((4, length)))
+    noise = noise_std * (rng.standard_normal((n_rx, length)) + 1j * rng.standard_normal((n_rx, length)))
     mixture = mixture + noise.astype(np.complex64)
 
     x = complex_matrix_to_iq_channels(mixture)
@@ -118,15 +126,16 @@ def generate_sample(length, rng):
         "source_a": meta_a,
         "source_b": meta_b,
         "noise_std": float(noise_std),
-        "h_a_real": np.real(FIXED_H_A).astype(float).tolist(),
-        "h_a_imag": np.imag(FIXED_H_A).astype(float).tolist(),
-        "h_b_real": np.real(FIXED_H_B).astype(float).tolist(),
-        "h_b_imag": np.imag(FIXED_H_B).astype(float).tolist(),
+        "n_rx": int(n_rx),
+        "h_a_real": np.real(h_a).astype(float).tolist(),
+        "h_a_imag": np.imag(h_a).astype(float).tolist(),
+        "h_b_real": np.real(h_b).astype(float).tolist(),
+        "h_b_imag": np.imag(h_b).astype(float).tolist(),
     }
     return x, y, y_alt, source_a, source_b, mixture, metadata
 
 
-def save_dataset(root_dir, train_size=1024, val_size=256, test_size=256, length=256, seed=29):
+def save_dataset(root_dir, train_size=1024, val_size=256, test_size=256, length=256, seed=29, n_rx=4):
     root = Path(root_dir)
     if root.exists():
         shutil.rmtree(root)
@@ -139,7 +148,7 @@ def save_dataset(root_dir, train_size=1024, val_size=256, test_size=256, length=
         rng = np.random.default_rng(seed + split_idx)
         split_meta = []
         for idx in range(split_size):
-            x, y, y_alt, _, _, _, meta = generate_sample(length, rng)
+            x, y, y_alt, _, _, _, meta = generate_sample(length, rng, n_rx=n_rx)
             np.savez_compressed(root / split_name / f"sample_{idx:05d}.npz", x=x, y=y, y_alt=y_alt)
             split_meta.append(meta)
             metadata.append(meta)
@@ -153,7 +162,8 @@ def save_dataset(root_dir, train_size=1024, val_size=256, test_size=256, length=
                 "val": val_size,
                 "test": test_size,
                 "length": length,
-                "description": "Two pulse-shaped QPSK packets with distinct center frequencies, random timing/phase/CFO/amplitude, fixed multi-receiver channel mixing, and light noise.",
+                "n_rx": n_rx,
+                "description": "Two pulse-shaped QPSK packets with distinct center frequencies, random timing/phase/CFO/amplitude, fixed receiver channel mixing, and light noise.",
             },
             handle,
             indent=2,
@@ -243,11 +253,13 @@ def plot_sample_results(output_dir, source_a, source_b, mixture, pred_aligned, m
 
     fig, axes = plt.subplots(2, 1, figsize=(12, 6), sharex=True)
     axes[0].plot(mixture[0].real, label="RX0 real", color="black")
-    axes[0].plot(mixture[1].real, label="RX1 real", alpha=0.7)
+    if mixture.shape[0] > 1:
+        axes[0].plot(mixture[1].real, label="RX1 real", alpha=0.7)
     axes[0].set_title("Received Mixture Real Parts")
     axes[0].legend()
     axes[1].plot(mixture[0].imag, label="RX0 imag", color="black")
-    axes[1].plot(mixture[1].imag, label="RX1 imag", alpha=0.7)
+    if mixture.shape[0] > 1:
+        axes[1].plot(mixture[1].imag, label="RX1 imag", alpha=0.7)
     axes[1].set_title("Received Mixture Imag Parts")
     axes[1].legend()
     axes[1].set_xlabel("Sample")
@@ -287,6 +299,7 @@ def plot_sample_results(output_dir, source_a, source_b, mixture, pred_aligned, m
     plt.close(fig)
 
     meta_lines = [
+        f"n_rx={metadata['n_rx']}",
         f"noise_std={metadata['noise_std']:.4f}",
         f"A: symbols={metadata['source_a']['num_symbols']} start={metadata['source_a']['start']} amp={metadata['source_a']['amp']:.3f} cfo={metadata['source_a']['cfo']:.3f}",
         f"B: symbols={metadata['source_b']['num_symbols']} start={metadata['source_b']['start']} amp={metadata['source_b']['amp']:.3f} cfo={metadata['source_b']['cfo']:.3f}",
@@ -304,26 +317,48 @@ def plot_sample_results(output_dir, source_a, source_b, mixture, pred_aligned, m
 
 
 def main():
-    seed_everything(29)
-    experiment_root = Path(__file__).resolve().parent
-    data_root = experiment_root / "data"
-    outputs_root = experiment_root / "outputs"
-    checkpoint_path = outputs_root / "qpsk_rf_step_best.pt"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data-root", type=Path, default=None)
+    parser.add_argument("--outputs-root", type=Path, default=None)
+    parser.add_argument("--checkpoint-path", type=Path, default=None)
+    parser.add_argument("--train-size", type=int, default=1024)
+    parser.add_argument("--val-size", type=int, default=256)
+    parser.add_argument("--test-size", type=int, default=256)
+    parser.add_argument("--length", type=int, default=256)
+    parser.add_argument("--seed", type=int, default=29)
+    parser.add_argument("--epochs", type=int, default=80)
+    parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument("--n-rx", type=int, default=4)
+    args = parser.parse_args()
 
-    metadata = save_dataset(data_root, train_size=1024, val_size=256, test_size=256, length=256, seed=29)
+    experiment_root = Path(__file__).resolve().parent
+    data_root = args.data_root or (experiment_root / "data")
+    outputs_root = args.outputs_root or (experiment_root / "outputs")
+    checkpoint_path = args.checkpoint_path or (outputs_root / "qpsk_rf_step_best.pt")
+
+    seed_everything(args.seed)
+    metadata = save_dataset(
+        data_root,
+        train_size=args.train_size,
+        val_size=args.val_size,
+        test_size=args.test_size,
+        length=args.length,
+        seed=args.seed,
+        n_rx=args.n_rx,
+    )
     plot_dataset_randomness(metadata, outputs_root)
 
-    train_loader = make_loader(data_root / "train", batch_size=32, shuffle=True)
-    val_loader = make_loader(data_root / "val", batch_size=32, shuffle=False)
-    test_loader = make_loader(data_root / "test", batch_size=32, shuffle=False)
+    train_loader = make_loader(data_root / "train", batch_size=args.batch_size, shuffle=True)
+    val_loader = make_loader(data_root / "val", batch_size=args.batch_size, shuffle=False)
+    test_loader = make_loader(data_root / "test", batch_size=args.batch_size, shuffle=False)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    model = IQCNNSeparator(in_ch=8, out_ch=4, base_channels=32, dropout=0.0).to(device)
+    model = IQCNNSeparator(in_ch=2 * args.n_rx, out_ch=4, base_channels=32, dropout=0.0).to(device)
     model, train_hist, val_hist, train_meta = train_model(
         model,
         train_loader,
         val_loader,
-        epochs=80,
+        epochs=args.epochs,
         device=device,
         lr=8e-4,
         weight_decay=0.0,
@@ -336,7 +371,7 @@ def main():
     test_metrics = evaluate_model(model, test_loader, device)
 
     sample_rng = np.random.default_rng(404)
-    x_np, y_np, y_alt_np, source_a, source_b, mixture, sample_meta = generate_sample(256, sample_rng)
+    x_np, y_np, y_alt_np, source_a, source_b, mixture, sample_meta = generate_sample(args.length, sample_rng, n_rx=args.n_rx)
     x = torch.from_numpy(x_np).unsqueeze(0).to(device)
     y = torch.from_numpy(y_np).unsqueeze(0).to(device)
     y_alt = torch.from_numpy(y_alt_np).unsqueeze(0).to(device)
@@ -348,7 +383,9 @@ def main():
 
     summary = {
         "device": device,
-        "description": "Step 3 RF-like experiment: two pulse-shaped QPSK packets with distinct carrier bands, random timing/phase/CFO/amplitude, fixed 4-receiver channel mixing, and light noise.",
+        "description": "Step 3 RF-like experiment: two pulse-shaped QPSK packets with distinct carrier bands, random timing/phase/CFO/amplitude, fixed receiver channel mixing, and light noise.",
+        "n_rx": args.n_rx,
+        "data_root": str(data_root),
         "train_history": train_hist,
         "val_history": val_hist,
         "metadata": train_meta,
