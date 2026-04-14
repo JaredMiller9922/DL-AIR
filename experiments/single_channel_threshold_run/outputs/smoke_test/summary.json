@@ -1,0 +1,200 @@
+{
+  "run_name": "smoke_test",
+  "timestamp": "2026-04-13T20:55:27",
+  "data_root": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\data",
+  "device": "cuda",
+  "config_snapshot": {
+    "n_rx": 1,
+    "num_channels": 1,
+    "use_on_the_fly_data": false,
+    "alpha": 0.8,
+    "snr_db": 25,
+    "noise_enabled": false,
+    "samples_per_symbol": 2,
+    "n_symbols": 400,
+    "batch_size": 16,
+    "lr": 0.001
+  },
+  "thresholds": {
+    "baseline_models": 0.0,
+    "HTDemucs": 0.0
+  },
+  "max_epochs": {
+    "baseline_models": 2,
+    "HTDemucs": 2
+  },
+  "dataset_sizes": {
+    "train": 10000,
+    "val": 1000
+  },
+  "results": {
+    "Hybrid": {
+      "threshold": 0.0,
+      "max_epochs": 2,
+      "best_epoch": 2,
+      "stop_epoch": 2,
+      "stop_reason": "max_epochs_reached",
+      "best_val_mse": 0.000962416343908343,
+      "train_history_full": [
+        0.6208283011436463,
+        0.06135928368233144,
+        0.0014076352453790606
+      ],
+      "val_history_full": [
+        0.6208200700699337,
+        0.0018365082796663046,
+        0.000962416343908343
+      ],
+      "epochs_full": [
+        0,
+        1,
+        2
+      ],
+      "sampled_epochs": [
+        0,
+        1,
+        2
+      ],
+      "sampled_train_history": [
+        0.6208283011436463,
+        0.06135928368233144,
+        0.0014076352453790606
+      ],
+      "sampled_val_history": [
+        0.6208200700699337,
+        0.0018365082796663046,
+        0.000962416343908343
+      ],
+      "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\Hybrid_best.pt",
+      "final_mse": 0.000962416343908343,
+      "final_sdr_db": 27.15970360286652,
+      "final_symbol_accuracy": 1.0
+    },
+    "LSTM": {
+      "threshold": 0.0,
+      "max_epochs": 2,
+      "best_epoch": 2,
+      "stop_epoch": 2,
+      "stop_reason": "max_epochs_reached",
+      "best_val_mse": 0.0002826041646397835,
+      "train_history_full": [
+        0.501269518661499,
+        0.05151087002661079,
+        0.0008624542029574513
+      ],
+      "val_history_full": [
+        0.5013351279591757,
+        0.0006643484590486402,
+        0.0002826041646397835
+      ],
+      "epochs_full": [
+        0,
+        1,
+        2
+      ],
+      "sampled_epochs": [
+        0,
+        1,
+        2
+      ],
+      "sampled_train_history": [
+        0.501269518661499,
+        0.05151087002661079,
+        0.0008624542029574513
+      ],
+      "sampled_val_history": [
+        0.5013351279591757,
+        0.0006643484590486402,
+        0.0002826041646397835
+      ],
+      "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\LSTM_best.pt",
+      "final_mse": 0.0002826041646397835,
+      "final_sdr_db": 32.484205760653055,
+      "final_symbol_accuracy": 1.0
+    },
+    "IQ_CNN": {
+      "threshold": 0.0,
+      "max_epochs": 2,
+      "best_epoch": 2,
+      "stop_epoch": 2,
+      "stop_reason": "max_epochs_reached",
+      "best_val_mse": 0.0008689185146183248,
+      "train_history_full": [
+        0.6217977083206176,
+        0.05465489754602313,
+        0.001409104786068201
+      ],
+      "val_history_full": [
+        0.6219723934218997,
+        0.002300167910843378,
+        0.0008689185146183248
+      ],
+      "epochs_full": [
+        0,
+        1,
+        2
+      ],
+      "sampled_epochs": [
+        0,
+        1,
+        2
+      ],
+      "sampled_train_history": [
+        0.6217977083206176,
+        0.05465489754602313,
+        0.001409104786068201
+      ],
+      "sampled_val_history": [
+        0.6219723934218997,
+        0.002300167910843378,
+        0.0008689185146183248
+      ],
+      "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\IQ_CNN_best.pt",
+      "final_mse": 0.0008689185146183248,
+      "final_sdr_db": 27.748858436705575,
+      "final_symbol_accuracy": 1.0
+    },
+    "HTDemucs": {
+      "threshold": 0.0,
+      "max_epochs": 2,
+      "best_epoch": 2,
+      "stop_epoch": 2,
+      "stop_reason": "max_epochs_reached",
+      "best_val_mse": 0.4986870974775345,
+      "train_history_full": [
+        0.7089318796157837,
+        0.5025208423137665,
+        0.49943115792274473
+      ],
+      "val_history_full": [
+        0.7094898687468635,
+        0.49982724539817325,
+        0.4986870974775345
+      ],
+      "epochs_full": [
+        0,
+        1,
+        2
+      ],
+      "sampled_epochs": [
+        0,
+        1,
+        2
+      ],
+      "sampled_train_history": [
+        0.7089318796157837,
+        0.5025208423137665,
+        0.49943115792274473
+      ],
+      "sampled_val_history": [
+        0.7094898687468635,
+        0.49982724539817325,
+        0.4986870974775345
+      ],
+      "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\HTDemucs_best.pt",
+      "final_mse": 0.4986870974775345,
+      "final_sdr_db": 0.011424497538615786,
+      "final_symbol_accuracy": 0.25751750000000007
+    }
+  }
+}

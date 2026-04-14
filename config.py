@@ -15,13 +15,13 @@ class ExperimentConfig:
 
     # Training params
     batch_size: int = 16
-    epochs: int = 300
+    epochs: int = 20
     lr: float = 1e-3
 
     # Signal params
     modulation: str = "QPSK"
     # TODO: This variable shouldn't exist mixture = s1 + \alpha * s2 + noise. alpha is defined in MixtureConfig below
-    noise_alpha: float = 0.5
+    noise_alpha: float = 0.8
     noise_sigma: float = 0.1
     num_symbols: int = 1000
     num_sources: int = 2
@@ -42,15 +42,15 @@ class ExperimentConfig:
     rolloff: float = 0.25
     rrc_span_symbols: int = 12
     normalize_power: bool = True
-    num_channels: int = 4
+    num_channels: int = 1
 
     # ----- NoiseConfig -------- #
     noise_enabled: bool = False
 
     # ----- MixtureConfig -------- #
-    alpha: float = 1.0
-    snr_db: Optional[float] = 100 # Default value of 100 makes no changes
-    n_rx: int = 4
+    alpha: float = 0.8 
+    snr_db: float = 25 # Default value of 100 makes no changes
+    n_rx: int = 1
     random_phase: bool = True
 
-    use_on_the_fly_data: bool = True
+    use_on_the_fly_data: bool = False

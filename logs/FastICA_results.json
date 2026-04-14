@@ -1,0 +1,7 @@
+{
+    "final_mse": 0.7636474522333296,
+    "final_sdr_db": -1.8173889281257751,
+    "final_symbol_accuracy": 0.30128875000000005,
+    "train_history": [],
+    "val_history": []
+}

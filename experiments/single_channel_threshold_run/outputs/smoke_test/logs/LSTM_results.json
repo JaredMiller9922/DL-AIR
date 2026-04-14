@@ -1,0 +1,42 @@
+{
+  "threshold": 0.0,
+  "max_epochs": 2,
+  "best_epoch": 2,
+  "stop_epoch": 2,
+  "stop_reason": "max_epochs_reached",
+  "best_val_mse": 0.0002826041646397835,
+  "train_history_full": [
+    0.501269518661499,
+    0.05151087002661079,
+    0.0008624542029574513
+  ],
+  "val_history_full": [
+    0.5013351279591757,
+    0.0006643484590486402,
+    0.0002826041646397835
+  ],
+  "epochs_full": [
+    0,
+    1,
+    2
+  ],
+  "sampled_epochs": [
+    0,
+    1,
+    2
+  ],
+  "sampled_train_history": [
+    0.501269518661499,
+    0.05151087002661079,
+    0.0008624542029574513
+  ],
+  "sampled_val_history": [
+    0.5013351279591757,
+    0.0006643484590486402,
+    0.0002826041646397835
+  ],
+  "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\LSTM_best.pt",
+  "final_mse": 0.0002826041646397835,
+  "final_sdr_db": 32.484205760653055,
+  "final_symbol_accuracy": 1.0
+}

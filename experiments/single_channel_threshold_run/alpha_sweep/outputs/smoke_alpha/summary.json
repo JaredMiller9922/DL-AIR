@@ -1,0 +1,277 @@
+{
+  "run_name": "smoke_alpha",
+  "timestamp": "2026-04-13T23:18:24",
+  "device": "cuda",
+  "alphas": [
+    0.8,
+    1.0
+  ],
+  "config_snapshot": {
+    "n_rx": 1,
+    "num_channels": 1,
+    "use_on_the_fly_data": false,
+    "noise_enabled": false,
+    "snr_db": 25,
+    "epochs": 2,
+    "batch_size": 16,
+    "lr": 0.001,
+    "train_size": 200,
+    "val_size": 80
+  },
+  "results": {
+    "alpha_0p80": {
+      "alpha": 0.8,
+      "data_root": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\alpha_sweep\\data\\alpha_0p80",
+      "dataset_sizes": {
+        "train": 200,
+        "val": 80
+      },
+      "models": {
+        "Hybrid": {
+          "best_epoch": 2,
+          "best_val_mse": 0.258046817779541,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.6921101625149066,
+            0.3821557416365697,
+            0.2612549295792213
+          ],
+          "val_history_full": [
+            0.6907072305679322,
+            0.2928102731704712,
+            0.258046817779541
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.6921101625149066,
+            0.3821557416365697,
+            0.2612549295792213
+          ],
+          "sampled_val_history": [
+            0.6907072305679322,
+            0.2928102731704712,
+            0.258046817779541
+          ],
+          "final_mse": 0.258046817779541,
+          "final_sdr_db": 2.8753384590148925,
+          "final_symbol_accuracy": 0.6162500000000001
+        },
+        "LSTM": {
+          "best_epoch": 2,
+          "best_val_mse": 0.25530978441238406,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5082627397317153,
+            0.3785066833862892,
+            0.2587308402244861
+          ],
+          "val_history_full": [
+            0.5082350015640259,
+            0.2723404049873352,
+            0.25530978441238406
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5082627397317153,
+            0.3785066833862892,
+            0.2587308402244861
+          ],
+          "sampled_val_history": [
+            0.5082350015640259,
+            0.2723404049873352,
+            0.25530978441238406
+          ],
+          "final_mse": 0.25530978441238406,
+          "final_sdr_db": 2.921579599380493,
+          "final_symbol_accuracy": 0.6039843749999999
+        },
+        "IQ_CNN": {
+          "best_epoch": 2,
+          "best_val_mse": 0.25522065758705137,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.6551023125648499,
+            0.3729848678295429,
+            0.2579334217768449
+          ],
+          "val_history_full": [
+            0.6544299125671387,
+            0.2663161396980286,
+            0.25522065758705137
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.6551023125648499,
+            0.3729848678295429,
+            0.2579334217768449
+          ],
+          "sampled_val_history": [
+            0.6544299125671387,
+            0.2663161396980286,
+            0.25522065758705137
+          ],
+          "final_mse": 0.25522065758705137,
+          "final_sdr_db": 2.92314190864563,
+          "final_symbol_accuracy": 0.6321562500000002
+        }
+      }
+    },
+    "alpha_1p00": {
+      "alpha": 1.0,
+      "data_root": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\alpha_sweep\\data\\alpha_1p00",
+      "dataset_sizes": {
+        "train": 200,
+        "val": 80
+      },
+      "models": {
+        "Hybrid": {
+          "best_epoch": 2,
+          "best_val_mse": 0.262917298078537,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5231664822651789,
+            0.3894452704833104,
+            0.26760152211556065
+          ],
+          "val_history_full": [
+            0.524244737625122,
+            0.29832740426063536,
+            0.262917298078537
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5231664822651789,
+            0.3894452704833104,
+            0.26760152211556065
+          ],
+          "sampled_val_history": [
+            0.524244737625122,
+            0.29832740426063536,
+            0.262917298078537
+          ],
+          "final_mse": 0.262917298078537,
+          "final_sdr_db": 2.7939587593078614,
+          "final_symbol_accuracy": 0.5668281249999999
+        },
+        "LSTM": {
+          "best_epoch": 2,
+          "best_val_mse": 0.2551053762435913,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.502641879595243,
+            0.3760661024313707,
+            0.2597833803066841
+          ],
+          "val_history_full": [
+            0.5026616930961609,
+            0.2714764356613159,
+            0.2551053762435913
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.502641879595243,
+            0.3760661024313707,
+            0.2597833803066841
+          ],
+          "sampled_val_history": [
+            0.5026616930961609,
+            0.2714764356613159,
+            0.2551053762435913
+          ],
+          "final_mse": 0.2551053762435913,
+          "final_sdr_db": 2.925341987609863,
+          "final_symbol_accuracy": 0.5675468749999999
+        },
+        "IQ_CNN": {
+          "best_epoch": 2,
+          "best_val_mse": 0.2540311276912689,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5776831599382254,
+            0.330451630629026,
+            0.25685951801446766
+          ],
+          "val_history_full": [
+            0.5783812642097473,
+            0.2627658128738403,
+            0.2540311276912689
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5776831599382254,
+            0.330451630629026,
+            0.25685951801446766
+          ],
+          "sampled_val_history": [
+            0.5783812642097473,
+            0.2627658128738403,
+            0.2540311276912689
+          ],
+          "final_mse": 0.2540311276912689,
+          "final_sdr_db": 2.9436513900756838,
+          "final_symbol_accuracy": 0.569046875
+        }
+      }
+    }
+  }
+}

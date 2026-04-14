@@ -1,0 +1,42 @@
+{
+  "threshold": 0.0,
+  "max_epochs": 2,
+  "best_epoch": 2,
+  "stop_epoch": 2,
+  "stop_reason": "max_epochs_reached",
+  "best_val_mse": 0.0008689185146183248,
+  "train_history_full": [
+    0.6217977083206176,
+    0.05465489754602313,
+    0.001409104786068201
+  ],
+  "val_history_full": [
+    0.6219723934218997,
+    0.002300167910843378,
+    0.0008689185146183248
+  ],
+  "epochs_full": [
+    0,
+    1,
+    2
+  ],
+  "sampled_epochs": [
+    0,
+    1,
+    2
+  ],
+  "sampled_train_history": [
+    0.6217977083206176,
+    0.05465489754602313,
+    0.001409104786068201
+  ],
+  "sampled_val_history": [
+    0.6219723934218997,
+    0.002300167910843378,
+    0.0008689185146183248
+  ],
+  "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\IQ_CNN_best.pt",
+  "final_mse": 0.0008689185146183248,
+  "final_sdr_db": 27.748858436705575,
+  "final_symbol_accuracy": 1.0
+}

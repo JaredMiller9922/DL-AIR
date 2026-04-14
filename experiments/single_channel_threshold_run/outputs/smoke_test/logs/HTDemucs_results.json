@@ -1,0 +1,42 @@
+{
+  "threshold": 0.0,
+  "max_epochs": 2,
+  "best_epoch": 2,
+  "stop_epoch": 2,
+  "stop_reason": "max_epochs_reached",
+  "best_val_mse": 0.4986870974775345,
+  "train_history_full": [
+    0.7089318796157837,
+    0.5025208423137665,
+    0.49943115792274473
+  ],
+  "val_history_full": [
+    0.7094898687468635,
+    0.49982724539817325,
+    0.4986870974775345
+  ],
+  "epochs_full": [
+    0,
+    1,
+    2
+  ],
+  "sampled_epochs": [
+    0,
+    1,
+    2
+  ],
+  "sampled_train_history": [
+    0.7089318796157837,
+    0.5025208423137665,
+    0.49943115792274473
+  ],
+  "sampled_val_history": [
+    0.7094898687468635,
+    0.49982724539817325,
+    0.4986870974775345
+  ],
+  "checkpoint_path": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\outputs\\smoke_test\\checkpoints\\HTDemucs_best.pt",
+  "final_mse": 0.4986870974775345,
+  "final_sdr_db": 0.011424497538615786,
+  "final_symbol_accuracy": 0.25751750000000007
+}
