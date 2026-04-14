@@ -1,7 +1,7 @@
 {
-    "train_mse": 1.5058804500579834,
-    "train_sdr_db": -4.622351468276977,
-    "train_symbol_accuracy": 0.33040237500000175,
+    "train_mse": 1.5058804544448852,
+    "train_sdr_db": -4.622351459884643,
+    "train_symbol_accuracy": 0.3304023750000017,
     "final_mse": 1.4840594416572934,
     "final_sdr_db": -4.510668065812853,
     "final_symbol_accuracy": 0.3352987499999999,

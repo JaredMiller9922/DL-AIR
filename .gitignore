@@ -6,6 +6,7 @@ reporting_pipeline/outputs/datasets/
 reporting_pipeline/outputs/phase1_fastica
 __pycache__/
 *.pyc
+*.pt
 Final Report/*.aux
 Final Report/*.bbl
 Final Report/*.blg

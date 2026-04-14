@@ -230,7 +230,7 @@ class RFMixtureGenerator:
     # --------------------------
     # User Defined Alphabet Helpers
     # --------------------------
-    def symbols_to_bits(symbols):
+    def symbols_to_bits(self, symbols):
         bits = []
         for s in symbols:
             ascii_val = ord(s)           # convert char → integer
