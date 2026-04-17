@@ -1,0 +1,275 @@
+{
+  "run_name": "smoke_noise",
+  "timestamp": "2026-04-14T06:54:23",
+  "device": "cuda",
+  "variances": [
+    0.0,
+    0.16
+  ],
+  "config_snapshot": {
+    "alpha": 0.8,
+    "n_rx": 1,
+    "num_channels": 1,
+    "epochs": 2,
+    "batch_size": 16,
+    "lr": 0.001,
+    "train_size": 200,
+    "val_size": 80
+  },
+  "results": {
+    "var_0p0000": {
+      "noise_variance": 0.0,
+      "data_root": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\noise_sweep\\data\\var_0p0000",
+      "dataset_sizes": {
+        "train": 200,
+        "val": 80
+      },
+      "models": {
+        "Hybrid": {
+          "best_epoch": 2,
+          "best_val_mse": 0.25957361459732053,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.6913794508347144,
+            0.38198044208379894,
+            0.26276037096977234
+          ],
+          "val_history_full": [
+            0.6891146063804626,
+            0.29181718826293945,
+            0.25957361459732053
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.6913794508347144,
+            0.38198044208379894,
+            0.26276037096977234
+          ],
+          "sampled_val_history": [
+            0.6891146063804626,
+            0.29181718826293945,
+            0.25957361459732053
+          ],
+          "final_mse": 0.25957361459732053,
+          "final_sdr_db": 2.848857545852661,
+          "final_symbol_accuracy": 0.6169218749999998
+        },
+        "LSTM": {
+          "best_epoch": 2,
+          "best_val_mse": 0.25621284246444703,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5083218491994418,
+            0.3798723587623009,
+            0.260643516595547
+          ],
+          "val_history_full": [
+            0.508110249042511,
+            0.27354570031166076,
+            0.25621284246444703
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5083218491994418,
+            0.3798723587623009,
+            0.260643516595547
+          ],
+          "sampled_val_history": [
+            0.508110249042511,
+            0.27354570031166076,
+            0.25621284246444703
+          ],
+          "final_mse": 0.25621284246444703,
+          "final_sdr_db": 2.905531406402588,
+          "final_symbol_accuracy": 0.5978437500000001
+        },
+        "IQ_CNN": {
+          "best_epoch": 2,
+          "best_val_mse": 0.2554006457328796,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.6546963086495032,
+            0.37116082356526303,
+            0.2586477605196146
+          ],
+          "val_history_full": [
+            0.65432049036026,
+            0.26649934649467466,
+            0.2554006457328796
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.6546963086495032,
+            0.37116082356526303,
+            0.2586477605196146
+          ],
+          "sampled_val_history": [
+            0.65432049036026,
+            0.26649934649467466,
+            0.2554006457328796
+          ],
+          "final_mse": 0.2554006457328796,
+          "final_sdr_db": 2.919382190704346,
+          "final_symbol_accuracy": 0.6349218750000003
+        }
+      }
+    },
+    "var_0p1600": {
+      "noise_variance": 0.16,
+      "data_root": "C:\\Users\\battl\\Documents\\School 2026\\Jareds_Repo\\DL-AIR\\experiments\\single_channel_threshold_run\\noise_sweep\\data\\var_0p1600",
+      "dataset_sizes": {
+        "train": 200,
+        "val": 80
+      },
+      "models": {
+        "Hybrid": {
+          "best_epoch": 2,
+          "best_val_mse": 0.27599740624427793,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5215583030994122,
+            0.4052751545722668,
+            0.2835759703929608
+          ],
+          "val_history_full": [
+            0.5201116442680359,
+            0.3165904462337494,
+            0.27599740624427793
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5215583030994122,
+            0.4052751545722668,
+            0.2835759703929608
+          ],
+          "sampled_val_history": [
+            0.5201116442680359,
+            0.3165904462337494,
+            0.27599740624427793
+          ],
+          "final_mse": 0.27599740624427793,
+          "final_sdr_db": 2.5823864459991457,
+          "final_symbol_accuracy": 0.5746874999999998
+        },
+        "LSTM": {
+          "best_epoch": 2,
+          "best_val_mse": 0.27121098041534425,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5028889729426458,
+            0.38248156354977536,
+            0.2761586537727943
+          ],
+          "val_history_full": [
+            0.5027830362319946,
+            0.28300983309745786,
+            0.27121098041534425
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5028889729426458,
+            0.38248156354977536,
+            0.2761586537727943
+          ],
+          "sampled_val_history": [
+            0.5027830362319946,
+            0.28300983309745786,
+            0.27121098041534425
+          ],
+          "final_mse": 0.27121098041534425,
+          "final_sdr_db": 2.6587658882141114,
+          "final_symbol_accuracy": 0.578765625
+        },
+        "IQ_CNN": {
+          "best_epoch": 2,
+          "best_val_mse": 0.26647364497184756,
+          "stop_epoch": 2,
+          "stop_reason": "fixed_budget",
+          "epochs_full": [
+            0,
+            1,
+            2
+          ],
+          "train_history_full": [
+            0.5790827962068411,
+            0.34223623688404375,
+            0.27177417049041164
+          ],
+          "val_history_full": [
+            0.5791353225708008,
+            0.2759756207466125,
+            0.26647364497184756
+          ],
+          "sampled_epochs": [
+            0,
+            1,
+            2
+          ],
+          "sampled_train_history": [
+            0.5790827962068411,
+            0.34223623688404375,
+            0.27177417049041164
+          ],
+          "sampled_val_history": [
+            0.5791353225708008,
+            0.2759756207466125,
+            0.26647364497184756
+          ],
+          "final_mse": 0.26647364497184756,
+          "final_sdr_db": 2.7354415893554687,
+          "final_symbol_accuracy": 0.579546875
+        }
+      }
+    }
+  }
+}
