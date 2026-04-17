@@ -9,6 +9,7 @@ import torch
 from torch.utils.data import Dataset
 from utils.model_utils.conversion_helpers import *
 from torch.utils.data import DataLoader
+from config import ExperimentConfig
 
 def make_loader(data_dir, batch_size=4, shuffle=False):
     ds = SavedRFDataset(data_dir)
@@ -68,8 +69,10 @@ class SyntheticRFDataset(Dataset):
         source_b = ex["source_b"]    # (T,) complex
 
         # 1 channel case
-        # x = complex_to_2ch(mixture)     # (2*n_rx, T)
-        x = complex_matrix_to_iq_channels(mixture)
+        if ExperimentConfig.n_rx == 1:
+            x = complex_to_2ch(mixture)     # (2*n_rx, T)
+        else:
+            x = complex_matrix_to_iq_channels(mixture)
         y = stacked_sources_to_iq(source_a, source_b)  # (4, T)
 
         sample = {

@@ -197,8 +197,8 @@ class ModelEvaluator:
 
         print(
             f"{model_name} | "
-            f"Train Sym Acc: {metrics['train_symbol_accuracy']:.4f} | "
-            f"Val Sym Acc: {metrics['val_symbol_accuracy']:.4f}"
+            f"Train Sym Acc: {metrics['train_symbol_accuracy']:.3f} | "
+            f"Val Sym Acc: {metrics['val_symbol_accuracy']:.3f}"
         )
 
         return metrics

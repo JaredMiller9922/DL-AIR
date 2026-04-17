@@ -6,12 +6,12 @@ from config import ExperimentConfig
 
 @dataclass
 class QPSKConfig:
-    n_symbols: int = ExperimentConfig.n_symbols
+    n_symbols: int = ExperimentConfig.num_symbols
     samples_per_symbol: int = ExperimentConfig.samples_per_symbol
     rolloff: float = ExperimentConfig.rolloff
     rrc_span_symbols: int = ExperimentConfig.rrc_span_symbols
     normalize_power: bool = ExperimentConfig.normalize_power
-    num_channels: int = ExperimentConfig.num_channels
+    num_channels: int = ExperimentConfig.n_rx
 
 
 @dataclass
@@ -21,10 +21,11 @@ class NoiseConfig:
 
 @dataclass
 class MixtureConfig:
-    alpha: float = ExperimentConfig.alpha
+    alpha: float = ExperimentConfig.noise_alpha
     snr_db: Optional[float] = ExperimentConfig.snr_db
     n_rx: int = ExperimentConfig.n_rx
     random_phase: bool = ExperimentConfig.random_phase
+    phase_shift_deg: int = ExperimentConfig.phase_shift_deg
 
 class RFMixtureGenerator:
     """
@@ -81,10 +82,10 @@ class RFMixtureGenerator:
             H = np.array([[1.0, mix_cfg.alpha]], dtype=np.complex128)
         else:
             # Multi-channel receive case
-            H = self._sample_mixing_matrix(
+            H = self._sample_phase_change_matrix(
                 n_rx=mix_cfg.n_rx,
-                random_phase=mix_cfg.random_phase,
-            )  # shape (n_rx, 2)
+                phase_change_deg=mix_cfg.phase_shift_deg
+            )
 
             # Stack sources as (2, T)
             sources = np.vstack([
@@ -101,8 +102,6 @@ class RFMixtureGenerator:
             else:
                 noise = np.zeros_like(signal)
                 mixture = signal
-
-
 
         return {
             "mixture": mixture.astype(np.complex64),
@@ -227,6 +226,19 @@ class RFMixtureGenerator:
         H /= np.linalg.norm(H, axis=0, keepdims=True) + 1e-12
         return H
     
+    def _sample_phase_change_matrix(self, n_rx: int, phase_change_deg: float = 5.0) -> np.ndarray:
+        # Convert degrees passed in to radians
+        phase_step = np.deg2rad(phase_change_deg)
+        antenna_phases = np.arange(n_rx) * phase_step
+
+        phases = np.zeros((n_rx, 2), dtype=np.float64)
+        # positive case represents interferer coming from the left side
+        phases[:, 0] = antenna_phases          # source A: 0, Δφ, 2Δφ, ...
+        # negative case represents interferer coming from the right side
+        phases[:, 1] = -antenna_phases         # source B: 0, -Δφ, -2Δφ, ...
+
+        return np.exp(1j * phases).astype(np.complex128)
+
     # --------------------------
     # User Defined Alphabet Helpers
     # --------------------------
