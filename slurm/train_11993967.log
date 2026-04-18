@@ -1,0 +1,70 @@
+Using on the fly data generation
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+ICA iterations used: 3
+ICA iterations used: 4
+ICA iterations used: 4
+ICA iterations used: 3
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Sym Acc} \\ \hline
+FastICA & 1.70548 & -5.16 & 0.2330 \\
+\hline
+\end{tabular}
+\end{table}

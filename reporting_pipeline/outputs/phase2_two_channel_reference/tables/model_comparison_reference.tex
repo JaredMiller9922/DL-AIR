@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Two-channel reference comparison using the main repo generator.}
+\label{tab:phase2_two_channel_reference}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Model & PIT-MSE & Wave MSE & SDR & SOI Acc & Int Acc \\ 
+\hline
+LSTM & 0.4570 & 0.4570 & 0.42 & 0.631 & 0.631 \\ 
+Hybrid & 0.4548 & 0.4548 & 0.44 & 0.629 & 0.629 \\ 
+IQ\_CNN & 0.4544 & 0.4544 & 0.44 & 0.626 & 0.626 \\ 
+Linear & 0.4600 & 0.4600 & 0.39 & 0.625 & 0.625 \\ 
+Tiny & 0.4567 & 0.4567 & 0.43 & 0.622 & 0.622 \\ 
+FastICA & 0.8763 & 0.8763 & -2.32 & 0.621 & 0.621 \\ 
+\hline
+\end{tabular}
+\end{table}

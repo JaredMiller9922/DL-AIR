@@ -1,0 +1,19 @@
+{
+  "threshold_symbol_accuracy": 0.95,
+  "alpha_failure": {
+    "FastICA": null,
+    "Hybrid": null,
+    "IQ_CNN": null,
+    "LSTM": null,
+    "Linear": null,
+    "Tiny": null
+  },
+  "snr_failure": {
+    "FastICA": null,
+    "Hybrid": null,
+    "IQ_CNN": null,
+    "LSTM": null,
+    "Linear": null,
+    "Tiny": null
+  }
+}

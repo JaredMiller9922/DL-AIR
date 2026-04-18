@@ -9,6 +9,7 @@ from networks.lstm_separator import LSTMSeparator
 from networks.linear_separator import LinearSeparator
 from networks.iq_cnn_separator import IQCNNSeparator
 from networks.htdemucs import RFHTDemucsWrapper
+from networks.fast_ica import FastICABaseline
 from utils.data_utils.dataset import make_loader
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 from cross_validator import GridSearchManager
@@ -171,14 +172,14 @@ def main():
         )
 
         # KEEP validation FIXED
-        val_loader, _ = make_loader("../data/val", batch_size=ExperimentConfig.batch_size)
+        val_loader, _ = make_loader("data/val", batch_size=ExperimentConfig.batch_size)
     
     else:
         print("Using data stored in data folder")
-        train_loader, _ = make_loader("../data/train", batch_size=16, shuffle=True)
-        val_loader, _ = make_loader("../data/val", batch_size=16)
+        train_loader, _ = make_loader("data/train", batch_size=16, shuffle=True)
+        val_loader, _ = make_loader("data/val", batch_size=16)
     
-    plotter = BeautifulRFPlotter(save_dir="../visualizations")
+    plotter = BeautifulRFPlotter(save_dir="visualizations")
 
     rrc = rrc_taps(
         sps=ExperimentConfig.samples_per_symbol,
@@ -187,8 +188,9 @@ def main():
     )
 
     evaluator = ModelEvaluator(
-        val_loader,
-        plotter,
+        train_loader=train_loader,
+        val_loader=val_loader,
+        plotter=plotter,
         rrc_taps=rrc,
         sps=ExperimentConfig.samples_per_symbol,
         device=device,
@@ -198,40 +200,40 @@ def main():
     print("WE MADE IT BEFORE THE Separator")
 
     models_to_test = {
-        "Hybrid": HybridSeparator(in_ch=8, out_ch=4).to(device),
-        "LSTM": LSTMSeparator(in_ch=8, out_ch=4).to(device),
-        "Linear": LinearSeparator(in_ch=8, out_ch=4).to(device),
-        "IQ_CNN": IQCNNSeparator(in_ch=8, out_ch=4).to(device),
-        "HTDemucs": RFHTDemucsWrapper(in_ch=8, out_ch=4).to(device),
+        # "FastICA": {"model": FastICABaseline(), "train": False},
+        # "Hybrid": {"model": HybridSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        # "LSTM": {"model": LSTMSeparator(in_ch=4, out_ch=4).to(device), "train": True},
+        "IQ_CNN": {"model": IQCNNSeparator(in_ch=2, out_ch=4).to(device), "train": True},
+        # "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=4, out_ch=4).to(device), "train": True},
     }
 
     print("MOdels were tested")
 
-    if DO_CROSS_VAL:
-        manager = GridSearchManager(HybridSeparator, train_loader, val_loader, evaluator)
-        grid = {
-            'lr': [1e-3, 5e-4],
-            'dropout': [0, 0.2],
-            'hidden': [64, 128],
-            'epochs': [100]
-        }
-        manager.run_grid_search(grid)
-    else:
-        for name, model in models_to_test.items():
-            print(f"--- Training {name} ---")
+    for name, entry in models_to_test.items():
+        model = entry["model"]
+        print(f"--- Training {name} ---")
+        if entry["train"]:
             print(f"Model: {name} and parameters: {model.parameters()}")
-            trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=ExperimentConfig.epochs, device=device)
-            
-            # This saves the JSON, plots the waves, and logs SDR
+
+            save_path = f"pytorch_models/{name}.pt"
+
+            trained_model, t_hist, v_hist = train_model(
+                model,
+                train_loader,
+                val_loader,
+                plotter,
+                epochs=ExperimentConfig.epochs,
+                device=device,
+                save_path=save_path
+            )
             all_results[name] = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, name)
+        else:
+            print(f"Model: {name} baseline (no training step)")
+            all_results[name] = evaluator.run_full_evaluation(model, [], [], name)
 
     # Final visual duties
     evaluator.plot_comparison(all_results)
     evaluator.print_latex_table(all_results)
-
-
-
-
 
 
 
