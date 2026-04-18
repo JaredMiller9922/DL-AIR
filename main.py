@@ -122,7 +122,7 @@ def run_experiment(config: ExperimentConfig, ui_callback=None):
 
 
 
-def main():
+def train_and_validate():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
     if ExperimentConfig.use_on_the_fly_data:
@@ -131,14 +131,14 @@ def main():
         gen = RFMixtureGenerator(seed=0)
 
         qpsk_cfg_soi = QPSKConfig(
-            n_symbols=ExperimentConfig.n_symbols,
+            n_symbols=ExperimentConfig.num_symbols,
             samples_per_symbol=ExperimentConfig.samples_per_symbol,
             rolloff=ExperimentConfig.rolloff,
             rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
         )
 
         qpsk_cfg_int = QPSKConfig(
-            n_symbols=ExperimentConfig.n_symbols,
+            n_symbols=ExperimentConfig.num_symbols,
             samples_per_symbol=ExperimentConfig.samples_per_symbol,
             rolloff=ExperimentConfig.rolloff,
             rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
@@ -304,7 +304,7 @@ if __name__ == "__main__":
 
     # 👉 If no CLI args → run original behavior
     if args.mode is None:
-        main()
+        train_and_validate()
     else:
         config = ExperimentConfig(
             mode=args.mode,
