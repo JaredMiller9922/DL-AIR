@@ -1,0 +1,41 @@
+Using data stored in data folder
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x151574e959a0>
+Epoch 10: Train MSE 0.50000438 | Val MSE 0.50000542
+Epoch 20: Train MSE 0.50000492 | Val MSE 0.50000561
+Epoch 30: Train MSE 0.50000494 | Val MSE 0.50000628
+Epoch 40: Train MSE 0.50000401 | Val MSE 0.49999987
+Epoch 50: Train MSE 0.50000394 | Val MSE 0.50000056
+Epoch 60: Train MSE 0.50000433 | Val MSE 0.50000105
+Epoch 70: Train MSE 0.50000430 | Val MSE 0.50000994
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 131, in <module>
+    main()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 121, in main
+    trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=ExperimentConfig.epochs, device=device)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/train.py", line 24, in train_model
+    for batch in train_loader:
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+    data = self._next_data()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1465, in _next_data
+    return self._process_data(data)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1491, in _process_data
+    data.reraise()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/_utils.py", line 715, in reraise
+    raise exception
+FileNotFoundError: Caught FileNotFoundError in DataLoader worker process 1.
+Original Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 351, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/utils/data_utils/dataset.py", line 164, in __getitem__
+    data = np.load(self.files[idx])
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/numpy/lib/_npyio_impl.py", line 451, in load
+    fid = stack.enter_context(open(os.fspath(file), "rb"))
+FileNotFoundError: [Errno 2] No such file or directory: '../data/train/sample_000020.npz'
+

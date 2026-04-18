@@ -1,8 +1,9 @@
 import torch
 from utils.model_utils.losses import mse_loss
 from networks.htdemucs import RFHTDemucs
+import os
 
-def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cpu", lr=1e-3):
+def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cpu", lr=1e-3, save_path=None):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     train_hist, val_hist = [] , []
 
@@ -52,6 +53,9 @@ def train_model(model, train_loader, val_loader, plotter, epochs=300, device="cp
             # print(f"Epoch {epoch}: Train MSE {avg_train:.4f} | Val MSE {avg_val:.4f}")
             print(f"Epoch {epoch}: Train MSE {avg_train:.8f} | Val MSE {avg_val:.8f}")
 
-        
+    if save_path is not None:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        torch.save(model.state_dict(), save_path)
+        print(f"Saved model to {save_path}")
 
     return model, train_hist, val_hist

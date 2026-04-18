@@ -10,14 +10,15 @@ if __name__ == "__main__":
     generator = RFMixtureGenerator(seed = 0)
 
     qpsk_cfg_soi = QPSKConfig(
-        n_symbols=ExperimentConfig.n_symbols,
+        n_symbols=ExperimentConfig.num_symbols,
         samples_per_symbol=ExperimentConfig.samples_per_symbol,
         rolloff=ExperimentConfig.rolloff,
         rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
+        num_channels=ExperimentConfig.n_rx
     )
 
     qpsk_cfg_int = QPSKConfig(
-        n_symbols=ExperimentConfig.n_symbols,
+        n_symbols=ExperimentConfig.num_symbols,
         samples_per_symbol=ExperimentConfig.samples_per_symbol,
         rolloff=ExperimentConfig.rolloff,
         rrc_span_symbols=ExperimentConfig.rrc_span_symbols,
@@ -28,8 +29,9 @@ if __name__ == "__main__":
     )
 
     mix_cfg = MixtureConfig(
-        alpha=ExperimentConfig.alpha,
+        alpha=ExperimentConfig.noise_alpha,
         snr_db=ExperimentConfig.snr_db,
+        phase_shift_deg=ExperimentConfig.phase_shift_deg
     )
 
     gen = RFMixtureGenerator(seed=0)
@@ -44,9 +46,9 @@ if __name__ == "__main__":
     )
 
     dataset.save_splits(
-        train_size=20000,
-        val_size=2000,
-        test_size=2000,
+        train_size=10000,
+        val_size=1000,
+        test_size=1000,
         root_dir="data",
         overwrite=True,
     )

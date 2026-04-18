@@ -1,0 +1,187 @@
+Using data stored in data folder
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+FastICA | Train Sym Acc: 0.3304 | Val Sym Acc: 0.3353
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x000002A0A32E6F80>
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+FastICA | Train Sym Acc: 0.3304 | Val Sym Acc: 0.3353
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+--- Training FastICA ---
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+FastICA | Train Sym Acc: 0.3304 | Val Sym Acc: 0.3353
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x000002A0A32E6F80>
+Epoch 10: Train MSE 0.50000246 | Val MSE 0.50000010
+Epoch 20: Train MSE 0.50000612 | Val MSE 0.50000501
+Epoch 30: Train MSE 0.50000442 | Val MSE 0.50000517
+Epoch 40: Train MSE 0.50000475 | Val MSE 0.50000104
+Epoch 50: Train MSE 0.50000316 | Val MSE 0.50001525
+Epoch 60: Train MSE 0.50000476 | Val MSE 0.50000058
+Epoch 70: Train MSE 0.50000313 | Val MSE 0.49999956
+Epoch 80: Train MSE 0.50000456 | Val MSE 0.50000518
+Epoch 90: Train MSE 0.50000501 | Val MSE 0.50000234
+Epoch 100: Train MSE 0.50000451 | Val MSE 0.50000557
+Epoch 110: Train MSE 0.50000381 | Val MSE 0.50000222
+Epoch 120: Train MSE 0.50000455 | Val MSE 0.49999947
+Epoch 130: Train MSE 0.50000442 | Val MSE 0.50000364
+Epoch 140: Train MSE 0.50000461 | Val MSE 0.50000007
+Epoch 150: Train MSE 0.50000413 | Val MSE 0.50000291
+Epoch 160: Train MSE 0.50000419 | Val MSE 0.50000189
+Epoch 170: Train MSE 0.50000446 | Val MSE 0.50000411
+Epoch 180: Train MSE 0.50000459 | Val MSE 0.49999985
+Epoch 190: Train MSE 0.50000381 | Val MSE 0.49999896
+Epoch 200: Train MSE 0.50000447 | Val MSE 0.50000290
+Epoch 210: Train MSE 0.50000512 | Val MSE 0.50001886
+Epoch 220: Train MSE 0.50000405 | Val MSE 0.50000120
+Epoch 230: Train MSE 0.50000420 | Val MSE 0.49999939
+Epoch 240: Train MSE 0.50000337 | Val MSE 0.50000798
+Epoch 250: Train MSE 0.50000413 | Val MSE 0.50000400
+Epoch 260: Train MSE 0.50000422 | Val MSE 0.50000470
+Epoch 270: Train MSE 0.50000352 | Val MSE 0.50000201
+Epoch 280: Train MSE 0.50000505 | Val MSE 0.50000257
+Epoch 290: Train MSE 0.50000393 | Val MSE 0.50001322
+Epoch 300: Train MSE 0.50000497 | Val MSE 0.50000511
+Saved model to pytorch_models/Hybrid.pt
+Hybrid | Train Sym Acc: 0.2598 | Val Sym Acc: 0.2592
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x000002A11EC25000>
+Epoch 10: Train MSE 0.50000012 | Val MSE 0.50002032
+Epoch 20: Train MSE 0.49998228 | Val MSE 0.50002553
+Epoch 30: Train MSE 0.49996270 | Val MSE 0.50004511
+Epoch 40: Train MSE 0.49994046 | Val MSE 0.50003237
+Epoch 50: Train MSE 0.49987377 | Val MSE 0.50007045
+Epoch 60: Train MSE 0.49980009 | Val MSE 0.50008269
+Epoch 70: Train MSE 0.49969436 | Val MSE 0.50019870
+Epoch 80: Train MSE 0.49946111 | Val MSE 0.50027630
+Epoch 90: Train MSE 0.49901094 | Val MSE 0.50104218
+Epoch 100: Train MSE 0.49744672 | Val MSE 0.50157274
+Epoch 110: Train MSE 0.49225787 | Val MSE 0.50845059
+Epoch 120: Train MSE 0.48121059 | Val MSE 0.51599891
+Epoch 130: Train MSE 0.46308867 | Val MSE 0.52526667
+Epoch 140: Train MSE 0.43754460 | Val MSE 0.54795240
+Epoch 150: Train MSE 0.40691984 | Val MSE 0.56694310
+Epoch 160: Train MSE 0.37391500 | Val MSE 0.58630567
+Epoch 170: Train MSE 0.34516486 | Val MSE 0.62124140
+Epoch 180: Train MSE 0.31323088 | Val MSE 0.62495505
+Epoch 190: Train MSE 0.28271336 | Val MSE 0.64724554
+Epoch 200: Train MSE 0.25538030 | Val MSE 0.68531644
+Epoch 210: Train MSE 0.23170965 | Val MSE 0.70402149
+Epoch 220: Train MSE 0.21047487 | Val MSE 0.72080200
+Epoch 230: Train MSE 0.19286094 | Val MSE 0.72943777
+Epoch 240: Train MSE 0.17754580 | Val MSE 0.74918935
+Epoch 250: Train MSE 0.16473228 | Val MSE 0.75588971
+Epoch 260: Train MSE 0.15502739 | Val MSE 0.76092795
+Epoch 270: Train MSE 0.14306557 | Val MSE 0.77602727
+Epoch 280: Train MSE 0.13801577 | Val MSE 0.77421606
+Epoch 290: Train MSE 0.13159367 | Val MSE 0.78672735
+Epoch 300: Train MSE 0.12424151 | Val MSE 0.79414038
+Saved model to pytorch_models/LSTM.pt
+LSTM | Train Sym Acc: 0.9436 | Val Sym Acc: 0.3342
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x000002A10794F1B0>
+Epoch 10: Train MSE 0.50002025 | Val MSE 0.50014368
+Epoch 20: Train MSE 0.49998551 | Val MSE 0.50010317
+Epoch 30: Train MSE 0.49986606 | Val MSE 0.50009788
+Epoch 40: Train MSE 0.49926583 | Val MSE 0.50053770
+Epoch 50: Train MSE 0.45579492 | Val MSE 0.53311415
+Epoch 60: Train MSE 0.44385091 | Val MSE 0.53313122
+Epoch 70: Train MSE 0.44404150 | Val MSE 0.53661409
+Epoch 80: Train MSE 0.42390992 | Val MSE 0.55638418
+Epoch 90: Train MSE 0.41122035 | Val MSE 0.56610171
+Epoch 100: Train MSE 0.39946951 | Val MSE 0.58961437
+Epoch 110: Train MSE 0.38794876 | Val MSE 0.59290297
+Epoch 120: Train MSE 0.38242424 | Val MSE 0.60042789
+Epoch 130: Train MSE 0.37626233 | Val MSE 0.60204317
+Epoch 140: Train MSE 0.37283941 | Val MSE 0.60978109
+Epoch 150: Train MSE 0.36840730 | Val MSE 0.61470510
+Epoch 160: Train MSE 0.36501967 | Val MSE 0.61465390
+Epoch 170: Train MSE 0.35874713 | Val MSE 0.62710684
+Epoch 180: Train MSE 0.34937612 | Val MSE 0.63567744
+Epoch 190: Train MSE 0.33342207 | Val MSE 0.65695324
+Epoch 200: Train MSE 0.32559998 | Val MSE 0.67104163
+Epoch 210: Train MSE 0.31771242 | Val MSE 0.67599005
+Epoch 220: Train MSE 0.31203326 | Val MSE 0.67067988
+Epoch 230: Train MSE 0.30579819 | Val MSE 0.69013908
+Epoch 240: Train MSE 0.30289426 | Val MSE 0.68833687
+Epoch 250: Train MSE 0.29768742 | Val MSE 0.69328703
+Epoch 260: Train MSE 0.29307367 | Val MSE 0.69636470
+Epoch 270: Train MSE 0.28623945 | Val MSE 0.70238701
+Epoch 280: Train MSE 0.28106746 | Val MSE 0.69381562
+Epoch 290: Train MSE 0.27590719 | Val MSE 0.70155585
+Epoch 300: Train MSE 0.26993971 | Val MSE 0.71723953
+Saved model to pytorch_models/IQ_CNN.pt
+IQ_CNN | Train Sym Acc: 0.6549 | Val Sym Acc: 0.3393
+--- Training HTDemucs ---
+Model: HTDemucs and parameters: <generator object Module.parameters at 0x000002A11EC243C0>
+Epoch 10: Train MSE 0.49968902 | Val MSE 0.50029058
+Epoch 20: Train MSE 0.49702588 | Val MSE 0.50220762
+Epoch 30: Train MSE 0.49273369 | Val MSE 0.50561800
+Epoch 40: Train MSE 0.48788070 | Val MSE 0.50992998
+Epoch 50: Train MSE 0.48277064 | Val MSE 0.51454223
+Epoch 60: Train MSE 0.47819949 | Val MSE 0.51861079
+Epoch 70: Train MSE 0.47405784 | Val MSE 0.52279824
+Epoch 80: Train MSE 0.47051794 | Val MSE 0.52555846
+Epoch 90: Train MSE 0.46703379 | Val MSE 0.52931435
+Epoch 100: Train MSE 0.46324428 | Val MSE 0.53129556
+Epoch 110: Train MSE 0.45872526 | Val MSE 0.53469944
+Epoch 120: Train MSE 0.45524128 | Val MSE 0.53833319
+Epoch 130: Train MSE 0.45239045 | Val MSE 0.54099522
+Epoch 140: Train MSE 0.44931417 | Val MSE 0.54189049
+Epoch 150: Train MSE 0.44561736 | Val MSE 0.54539551
+Epoch 160: Train MSE 0.44406864 | Val MSE 0.54653715
+Epoch 170: Train MSE 0.44431219 | Val MSE 0.54765942
+Epoch 180: Train MSE 0.43972288 | Val MSE 0.55192732
+Epoch 190: Train MSE 0.43672396 | Val MSE 0.55218163
+Epoch 200: Train MSE 0.43849794 | Val MSE 0.55204302
+Epoch 210: Train MSE 0.43372926 | Val MSE 0.55562705
+Epoch 220: Train MSE 0.43327890 | Val MSE 0.55639305
+Epoch 230: Train MSE 0.43363686 | Val MSE 0.55727695
+Epoch 240: Train MSE 0.43037882 | Val MSE 0.55893158
+Epoch 250: Train MSE 0.42912537 | Val MSE 0.56087454
+Epoch 260: Train MSE 0.43004801 | Val MSE 0.56036583
+Epoch 270: Train MSE 0.42667146 | Val MSE 0.56158715
+Epoch 280: Train MSE 0.42718414 | Val MSE 0.56254632
+Epoch 290: Train MSE 0.42509489 | Val MSE 0.56409099
+Epoch 300: Train MSE 0.42249141 | Val MSE 0.56650801
+Saved model to pytorch_models/HTDemucs.pt
+HTDemucs | Train Sym Acc: 0.4316 | Val Sym Acc: 0.2556
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lcccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Train Sym Acc} & \textbf{Val Sym Acc} \\ \hline
+FastICA & 1.48406 & -4.51 & 0.3304 & 0.3353 \\
+Hybrid & 0.50001 & -0.00 & 0.2598 & 0.2592 \\
+LSTM & 0.79414 & -1.74 & 0.9436 & 0.3342 \\
+IQ_CNN & 0.71724 & -1.30 & 0.6549 & 0.3393 \\
+HTDemucs & 0.56651 & -0.54 & 0.4316 & 0.2556 \\
+\hline
+\end{tabular}
+\end{table}

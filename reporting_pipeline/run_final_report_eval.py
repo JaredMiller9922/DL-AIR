@@ -1,6 +1,7 @@
 import argparse
 import csv
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -12,7 +13,17 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from reporting_pipeline.config import make_default_config
 from reporting_pipeline.data import ensure_sweep_eval_data, ensure_training_data, make_loader
-from reporting_pipeline.metrics import QPSK_LABELS, evaluate_loader, plot_metric_curves, plot_qpsk_alphabet, save_csv, save_json
+from reporting_pipeline.metrics import (
+    QPSK_LABELS,
+    evaluate_loader,
+    plot_example_signals,
+    plot_metric_curves,
+    plot_model_bar,
+    plot_qpsk_alphabet,
+    plot_wave_error_vs_symbol_accuracy,
+    save_csv,
+    save_json,
+)
 from reporting_pipeline.model_registry import active_specs, load_trained_model
 from reporting_pipeline.training import train_model
 from utils.model_utils.symbol_utils import rrc_taps
@@ -122,6 +133,71 @@ def write_symbol_alphabet(config):
         writer.writerows(rows)
 
 
+def save_latex_table(path: Path, caption: str, label: str, headers, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    def esc(value: str) -> str:
+        return value.replace("_", r"\_")
+    with open(path, "w") as handle:
+        cols = "|" + "c|" * len(headers)
+        handle.write("\\begin{table}[t]\n\\centering\n")
+        handle.write(f"\\caption{{{esc(caption)}}}\n")
+        handle.write(f"\\label{{{label}}}\n")
+        handle.write(f"\\begin{{tabular}}{{{cols}}}\n\\hline\n")
+        handle.write(" & ".join(esc(header) for header in headers) + " \\\\ \n\\hline\n")
+        for row in rows:
+            handle.write(" & ".join(esc(cell) for cell in row) + " \\\\ \n")
+        handle.write("\\hline\n\\end{tabular}\n\\end{table}\n")
+
+
+def write_report_tables(config, alpha_rows, snr_rows):
+    reference_rows = [row for row in alpha_rows if row["alpha"] == 1.0]
+    reference_rows.sort(key=lambda row: row["avg_symbol_accuracy"], reverse=True)
+    save_latex_table(
+        config.tables_dir / "model_comparison_reference.tex",
+        "Reference comparison on the fixed single-channel evaluation set.",
+        "tab:model_comparison_reference",
+        ["Model", "PIT-MSE", "Wave MSE", "SDR", "SOI Acc", "Int Acc"],
+        [
+            [
+                row["model"],
+                f"{row['pit_mse']:.4f}",
+                f"{row['wave_mse']:.4f}",
+                f"{row['sdr_db']:.2f}",
+                f"{row['soi_symbol_accuracy']:.3f}",
+                f"{row['int_symbol_accuracy']:.3f}",
+            ]
+            for row in reference_rows
+        ],
+    )
+
+    alpha_summary = []
+    for model_name in sorted({row["model"] for row in alpha_rows}):
+        subset = [row for row in alpha_rows if row["model"] == model_name]
+        best = max(subset, key=lambda row: row["alpha"] if row["soi_symbol_accuracy"] >= 0.95 else -1)
+        alpha_summary.append([model_name, f"{best['alpha']:.2f}", f"{best['soi_symbol_accuracy']:.3f}", f"{best['wave_mse']:.4f}"])
+    save_latex_table(
+        config.tables_dir / "alpha_robustness_summary.tex",
+        "Largest tested interference level before substantial SOI symbol degradation.",
+        "tab:alpha_robustness",
+        ["Model", "Alpha", "SOI Acc", "Wave MSE"],
+        alpha_summary,
+    )
+
+    snr_summary = []
+    for model_name in sorted({row["model"] for row in snr_rows}):
+        subset = [row for row in snr_rows if row["model"] == model_name]
+        kept = [row for row in subset if row["soi_symbol_accuracy"] >= 0.95]
+        best = min(kept, key=lambda row: row["snr_db"]) if kept else min(subset, key=lambda row: row["snr_db"])
+        snr_summary.append([model_name, f"{best['snr_db']:.1f}", f"{best['soi_symbol_accuracy']:.3f}", f"{best['wave_mse']:.4f}"])
+    save_latex_table(
+        config.tables_dir / "noise_robustness_summary.tex",
+        "Lowest tested SNR before substantial SOI symbol degradation.",
+        "tab:noise_robustness",
+        ["Model", "SNR (dB)", "SOI Acc", "Wave MSE"],
+        snr_summary,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--quick", action="store_true", help="Run a tiny smoke-test version of the final report evaluation")
@@ -142,11 +218,13 @@ def main():
     config.force_retrain = args.force_retrain
 
     device = config.device if config.device == "cpu" or torch.cuda.is_available() else "cpu"
-    specs = active_specs(config.active_models)
+    specs = active_specs(config.active_models, in_ch=config.in_ch)
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
     config.figures_dir.mkdir(parents=True, exist_ok=True)
     config.tables_dir.mkdir(parents=True, exist_ok=True)
     config.json_dir.mkdir(parents=True, exist_ok=True)
+    if config.force_retrain and config.datasets_dir.exists():
+        shutil.rmtree(config.datasets_dir)
 
     alpha_dirs, snr_dirs = ensure_sweep_eval_data(config)
 
@@ -156,6 +234,7 @@ def main():
     write_summary_tables(config, alpha_rows, snr_rows)
     write_failure_summary(config, alpha_rows, snr_rows)
     write_symbol_alphabet(config)
+    write_report_tables(config, alpha_rows, snr_rows)
     plot_qpsk_alphabet(config.figures_dir / "qpsk_symbol_alphabet.png")
 
     plot_metric_curves(config.figures_dir / "alpha_sweep_soi_symbol_accuracy.png", list(config.alpha_sweep), alpha_curves, "alpha", "soi_symbol_accuracy", "SOI Symbol Accuracy vs Interference Strength")
@@ -164,6 +243,28 @@ def main():
     plot_metric_curves(config.figures_dir / "noise_sweep_soi_symbol_accuracy.png", list(config.snr_sweep_db), snr_curves, "SNR (dB)", "soi_symbol_accuracy", "SOI Symbol Accuracy vs Noise Level")
     plot_metric_curves(config.figures_dir / "noise_sweep_interference_symbol_accuracy.png", list(config.snr_sweep_db), snr_curves, "SNR (dB)", "int_symbol_accuracy", "Interference Symbol Accuracy vs Noise Level")
     plot_metric_curves(config.figures_dir / "noise_sweep_wave_mse.png", list(config.snr_sweep_db), snr_curves, "SNR (dB)", "wave_mse", "Wave Recovery Error vs Noise Level")
+    plot_model_bar(config.figures_dir / "model_comparison_reference_wave_mse.png", [row for row in alpha_rows if row["alpha"] == 1.0], "wave_mse", "Reference Wave Error Comparison", "Wave MSE")
+    plot_model_bar(config.figures_dir / "model_comparison_reference_soi_accuracy.png", [row for row in alpha_rows if row["alpha"] == 1.0], "soi_symbol_accuracy", "Reference SOI Symbol Accuracy Comparison", "SOI Symbol Accuracy")
+    plot_wave_error_vs_symbol_accuracy(config.figures_dir / "wave_error_vs_symbol_accuracy_alpha.png", alpha_rows, "Wave Error vs SOI Symbol Accuracy (Alpha Sweep)")
+    plot_wave_error_vs_symbol_accuracy(config.figures_dir / "wave_error_vs_symbol_accuracy_noise.png", snr_rows, "Wave Error vs SOI Symbol Accuracy (Noise Sweep)")
+
+    reference_rows = [row for row in alpha_rows if row["alpha"] == 1.0 and row["model"] != "FastICA"]
+    best_ref = max(reference_rows, key=lambda row: row["avg_symbol_accuracy"])
+    best_spec = next(spec for spec in specs if spec.name == best_ref["model"])
+    best_model = load_trained_model(best_spec, config.checkpoints_dir, device)
+    reference_loader = make_loader(alpha_dirs[1.0], batch_size=1, shuffle=False)
+    sample = next(iter(reference_loader))
+    with torch.no_grad():
+        pred = best_model(sample["x"].to(device)).cpu().numpy()[0]
+    x_np = sample["x"][0].numpy()
+    y_np = sample["y"][0].numpy()
+    plot_example_signals(config.figures_dir / "pipeline_example_best_model.png", x_np, y_np, pred, title_prefix=best_ref["model"])
+
+    fastica_spec = next(spec for spec in specs if spec.name == "FastICA")
+    fastica_model = load_trained_model(fastica_spec, config.checkpoints_dir, device)
+    with torch.no_grad():
+        fastica_pred = fastica_model(sample["x"].to(device)).cpu().numpy()[0]
+    plot_example_signals(config.figures_dir / "pipeline_example_fastica.png", x_np, y_np, fastica_pred, title_prefix="FastICA")
 
     summary = {
         "device": device,

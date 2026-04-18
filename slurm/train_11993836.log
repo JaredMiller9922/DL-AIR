@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 10, in <module>
+    from networks.fast_ica import FastICABaseline
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/networks/fast_ica.py", line 4, in <module>
+    from sklearn.decomposition import FastICA as SkFastICA
+ModuleNotFoundError: No module named 'sklearn'

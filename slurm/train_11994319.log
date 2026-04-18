@@ -1,0 +1,27 @@
+Using data stored in data folder
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x145843600900>
+Traceback (most recent call last):
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 124, in <module>
+    main()
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/slurm/../main.py", line 113, in main
+    trained_model, t_hist, v_hist = train_model(model, train_loader, val_loader, plotter, epochs=ExperimentConfig.epochs, device=device)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/train.py", line 17, in train_model
+    pred_snap = model(x_snap)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/Catpsone/DL-AIR/networks/hybrid_separator.py", line 67, in forward
+    x = self.in_proj(x)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 375, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/uufs/chpc.utah.edu/common/home/u1321655/miniconda3/envs/FastICA/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 370, in _conv_forward
+    return F.conv1d(
+RuntimeError: Given groups=1, weight of size [64, 8, 1], expected input[16, 4, 800] to have 8 channels, but got 4 channels instead

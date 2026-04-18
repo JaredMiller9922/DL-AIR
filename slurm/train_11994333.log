@@ -1,0 +1,35 @@
+Using data stored in data folder
+WE MADE IT BEFORE THE Separator
+MOdels were tested
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x151505114900>
+Epoch 10: Train MSE 0.49850506 | Val MSE 0.50194231
+Hybrid | Train Sym Acc: 0.2791 | Val Sym Acc: 0.2430
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x1514d9ed52a0>
+Epoch 10: Train MSE 0.49932121 | Val MSE 0.50054397
+LSTM | Train Sym Acc: 0.2721 | Val Sym Acc: 0.2521
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x1514de3122d0>
+Epoch 10: Train MSE 0.49892424 | Val MSE 0.50037566
+IQ_CNN | Train Sym Acc: 0.2719 | Val Sym Acc: 0.2498
+--- Training HTDemucs ---
+Model: HTDemucs and parameters: <generator object Module.parameters at 0x1514de312ea0>
+Epoch 10: Train MSE 0.49208617 | Val MSE 0.50732395
+HTDemucs | Train Sym Acc: 0.3192 | Val Sym Acc: 0.2501
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+FastICA | Train Sym Acc: 0.2465 | Val Sym Acc: 0.3321
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lcccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Train Sym Acc} & \textbf{Val Sym Acc} \\ \hline
+Hybrid & 0.50194 & -0.02 & 0.2791 & 0.2430 \\
+LSTM & 0.50054 & -0.00 & 0.2721 & 0.2521 \\
+IQ_CNN & 0.50038 & -0.00 & 0.2719 & 0.2498 \\
+HTDemucs & 0.50732 & -0.06 & 0.3192 & 0.2501 \\
+FastICA & 1.26542 & -3.00 & 0.2465 & 0.3321 \\
+\hline
+\end{tabular}
+\end{table}

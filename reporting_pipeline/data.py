@@ -2,6 +2,7 @@ import json
 import math
 from dataclasses import asdict
 from pathlib import Path
+import shutil
 
 import numpy as np
 import torch
@@ -35,6 +36,12 @@ class ReportDataset(Dataset):
             "symbols_b": torch.from_numpy(data["symbols_b"]).float(),
             "labels_a": torch.from_numpy(data["labels_a"]).long(),
             "labels_b": torch.from_numpy(data["labels_b"]).long(),
+            "start_a": torch.tensor(int(data["start_a"])).long(),
+            "start_b": torch.tensor(int(data["start_b"])).long(),
+            "phase_a": torch.tensor(float(data["phase_a"])).float(),
+            "phase_b": torch.tensor(float(data["phase_b"])).float(),
+            "center_bin_a": torch.tensor(float(data["center_bin_a"])).float(),
+            "center_bin_b": torch.tensor(float(data["center_bin_b"])).float(),
         }
         return sample
 
@@ -56,9 +63,7 @@ def _qpsk_symbols(num_symbols: int, rng: np.random.Generator):
 
 
 def _pulse_shape(symbols: np.ndarray, taps: np.ndarray, sps: int):
-    up = np.zeros(len(symbols) * sps, dtype=np.complex64)
-    up[::sps] = symbols
-    shaped = np.convolve(up, taps, mode="same")
+    shaped = np.repeat(symbols, sps).astype(np.complex64)
     power = np.mean(np.abs(shaped) ** 2) + 1e-12
     return (shaped / np.sqrt(power)).astype(np.complex64)
 
@@ -86,10 +91,9 @@ def _snr_db_to_noise_std(signal: np.ndarray, snr_db: float) -> float:
 def _build_source(num_symbols: int, frame_len: int, sps: int, taps: np.ndarray, center_bin: float, rng: np.random.Generator):
     symbols, labels = _qpsk_symbols(num_symbols, rng)
     packet = _pulse_shape(symbols, taps, sps)
-    start_max = max(1, frame_len - len(packet))
-    start = int(rng.integers(0, start_max, endpoint=False))
+    start = 0
     amp = rng.uniform(0.9, 1.1)
-    cfo = rng.uniform(-0.15, 0.15)
+    cfo = 0.0
     phase = rng.uniform(0.0, 2.0 * math.pi)
     framed = _place_packet(packet, frame_len, start)
     wave = amp * _apply_carrier(framed, center_bin=center_bin, cfo_bin=cfo, phase=phase)
@@ -136,6 +140,12 @@ def _make_example(config: ReportEvalConfig, alpha: float, snr_db: float, rng: np
         "symbols_b": np.stack([symbols_b.real, symbols_b.imag], axis=0).astype(np.float32),
         "labels_a": labels_a,
         "labels_b": labels_b,
+        "start_a": np.array(meta_a["start"], dtype=np.int64),
+        "start_b": np.array(meta_b["start"], dtype=np.int64),
+        "phase_a": np.array(meta_a["phase"], dtype=np.float32),
+        "phase_b": np.array(meta_b["phase"], dtype=np.float32),
+        "center_bin_a": np.array(meta_a["center_bin"], dtype=np.float32),
+        "center_bin_b": np.array(meta_b["center_bin"], dtype=np.float32),
         "alpha": np.array(alpha, dtype=np.float32),
         "snr_db": np.array(snr_db, dtype=np.float32),
     }
