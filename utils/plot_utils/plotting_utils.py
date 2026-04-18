@@ -8,7 +8,6 @@ class BeautifulRFPlotter:
     def __init__(self, save_dir="visualizations"):
         self.save_dir = save_dir
         os.makedirs(self.save_dir, exist_ok=True)
-        # Use a clean, professional aesthetic
         plt.style.use('seaborn-v0_8-whitegrid')
         self.colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
@@ -55,9 +54,20 @@ class BeautifulRFPlotter:
         """
         Overlays the model's predictions on top of the ground truth sources.
         """
-        y_true_np = y_true[batch_idx, :, :num_samples].cpu().detach().numpy()
-        y_pred_np = y_pred[batch_idx, :, :num_samples].cpu().detach().numpy()
-        time = np.arange(num_samples)
+        # y_true_np = y_true[batch_idx, :, :num_samples].cpu().detach().numpy()
+        # y_pred_np = y_pred[batch_idx, :, :num_samples].cpu().detach().numpy()
+        # time = np.arange(num_samples)
+
+        y_true_np = y_true[batch_idx].cpu().detach().numpy()
+        y_pred_np = y_pred[batch_idx].cpu().detach().numpy()
+
+        # Ensure same length (VERY important)
+        min_len = min(y_true_np.shape[-1], y_pred_np.shape[-1], num_samples)
+
+        y_true_np = y_true_np[..., :min_len]
+        y_pred_np = y_pred_np[..., :min_len]
+
+        time = np.arange(min_len)
 
         fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
         fig.suptitle(f"Separation Performance: {model_name}", fontsize=16, fontweight='bold')
@@ -142,6 +152,10 @@ class BeautifulRFPlotter:
         plt.tight_layout()
         plt.savefig(os.path.join(self.save_dir, f"{model_name}_symbol_recovery.png"), dpi=300)
         plt.close()
+
+
+
+
 
 # --- UI Specific Plotting Helpers ---
 

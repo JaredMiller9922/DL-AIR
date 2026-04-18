@@ -254,18 +254,49 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="RF Separation Pipeline")
 
-    parser.add_argument("--mode", choices=["train", "evaluate"], default=None)
+    # --- Core Mode ---
+    parser.add_argument("--mode", choices=["train", "evaluate", "generate"], default=None)
+
+    # --- Model Definition ---
     parser.add_argument("--model", default="Hybrid")
+    parser.add_argument("--model_path", type=str, default=None)
+    parser.add_argument("--dropout", type=float, default=0.0)
+
+    # --- Training ---
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--use_cross_val", action="store_true")
 
+    # --- Signal / QPSK ---
+    parser.add_argument("--modulation", type=str, default="QPSK")
+    parser.add_argument("--n_symbols", type=int, default=4)
+    parser.add_argument("--samples_per_symbol", type=int, default=2)
+    parser.add_argument("--rolloff", type=float, default=0.25)
+    parser.add_argument("--rrc_span_symbols", type=int, default=12)
+    parser.add_argument("--normalize_power", action="store_true")
+    parser.add_argument("--num_channels", type=int, default=4)
+
+    # --- Time / Sampling ---
+    parser.add_argument("--fs", type=float, default=1.0)
+    parser.add_argument("--symbol_rate", type=float, default=None)
+    parser.add_argument("--T1", type=float, default=0.0)
+    parser.add_argument("--T2", type=float, default=None)
+
+    # --- Mixture / Noise ---
     parser.add_argument("--alpha", type=float, default=1.0)
     parser.add_argument("--noise", action="store_true")
-    parser.add_argument("--snr_db", type=float, default=25.0)
+    parser.add_argument("--snr_db", type=float, default=100.0)
+    parser.add_argument("--n_rx", type=int, default=4)
+    parser.add_argument("--random_phase", action="store_true")
     parser.add_argument("--noise_var", type=float, default=None)
 
-    parser.add_argument("--model_path", type=str, default=None)
+    # --- Data ---
+    parser.add_argument("--dataset_path", type=str, default="data")
+    parser.add_argument("--use_on_the_fly_data", action="store_true")
+
+    # --- Evaluation ---
+    parser.add_argument("--custom_symbols", type=str, default=None)
 
     args = parser.parse_args()
 
@@ -276,14 +307,38 @@ if __name__ == "__main__":
         config = ExperimentConfig(
             mode=args.mode,
             model_name=args.model,
-            epochs=args.epochs,
+            model_path=args.model_path,
+            dropout=args.dropout,
+
             batch_size=args.batch_size,
+            epochs=args.epochs,
             lr=args.lr,
+            use_cross_val=args.use_cross_val,
+
+            modulation=args.modulation,
+            n_symbols=args.n_symbols,
+            samples_per_symbol=args.samples_per_symbol,
+            rolloff=args.rolloff,
+            rrc_span_symbols=args.rrc_span_symbols,
+            normalize_power=args.normalize_power,
+            num_channels=args.num_channels,
+
+            fs=args.fs,
+            symbol_rate=args.symbol_rate,
+            T1=args.T1,
+            T2=args.T2,
+
             alpha=args.alpha,
             noise_enabled=args.noise,
             snr_db=args.snr_db,
+            n_rx=args.n_rx,
+            random_phase=args.random_phase,
             noise_variance=args.noise_var,
-            model_path=args.model_path
+
+            dataset_path=args.dataset_path,
+            use_on_the_fly_data=args.use_on_the_fly_data,
+
+            custom_symbols=args.custom_symbols,
         )
 
         results = run_experiment(config)

@@ -25,6 +25,10 @@ class ExperimentConfig:
     rrc_span_symbols: int = 12
     normalize_power: bool = True
     num_channels: int = 4
+    fs: float = 1.0  # Sampling frequency (Hz, normalized if needed)
+    symbol_rate: Optional[float] = None  # Optional if fs is derived
+    T1: float = 0.0
+    T2: Optional[float] = None  # or compute from n_symbols
 
     # --- Mixture & Noise Parameters ---
     alpha: float = 1.0           
