@@ -52,6 +52,7 @@ class ExperimentConfig:
     snr_db: float = 25 # Default value of 100 makes no changes
     random_phase: bool = False
     phase_shift_deg: int = 5
+    interference_phase_shift: int = 0
 
     # --- Data Management ---
     dataset_path: str = "data"

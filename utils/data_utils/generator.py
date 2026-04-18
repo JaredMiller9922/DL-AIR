@@ -29,6 +29,7 @@ class MixtureConfig:
     n_rx: int = ExperimentConfig.n_rx
     random_phase: bool = ExperimentConfig.random_phase
     phase_shift_deg: int = ExperimentConfig.phase_shift_deg
+    interference_phase_shift: int = ExperimentConfig.interference_phase_shift
 
 class RFMixtureGenerator:
     """
@@ -70,10 +71,22 @@ class RFMixtureGenerator:
         s_soi, s_soi_symbols, soi_meta = self.generate_qpsk(qpsk_cfg_soi)
         s_int, s_int_symbols, int_meta = self.generate_qpsk(qpsk_cfg_int)
 
+        # If the two generated waveforms do not have the same length,
+        # resample both onto a common grid so they can be mixed directly.
+        # this facilitates experiment D
+        if len(s_soi) != len(s_int):
+            target_len = max(len(s_soi), len(s_int))
+            s_soi = self._resample_complex_to_len(s_soi, target_len)
+            s_int = self._resample_complex_to_len(s_int, target_len)
+
+        # Mix signals s_soi + α * s_int + noise
+        theta = np.deg2rad(mix_cfg.interference_phase_shift)
+        phase_shift = np.exp(1j * theta)
+
         # The simple case where there is only 1 antenna
         if mix_cfg.n_rx == 1:
-            # Mix signals s_soi + α * s_int + noise
-            signal = s_soi + mix_cfg.alpha * s_int
+
+            signal = s_soi + phase_shift * mix_cfg.alpha * s_int
             if noise_cfg.enabled:
                 noise = self.generate_noise(signal, mix_cfg.snr_db)
                 mixture = signal + noise
@@ -82,7 +95,7 @@ class RFMixtureGenerator:
                 mixture = signal + noise
             
             # Dummy matrix 
-            H = np.array([[1.0, mix_cfg.alpha]], dtype=np.complex128)
+            H = np.array([[1.0, phase_shift * mix_cfg.alpha]], dtype=np.complex128)
         else:
             # Multi-channel receive case
             H = self._sample_phase_change_matrix(
@@ -93,7 +106,7 @@ class RFMixtureGenerator:
             # Stack sources as (2, T)
             sources = np.vstack([
                 s_soi,
-                mix_cfg.alpha * s_int,
+                phase_shift * mix_cfg.alpha * s_int,
             ])
 
             # Linear mixture at all receivers: (n_rx, 2) @ (2, T) -> (n_rx, T)
@@ -242,6 +255,21 @@ class RFMixtureGenerator:
 
         return np.exp(1j * phases).astype(np.complex128)
 
+    def _resample_complex_to_len(self, x: np.ndarray, target_len: int) -> np.ndarray:
+        """
+        Resample a complex 1D waveform to target_len using linear interpolation
+        on real and imaginary parts separately.
+        """
+        if len(x) == target_len:
+            return x
+
+        old_idx = np.linspace(0.0, 1.0, len(x))
+        new_idx = np.linspace(0.0, 1.0, target_len)
+
+        x_real = np.interp(new_idx, old_idx, np.real(x))
+        x_imag = np.interp(new_idx, old_idx, np.imag(x))
+
+        return x_real + 1j * x_imag
     # --------------------------
     # User Defined Alphabet Helpers
     # --------------------------
