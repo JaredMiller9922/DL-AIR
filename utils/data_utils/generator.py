@@ -16,10 +16,9 @@ class QPSKConfig:
 
 @dataclass
 class NoiseConfig:
-    def __init__(self, enabled=False, snr_db=100.0, variance=None):
-        self.enabled = enabled
-        self.snr_db = snr_db
-        self.variance = variance
+    enabled = ExperimentConfig.noise_enabled
+    snr_db: Optional[float] = ExperimentConfig.snr_db
+    sigma2: Optional[float] = ExperimentConfig.sigma2
 
 
 @dataclass
@@ -170,20 +169,26 @@ class RFMixtureGenerator:
         }
         return shaped, symbols, meta
     
-    def generate_noise(self, signal: np.ndarray, snr_db: Optional[float]) -> np.ndarray:
-        if snr_db is None:
+
+    def generate_noise(self, signal: np.ndarray, noise_cfg: NoiseConfig) -> np.ndarray:
+        if noise_cfg.snr_db is None and noise_cfg.sigma2 is None:
             return np.zeros_like(signal)
 
-        signal_power = np.mean(np.abs(signal) ** 2)
-        snr_linear = 10 ** (snr_db / 10.0)
-        noise_power = signal_power / snr_linear
-
+        # Base complex Gaussian noise with unit variance
         noise = (
             self.rng.standard_normal(signal.shape)
             + 1j * self.rng.standard_normal(signal.shape)
         ) / np.sqrt(2.0)
 
-        noise *= np.sqrt(noise_power)
+        if noise_cfg.sigma2 is not None:
+            # Scale the noise by sigma2
+            noise *= np.sqrt(noise_cfg.sigma2)
+        else:
+            # SNR-based scaling (current behavior)
+            signal_power = np.mean(np.abs(signal) ** 2)
+            snr_linear = 10 ** (noise_cfg.snr_db / 10.0)
+            noise_power = signal_power / snr_linear
+            noise *= np.sqrt(noise_power)
 
         return noise
 
@@ -270,6 +275,7 @@ class RFMixtureGenerator:
         x_imag = np.interp(new_idx, old_idx, np.imag(x))
 
         return x_real + 1j * x_imag
+
     # --------------------------
     # User Defined Alphabet Helpers
     # --------------------------
