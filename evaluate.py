@@ -204,15 +204,40 @@ class ModelEvaluator:
         return metrics
 
     def plot_comparison(self, all_metrics):
+        os.makedirs("visualizations", exist_ok=True)
+
+        # -----------------------------
+        # 1. Validation MSE plot
+        # -----------------------------
         plt.figure(figsize=(10, 6))
         for name, m in all_metrics.items():
             if len(m["val_history"]) > 0:
                 plt.plot(m["val_history"], label=f"{name} (Val MSE)")
-        plt.title("Model Performance Comparison")
+
+        plt.title("Model Comparison (Validation MSE)")
         plt.xlabel("Epoch")
         plt.ylabel("MSE")
         plt.legend()
-        plt.savefig("visualizations/model_comparison.png")
+        plt.grid(True, linestyle="--", alpha=0.7)
+
+        plt.savefig("visualizations/models_comparison_validation.png")
+        plt.close()
+
+        # -----------------------------
+        # 2. Training MSE plot
+        # -----------------------------
+        plt.figure(figsize=(10, 6))
+        for name, m in all_metrics.items():
+            if len(m["train_history"]) > 0:
+                plt.plot(m["train_history"], label=f"{name} (Train MSE)")
+
+        plt.title("Model Comparison (Training MSE)")
+        plt.xlabel("Epoch")
+        plt.ylabel("MSE")
+        plt.legend()
+        plt.grid(True, linestyle="--", alpha=0.7)
+
+        plt.savefig("visualizations/models_comparison_training.png")
         plt.close()
 
     def print_latex_table(self, all_metrics):
