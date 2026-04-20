@@ -16,7 +16,7 @@ class QPSKConfig:
 
 @dataclass
 class NoiseConfig:
-    enabled = ExperimentConfig.noise_enabled
+    enabled: bool = ExperimentConfig.noise_enabled
     snr_db: Optional[float] = ExperimentConfig.snr_db
     sigma2: Optional[float] = ExperimentConfig.sigma2
 
@@ -87,7 +87,7 @@ class RFMixtureGenerator:
 
             signal = s_soi + phase_shift * mix_cfg.alpha * s_int
             if noise_cfg.enabled:
-                noise = self.generate_noise(signal, mix_cfg.snr_db)
+                noise = self.generate_noise(signal, noise_cfg)
                 mixture = signal + noise
             else:
                 noise = np.zeros_like(signal)
@@ -112,7 +112,7 @@ class RFMixtureGenerator:
             signal = H @ sources
 
             if noise_cfg.enabled:
-                noise = self.generate_noise(signal, mix_cfg.snr_db)
+                noise = self.generate_noise(signal, noise_cfg)
                 mixture = signal + noise
             else:
                 noise = np.zeros_like(signal)
@@ -171,7 +171,8 @@ class RFMixtureGenerator:
     
 
     def generate_noise(self, signal: np.ndarray, noise_cfg: NoiseConfig) -> np.ndarray:
-        if noise_cfg.snr_db is None and noise_cfg.sigma2 is None:
+        # If noise_enabled is set to false
+        if not noise_cfg.enabled:
             return np.zeros_like(signal)
 
         # Base complex Gaussian noise with unit variance

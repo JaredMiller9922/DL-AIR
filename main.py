@@ -197,17 +197,22 @@ def train_and_validate():
     )
 
     all_results = {}
-    print("WE MADE IT BEFORE THE Separator")
 
-    models_to_test = {
-        # "FastICA": {"model": FastICABaseline(), "train": False},
-        # "Hybrid": {"model": HybridSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        # "LSTM": {"model": LSTMSeparator(in_ch=4, out_ch=4).to(device), "train": True},
-        "IQ_CNN": {"model": IQCNNSeparator(in_ch=2, out_ch=4).to(device), "train": True},
-        # "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=4, out_ch=4).to(device), "train": True},
-    }
-
-    print("MOdels were tested")
+    if ExperimentConfig.n_rx == 1:
+        models_to_test = {
+            "Hybrid": {"model": HybridSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            "LSTM": {"model": LSTMSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            "IQ_CNN": {"model": IQCNNSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+        }
+    else:
+        models_to_test = {
+            "FastICA": {"model": FastICABaseline(), "train": False},
+            "Hybrid": {"model": HybridSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            "LSTM": {"model": LSTMSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            "IQ_CNN": {"model": IQCNNSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+        }
 
     for name, entry in models_to_test.items():
         model = entry["model"]

@@ -18,8 +18,6 @@ class ExperimentConfig:
 
     # Signal params
     modulation: str = "QPSK"
-    # TODO: This variable shouldn't exist mixture = s1 + \alpha * s2 + noise. alpha is defined in MixtureConfig below
-    noise_sigma: float = 0.1
 
     # Data
     dataset_path: str = "./data"
@@ -28,21 +26,13 @@ class ExperimentConfig:
     # Advanced
     use_cross_val: bool = False
 
-
-    # Config parameters that Jared needed
-
     # ----- QPSKConfig -------- #
     num_symbols: int = 400
-    n_rx: int = 1
+    n_rx: int = 4
     samples_per_symbol: int = 2
     rolloff: float = 0.25
     rrc_span_symbols: int = 12
     normalize_power: bool = True
-    num_channels: int = 4
-    # fs: float = 1.0  # Sampling frequency (Hz, normalized if needed)
-    # symbol_rate: Optional[float] = None  # Optional if fs is derived
-    # T1: float = 0.0
-    # T2: Optional[float] = None  # or compute from n_symbols
 
     # ----- NoiseConfig -------- #
     noise_enabled: bool = True
