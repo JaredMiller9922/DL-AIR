@@ -1,0 +1,111 @@
+Using data stored in data folder
+--- Training FastICA ---
+Model: FastICA baseline (no training step)
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+C:\Users\jared\anaconda3\envs\FastICA\lib\site-packages\sklearn\decomposition\_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+FastICA | Train Sym Acc: 0.363 | Val Sym Acc: 0.363
+--- Training Hybrid ---
+Model: Hybrid and parameters: <generator object Module.parameters at 0x00000243E9033F40>
+Epoch 10: Train MSE 0.00108924 | Val MSE 0.00024896
+Epoch 20: Train MSE 0.00024036 | Val MSE 0.00012499
+Saved model to pytorch_models/Hybrid.pt
+Hybrid | Train Sym Acc: 1.000 | Val Sym Acc: 1.000
+--- Training LSTM ---
+Model: LSTM and parameters: <generator object Module.parameters at 0x0000024408D79930>
+Epoch 10: Train MSE 0.00012133 | Val MSE 0.00012887
+Epoch 20: Train MSE 0.00004658 | Val MSE 0.00002373
+Saved model to pytorch_models/LSTM.pt
+LSTM | Train Sym Acc: 1.000 | Val Sym Acc: 1.000
+--- Training IQ_CNN ---
+Model: IQ_CNN and parameters: <generator object Module.parameters at 0x0000024408D791C0>
+Epoch 10: Train MSE 0.00024127 | Val MSE 0.00033672
+Epoch 20: Train MSE 0.00013503 | Val MSE 0.00012427
+Saved model to pytorch_models/IQ_CNN.pt
+IQ_CNN | Train Sym Acc: 1.000 | Val Sym Acc: 1.000
+--- Training HTDemucs ---
+Model: HTDemucs and parameters: <generator object Module.parameters at 0x0000024408D7AD50>
+Epoch 10: Train MSE 0.46941443 | Val MSE 0.46857882
+Epoch 20: Train MSE 0.43891006 | Val MSE 0.44171487
+Saved model to pytorch_models/HTDemucs.pt
+HTDemucs | Train Sym Acc: 0.364 | Val Sym Acc: 0.355
+
+% Copy this into your LaTeX report:
+\begin{table}[h]\centering
+\begin{tabular}{lcccc}
+\hline \textbf{Model} & \textbf{Final MSE} & \textbf{SDR (dB)} & \textbf{Train Sym Acc} & \textbf{Val Sym Acc} \\ \hline
+FastICA & 1.29460 & -4.01 & 0.3627 & 0.3631 \\
+Hybrid & 0.00012 & 36.17 & 1.0000 & 1.0000 \\
+LSTM & 0.00002 & 45.04 & 1.0000 & 1.0000 \\
+IQ_CNN & 0.00012 & 36.10 & 1.0000 & 1.0000 \\
+HTDemucs & 0.44171 & 0.54 & 0.3638 & 0.3555 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class ExperimentConfig:
+    # --- Core Mode ---
+    mode: str = "train"  # "train", "evaluate", or "generate"
+
+    # --- Model Definition ---
+    model_name: str = "Hybrid"
+    model_path: Optional[str] = None
+    dropout: float = 0.0 
+
+    # --- Training Hyperparameters ---
+    batch_size: int = 16
+    epochs: int = 20
+    lr: float = 1e-3
+
+    # Signal params
+    modulation: str = "QPSK"
+
+    # Data
+    dataset_path: str = "./data"
+    generate_new_data: bool = False 
+
+    # Advanced
+    use_cross_val: bool = False
+
+    # ----- QPSKConfig -------- #
+    num_symbols: int = 400
+    n_rx: int = 2
+    samples_per_symbol: int = 2
+    rolloff: float = 0.25
+    rrc_span_symbols: int = 12
+    normalize_power: bool = True
+
+    # ----- NoiseConfig -------- #
+    noise_enabled: bool = True
+    # IMPORTANT: Either snr_db or sigma2 should be set here not both
+    snr_db: float = 25
+    sigma2: float = None
+
+    # ----- MixtureConfig -------- #
+    noise_alpha: float = 0.8
+    random_phase: bool = False
+    phase_shift_deg: int = 5
+    interference_phase_shift: int = 0
+
+    # --- Data Management ---
+    dataset_path: str = "data"
+    use_on_the_fly_data: bool = False
+    
+    # --- Evaluation Specifics ---
+    # Captures custom user bits (e.g., "10110011") from the UI for Source A
+    custom_symbols: Optional[str] = None
