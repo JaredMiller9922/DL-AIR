@@ -13,7 +13,7 @@ class ExperimentConfig:
 
     # --- Training Hyperparameters ---
     batch_size: int = 16
-    epochs: int = 100
+    epochs: int = 20
     lr: float = 1e-3
 
     # Signal params
@@ -41,7 +41,7 @@ class ExperimentConfig:
     sigma2: float = None
 
     # ----- MixtureConfig -------- #
-    noise_alpha: float = 1
+    noise_alpha: float = 0.8
     random_phase: bool = False
     phase_shift_deg: int = 5
     interference_phase_shift: int = 0
