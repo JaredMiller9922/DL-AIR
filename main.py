@@ -207,11 +207,11 @@ def train_and_validate():
         }
     else:
         models_to_test = {
-            "FastICA": {"model": FastICABaseline(), "train": False},
-            "Hybrid": {"model": HybridSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
-            "LSTM": {"model": LSTMSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            # "FastICA": {"model": FastICABaseline(), "train": False},
+            # "Hybrid": {"model": HybridSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            # "LSTM": {"model": LSTMSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
             "IQ_CNN": {"model": IQCNNSeparator(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
-            "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
+            # "HTDemucs": {"model": RFHTDemucsWrapper(in_ch=ExperimentConfig.n_rx * 2, out_ch=4).to(device), "train": True},
         }
 
     for name, entry in models_to_test.items():
