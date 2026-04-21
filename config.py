@@ -28,7 +28,7 @@ class ExperimentConfig:
 
     # ----- QPSKConfig -------- #
     num_symbols: int = 400
-    n_rx: int = 4
+    n_rx: int = 2
     samples_per_symbol: int = 2
     rolloff: float = 0.25
     rrc_span_symbols: int = 12
