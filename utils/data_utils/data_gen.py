@@ -1,7 +1,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from generator import RFMixtureGenerator, QPSKConfig, MixtureConfig, NoiseConfig
+from utils.data_utils.generator import RFMixtureGenerator, QPSKConfig, MixtureConfig, NoiseConfig
 from utils.data_utils.dataset import SyntheticRFDataset
 from config import ExperimentConfig
 

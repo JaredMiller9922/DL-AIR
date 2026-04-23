@@ -1,0 +1,4 @@
+benchmark,model,model_type,task,mean_cv_accuracy,std_cv_accuracy,status
+benchmark_modulation_diverse,LDA,classical_feature,source_b_type,0.2,0.15,ok
+benchmark_modulation_diverse,QDA,classical_feature,source_b_type,0.3,0.1,ok
+benchmark_modulation_diverse,Logistic Regression,classical_feature,source_b_type,0.325,0.06123724356957945,ok

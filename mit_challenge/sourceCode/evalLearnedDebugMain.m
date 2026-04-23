@@ -21,7 +21,7 @@ thisDir = fileparts(thisFile);
 projectRoot = fullfile(thisDir, '..', '..');
 
 if (nargin < 4 || isempty(checkpointPath))
-    checkpointPath = fullfile(projectRoot, 'pytorch_models', 'hybrid_model.pt');
+    checkpointPath = defaultCheckpointPath(projectRoot, modelName);
 end
 
 if (exist('OCTAVE_VERSION', 'builtin'))
@@ -103,4 +103,18 @@ for rr = 1:size(summaryMatrix, 1)
 end
 
 fclose(fid);
+end
+
+function checkpointPath = defaultCheckpointPath(projectRoot, modelName)
+safeName = lower(strrep(modelName, '-', '_'));
+safeName = strrep(safeName, ' ', '_');
+
+if (strcmp(safeName, 'iqcnn'))
+    safeName = 'iq_cnn';
+end
+if (strcmp(safeName, 'rfhtdemucs'))
+    safeName = 'htdemucs';
+end
+
+checkpointPath = fullfile(projectRoot, 'pytorch_models', [safeName, '_model.pt']);
 end

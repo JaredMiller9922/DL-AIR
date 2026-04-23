@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -77,6 +78,20 @@ def output_iq_to_complex_sources(output_iq: np.ndarray) -> tuple[np.ndarray, np.
     )
 
 
+def run_model_inference(model, x_tensor: torch.Tensor, model_name: str, min_len: int = 2048) -> torch.Tensor:
+    """Run a separator while preserving the original frame length.
+
+    HTDemucs has a deep strided encoder and cannot process very short MIT
+    backend frames directly. Padding here keeps the adapter MIT-compatible
+    without changing the model class or the output file format.
+    """
+    original_len = x_tensor.shape[-1]
+    if normalize_model_name(model_name) == "HTDemucs" and original_len < min_len:
+        x_tensor = F.pad(x_tensor, (0, min_len - original_len))
+    y_hat = model(x_tensor)
+    return y_hat[..., :original_len]
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run a learned separator on MIT backend .iqdata frames.")
     parser.add_argument("--input_dir", required=True)
@@ -142,7 +157,7 @@ def main() -> int:
             model_mixture = mixture[:expected_rx]
             x = complex_matrix_to_iq_channels(model_mixture)
             x_tensor = torch.from_numpy(x).unsqueeze(0).float().to(device)
-            y_hat = model(x_tensor).detach().cpu().numpy()[0]
+            y_hat = run_model_inference(model, x_tensor, model_name).detach().cpu().numpy()[0]
             source_a, source_b = output_iq_to_complex_sources(y_hat)
 
             base = (

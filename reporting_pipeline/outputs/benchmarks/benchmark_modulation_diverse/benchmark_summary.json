@@ -1,0 +1,205 @@
+{
+  "config": {
+    "mode": "evaluate",
+    "model_name": "HTDemucs",
+    "model_path": null,
+    "dropout": 0.0,
+    "batch_size": 1,
+    "epochs": 3,
+    "lr": 0.001,
+    "modulation": "QPSK",
+    "source_a_type": "QPSK",
+    "source_b_type": "QPSK",
+    "source_family_mode": true,
+    "source_a_family": [
+      "BPSK",
+      "QPSK",
+      "8PSK",
+      "16QAM"
+    ],
+    "source_b_family": [
+      "BPSK",
+      "QPSK",
+      "8PSK",
+      "16QAM",
+      "PAM"
+    ],
+    "modulation_family_sweep": false,
+    "use_cross_val": false,
+    "num_symbols": 400,
+    "n_symbols": 400,
+    "n_rx": 2,
+    "samples_per_symbol": 2,
+    "rolloff": 0.25,
+    "rrc_span_symbols": 12,
+    "normalize_power": true,
+    "n_symbols_range": [
+      1024,
+      1024
+    ],
+    "samples_per_symbol_choices": [
+      2
+    ],
+    "rolloff_range": [
+      0.2,
+      0.35
+    ],
+    "num_channels": 4,
+    "fs": 1.0,
+    "symbol_rate": null,
+    "T1": 0.0,
+    "T2": null,
+    "noise_enabled": true,
+    "snr_db": 25.0,
+    "sigma2": null,
+    "noise_variance": null,
+    "alpha": 1.0,
+    "noise_alpha": 0.8,
+    "random_phase": false,
+    "phase_shift_deg": 5,
+    "interference_phase_shift": 0,
+    "mixing_mode": "random_complex",
+    "random_complex_mixing": true,
+    "timing_offset": 0,
+    "timing_offset_range": [
+      -2,
+      2
+    ],
+    "carrier_offset": 0.0,
+    "carrier_offset_range": null,
+    "phase_mismatch_deg": 0.0,
+    "phase_mismatch_range_deg": null,
+    "amplitude_imbalance_db": 0.0,
+    "amplitude_imbalance_db_range": null,
+    "alpha_range": [
+      0.3,
+      1.5
+    ],
+    "snr_db_range": [
+      15.0,
+      35.0
+    ],
+    "dataset_path": "data",
+    "generate_new_data": false,
+    "use_on_the_fly_data": false,
+    "train_examples": 4,
+    "val_examples": 4,
+    "test_examples": 4,
+    "save_dir": "visualizations",
+    "log_dir": "logs",
+    "model_dir": "pytorch_models",
+    "benchmark_name": "benchmark_modulation_diverse",
+    "transfer_eval_target": null,
+    "mit_aligned": false,
+    "custom_symbols": null
+  },
+  "model_results": [
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "FastICA",
+      "model_type": "classical_separator",
+      "mode": "evaluate",
+      "n_rx": 2,
+      "num_examples": 4,
+      "mse": 1.24807408452034,
+      "sdr_db": -3.8856866359710693,
+      "symbol_accuracy": NaN,
+      "checkpoint_path": null,
+      "status": "ok"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "Hybrid",
+      "model_type": "neural",
+      "mode": "evaluate",
+      "n_rx": 2,
+      "num_examples": 4,
+      "mse": 0.6253570914268494,
+      "sdr_db": -0.9166556410491467,
+      "symbol_accuracy": NaN,
+      "checkpoint_path": "D:\\CS 6955\\CS-6955\\DL-AIR\\pytorch_models\\hybrid_model.pt",
+      "status": "ok"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "LSTM",
+      "model_type": "neural",
+      "mode": "evaluate",
+      "n_rx": 2,
+      "num_examples": 4,
+      "mse": 0.5983007252216339,
+      "sdr_db": -0.7233718931674957,
+      "symbol_accuracy": NaN,
+      "checkpoint_path": "D:\\CS 6955\\CS-6955\\DL-AIR\\pytorch_models\\lstm_model.pt",
+      "status": "ok"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "Linear",
+      "model_type": "neural",
+      "mode": "evaluate",
+      "n_rx": 2,
+      "num_examples": 4,
+      "mse": NaN,
+      "sdr_db": NaN,
+      "symbol_accuracy": NaN,
+      "checkpoint_path": null,
+      "status": "missing_checkpoint"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "IQ_CNN",
+      "model_type": "neural",
+      "mode": "evaluate",
+      "n_rx": 2,
+      "num_examples": 4,
+      "mse": 0.659113734960556,
+      "sdr_db": -1.1280649080872536,
+      "symbol_accuracy": NaN,
+      "checkpoint_path": "D:\\CS 6955\\CS-6955\\DL-AIR\\pytorch_models\\iq_cnn_model.pt",
+      "status": "ok"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "HTDemucs",
+      "model_type": "neural",
+      "mode": "evaluate",
+      "n_rx": 2,
+      "num_examples": 4,
+      "mse": 0.5546436160802841,
+      "sdr_db": -0.4516414403915405,
+      "symbol_accuracy": NaN,
+      "checkpoint_path": "D:\\CS 6955\\CS-6955\\DL-AIR\\pytorch_models\\htdemucs_model.pt",
+      "status": "ok"
+    }
+  ],
+  "classical_feature_results": [
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "LDA",
+      "model_type": "classical_feature",
+      "task": "source_b_type",
+      "mean_cv_accuracy": 0.2,
+      "std_cv_accuracy": 0.15,
+      "status": "ok"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "QDA",
+      "model_type": "classical_feature",
+      "task": "source_b_type",
+      "mean_cv_accuracy": 0.3,
+      "std_cv_accuracy": 0.1,
+      "status": "ok"
+    },
+    {
+      "benchmark": "benchmark_modulation_diverse",
+      "model": "Logistic Regression",
+      "model_type": "classical_feature",
+      "task": "source_b_type",
+      "mean_cv_accuracy": 0.325,
+      "std_cv_accuracy": 0.06123724356957945,
+      "status": "ok"
+    }
+  ]
+}

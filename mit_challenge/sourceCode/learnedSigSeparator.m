@@ -10,7 +10,7 @@ projectRoot = fullfile(thisDir, '..', '..');
 pyScript = fullfile(thisDir, '..', 'infer_mit_separator.py');
 
 if (nargin < 10 || isempty(checkpointPath))
-    checkpointPath = fullfile(projectRoot, 'pytorch_models', 'hybrid_model.pt');
+    checkpointPath = defaultCheckpointPath(projectRoot, modelName);
 end
 
 pyExe = getenv('PYTHON_EXE');
@@ -31,4 +31,18 @@ Y0 = [];
 sigIn = [];
 W0 = [];
 
+end
+
+function checkpointPath = defaultCheckpointPath(projectRoot, modelName)
+safeName = lower(strrep(modelName, '-', '_'));
+safeName = strrep(safeName, ' ', '_');
+
+if (strcmp(safeName, 'iqcnn'))
+    safeName = 'iq_cnn';
+end
+if (strcmp(safeName, 'rfhtdemucs'))
+    safeName = 'htdemucs';
+end
+
+checkpointPath = fullfile(projectRoot, 'pytorch_models', [safeName, '_model.pt']);
 end

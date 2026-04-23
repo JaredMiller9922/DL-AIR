@@ -15,7 +15,15 @@ from utils.data_utils.dataset import make_loader
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
 from utils.model_utils.symbol_utils import rrc_taps
 from config import ExperimentConfig
-from utils.data_utils.generator import RFMixtureGenerator, QPSKConfig, NoiseConfig, MixtureConfig
+from utils.data_utils.generator import (
+    RFMixtureGenerator,
+    QPSKConfig,
+    NoiseConfig,
+    MixtureConfig,
+    SourceConfig,
+    SourceFamilyConfig,
+    mit_aligned_family_config,
+)
 from utils.data_utils.dataset import SyntheticRFDataset
 from torch.utils.data import DataLoader
 
@@ -185,11 +193,69 @@ def build_signal_configs(config):
         random_phase=config.random_phase,
         phase_shift_deg=config.phase_shift_deg,
         interference_phase_shift=config.interference_phase_shift,
+        mixing_mode=config.mixing_mode,
+        random_complex_mixing=config.random_complex_mixing,
+        timing_offset=config.timing_offset,
+        carrier_offset=config.carrier_offset,
+        phase_mismatch_deg=config.phase_mismatch_deg,
+        amplitude_imbalance_db=config.amplitude_imbalance_db,
     )
     return qpsk_cfg, noise_cfg, mix_cfg, snr_db
 
 
+def build_family_config(config):
+    if not config.source_family_mode and not config.mit_aligned:
+        return None
+    if config.mit_aligned:
+        family_cfg = mit_aligned_family_config()
+    else:
+        family_cfg = SourceFamilyConfig()
+
+    family_cfg.source_a_types = tuple(config.source_a_family or (config.source_a_type,))
+    family_cfg.source_b_types = tuple(config.source_b_family or (config.source_b_type,))
+    family_cfg.n_symbols_range = config.n_symbols_range or (config.num_symbols, config.num_symbols)
+    family_cfg.samples_per_symbol_choices = config.samples_per_symbol_choices or (config.samples_per_symbol,)
+    family_cfg.rolloff_range = config.rolloff_range or (config.rolloff, config.rolloff)
+    family_cfg.rrc_span_symbols = config.rrc_span_symbols
+    family_cfg.alpha_range = config.alpha_range or (config.alpha, config.alpha)
+    family_cfg.snr_db_range = config.snr_db_range or (config.snr_db, config.snr_db)
+    family_cfg.timing_offset_range = config.timing_offset_range or (config.timing_offset, config.timing_offset)
+    family_cfg.carrier_offset_range = config.carrier_offset_range or (config.carrier_offset, config.carrier_offset)
+    family_cfg.phase_mismatch_range_deg = config.phase_mismatch_range_deg or (
+        config.phase_mismatch_deg,
+        config.phase_mismatch_deg,
+    )
+    family_cfg.amplitude_imbalance_db_range = config.amplitude_imbalance_db_range or (
+        config.amplitude_imbalance_db,
+        config.amplitude_imbalance_db,
+    )
+    family_cfg.mixing_modes = (config.mixing_mode,)
+    family_cfg.n_rx = config.n_rx
+    family_cfg.normalize_power = config.normalize_power
+    family_cfg.mit_aligned = config.mit_aligned
+    return family_cfg
+
+
 def build_synthetic_loader(config, num_examples, generator, qpsk_cfg, noise_cfg, mix_cfg, shuffle=False):
+    source_a_cfg = SourceConfig(
+        source_type=config.source_a_type,
+        n_symbols=config.num_symbols,
+        samples_per_symbol=config.samples_per_symbol,
+        rolloff=config.rolloff,
+        rrc_span_symbols=config.rrc_span_symbols,
+        normalize_power=config.normalize_power,
+        num_channels=config.n_rx,
+    )
+    source_b_cfg = SourceConfig(
+        source_type=config.source_b_type,
+        n_symbols=config.num_symbols,
+        samples_per_symbol=config.samples_per_symbol,
+        rolloff=config.rolloff,
+        rrc_span_symbols=config.rrc_span_symbols,
+        normalize_power=config.normalize_power,
+        num_channels=config.n_rx,
+    )
+    family_cfg = build_family_config(config)
     dataset = SyntheticRFDataset(
         num_examples=num_examples,
         generator=generator,
@@ -198,6 +264,9 @@ def build_synthetic_loader(config, num_examples, generator, qpsk_cfg, noise_cfg,
         noise_cfg=noise_cfg,
         mix_cfg=mix_cfg,
         custom_symbols=config.custom_symbols,
+        source_a_cfg=source_a_cfg,
+        source_b_cfg=source_b_cfg,
+        family_cfg=family_cfg,
     )
     return DataLoader(dataset, batch_size=config.batch_size, shuffle=shuffle)
 
@@ -491,6 +560,12 @@ if __name__ == "__main__":
 
     # --- Signal / QPSK ---
     parser.add_argument("--modulation", type=str, default="QPSK")
+    parser.add_argument("--source_a_type", type=str, default=None)
+    parser.add_argument("--source_b_type", type=str, default=None)
+    parser.add_argument("--source_family_mode", action="store_true")
+    parser.add_argument("--source_a_family", type=str, default=None)
+    parser.add_argument("--source_b_family", type=str, default=None)
+    parser.add_argument("--mit_aligned", action="store_true")
     parser.add_argument("--n_symbols", type=int, default=4)
     parser.add_argument("--samples_per_symbol", type=int, default=2)
     parser.add_argument("--rolloff", type=float, default=0.25)
@@ -510,6 +585,11 @@ if __name__ == "__main__":
     parser.add_argument("--snr_db", type=float, default=100.0)
     parser.add_argument("--n_rx", type=int, default=4)
     parser.add_argument("--random_phase", action="store_true")
+    parser.add_argument("--mixing_mode", type=str, default="phase_only")
+    parser.add_argument("--timing_offset", type=int, default=0)
+    parser.add_argument("--carrier_offset", type=float, default=0.0)
+    parser.add_argument("--phase_mismatch_deg", type=float, default=0.0)
+    parser.add_argument("--amplitude_imbalance_db", type=float, default=0.0)
     parser.add_argument("--noise_var", type=float, default=None)
 
     # --- Data ---
@@ -537,6 +617,12 @@ if __name__ == "__main__":
             use_cross_val=args.use_cross_val,
 
             modulation=args.modulation,
+            source_a_type=args.source_a_type or args.modulation,
+            source_b_type=args.source_b_type or args.modulation,
+            source_family_mode=args.source_family_mode,
+            source_a_family=tuple(args.source_a_family.split(",")) if args.source_a_family else (args.source_a_type or args.modulation,),
+            source_b_family=tuple(args.source_b_family.split(",")) if args.source_b_family else (args.source_b_type or args.modulation,),
+            mit_aligned=args.mit_aligned,
             n_symbols=args.n_symbols,
             samples_per_symbol=args.samples_per_symbol,
             rolloff=args.rolloff,
@@ -554,6 +640,11 @@ if __name__ == "__main__":
             snr_db=args.snr_db,
             n_rx=args.n_rx,
             random_phase=args.random_phase,
+            mixing_mode=args.mixing_mode,
+            timing_offset=args.timing_offset,
+            carrier_offset=args.carrier_offset,
+            phase_mismatch_deg=args.phase_mismatch_deg,
+            amplitude_imbalance_db=args.amplitude_imbalance_db,
             noise_variance=args.noise_var,
 
             dataset_path=args.dataset_path,

@@ -46,6 +46,10 @@ class SyntheticRFDataset(Dataset):
         noise_cfg,
         mix_cfg,
         custom_symbols: Optional[str] = None,
+        source_a_cfg=None,
+        source_b_cfg=None,
+        family_cfg=None,
+        return_meta: bool = False,
     ):
         self.num_examples = num_examples
         self.generator = generator
@@ -54,6 +58,10 @@ class SyntheticRFDataset(Dataset):
         self.noise_cfg = noise_cfg
         self.mix_cfg = mix_cfg
         self.custom_symbols = custom_symbols
+        self.source_a_cfg = source_a_cfg
+        self.source_b_cfg = source_b_cfg
+        self.family_cfg = family_cfg
+        self.return_meta = return_meta
 
     def __len__(self) -> int:
         return self.num_examples
@@ -65,6 +73,9 @@ class SyntheticRFDataset(Dataset):
             noise_cfg = self.noise_cfg,
             mix_cfg=self.mix_cfg,
             soi_message=self.custom_symbols,
+            source_a_cfg=self.source_a_cfg,
+            source_b_cfg=self.source_b_cfg,
+            family_cfg=self.family_cfg,
         )
 
         mixture = ex["mixture"]      # (n_rx, T) complex
@@ -89,6 +100,9 @@ class SyntheticRFDataset(Dataset):
             ),
             # "meta": ex["meta"],
         }
+
+        if self.return_meta:
+            sample["meta"] = ex["meta"]
 
         return sample
 
