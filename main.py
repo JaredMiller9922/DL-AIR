@@ -1,6 +1,7 @@
+from pathlib import Path
+
+import numpy as np
 import torch
-import os
-import numpy as np 
 
 from train import train_model
 from evaluate import ModelEvaluator
@@ -12,9 +13,7 @@ from networks.htdemucs import RFHTDemucsWrapper
 from networks.fast_ica import FastICABaseline
 from utils.data_utils.dataset import make_loader
 from utils.plot_utils.plotting_utils import BeautifulRFPlotter
-from cross_validator import GridSearchManager
 from utils.model_utils.symbol_utils import rrc_taps
-from utils.data_utils.generator import QPSKConfig
 from config import ExperimentConfig
 from utils.data_utils.generator import RFMixtureGenerator, QPSKConfig, NoiseConfig, MixtureConfig
 from utils.data_utils.dataset import SyntheticRFDataset
@@ -22,6 +21,104 @@ from torch.utils.data import DataLoader
 
 
 DO_CROSS_VAL = False
+ROOT_DIR = Path(__file__).resolve().parent
+LEARNED_MODEL_NAMES = ("Hybrid", "LSTM", "Linear", "IQ_CNN", "HTDemucs")
+BASELINE_MODEL_NAMES = ("FastICA",)
+
+
+def normalize_model_name(model_name):
+    lookup = {
+        "hybrid": "Hybrid",
+        "lstm": "LSTM",
+        "linear": "Linear",
+        "iq_cnn": "IQ_CNN",
+        "iqcnn": "IQ_CNN",
+        "htdemucs": "HTDemucs",
+        "rfhtdemucs": "HTDemucs",
+        "fastica": "FastICA",
+        "fast_ica": "FastICA",
+    }
+    key = str(model_name).replace("-", "_").replace(" ", "_").lower()
+    if key not in lookup:
+        raise ValueError(f"Unknown model: {model_name}")
+    return lookup[key]
+
+
+def supported_model_names(n_rx=2, include_baselines=True):
+    names = list(LEARNED_MODEL_NAMES)
+    if include_baselines and n_rx >= 2:
+        names = list(BASELINE_MODEL_NAMES) + names
+    return names
+
+
+def model_is_trainable(model_name):
+    return normalize_model_name(model_name) in LEARNED_MODEL_NAMES
+
+
+def resolve_path(path):
+    if path is None:
+        return None
+    resolved = Path(path)
+    if not resolved.is_absolute():
+        resolved = ROOT_DIR / resolved
+    return resolved
+
+
+def checkpoint_candidates(model_name, model_dir=None):
+    name = normalize_model_name(model_name)
+    if not model_is_trainable(name):
+        return []
+
+    model_root = resolve_path(model_dir or "pytorch_models")
+    report_root = ROOT_DIR / "reporting_pipeline" / "outputs" / "checkpoints"
+    lower = name.lower()
+    report_names = {
+        "Hybrid": "hybrid_separator.pt",
+        "LSTM": "lstm_separator.pt",
+        "Linear": "linear_separator.pt",
+        "IQ_CNN": "iq_cnn_separator.pt",
+        "HTDemucs": "htdemucs_separator.pt",
+    }
+    names = [
+        f"{lower}_model.pt",
+        f"{name}_model.pt",
+        f"{name}.pt",
+        f"{lower}.pt",
+    ]
+    candidates = [model_root / filename for filename in names]
+    report_name = report_names.get(name)
+    if report_name:
+        candidates.append(report_root / report_name)
+    return candidates
+
+
+def default_checkpoint_path(model_name, model_dir=None):
+    candidates = checkpoint_candidates(model_name, model_dir)
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0] if candidates else None
+
+
+def load_model_weights(model, model_path, device):
+    resolved = resolve_path(model_path)
+    if resolved is None:
+        raise ValueError("A model_path is required for learned model evaluation.")
+    if not resolved.exists():
+        raise FileNotFoundError(f"No checkpoint found at {resolved}")
+
+    checkpoint = torch.load(str(resolved), map_location=device)
+    state_dict = checkpoint.get("model") if isinstance(checkpoint, dict) else None
+    if state_dict is None and isinstance(checkpoint, dict):
+        state_dict = checkpoint.get("state_dict")
+    if state_dict is None:
+        state_dict = checkpoint
+
+    if any(str(key).startswith("module.") for key in state_dict.keys()):
+        state_dict = {key.replace("module.", "", 1): value for key, value in state_dict.items()}
+
+    model.load_state_dict(state_dict)
+    return resolved
 
 def variance_to_snr_db(signal_power, variance):
     if variance is None or variance <= 0:
@@ -30,95 +127,212 @@ def variance_to_snr_db(signal_power, variance):
 
 def get_model(config, device):
     """Instantiates the model based on the UI dropdown."""
-    name = config.model_name.upper()
-    if name == "HYBRID": return HybridSeparator(in_ch=8, out_ch=4).to(device) # Add dropout kwarg if supported
-    elif name == "LSTM": return LSTMSeparator(in_ch=8, out_ch=4).to(device)
-    elif name == "LINEAR": return LinearSeparator(in_ch=8, out_ch=4).to(device)
-    elif name == "IQ_CNN": return IQCNNSeparator(in_ch=8, out_ch=4).to(device)
-    elif name == "HTDEMUCS": return RFHTDemucsWrapper(in_ch=8, out_ch=4).to(device)
-    else: raise ValueError(f"Unknown model: {config.model_name}")
+    name = normalize_model_name(config.model_name)
+    in_ch = config.n_rx * 2
+    dropout = config.dropout
+    if name == "FastICA":
+        return FastICABaseline().to(device)
+    if name == "Hybrid":
+        return HybridSeparator(in_ch=in_ch, out_ch=4, dropout=dropout).to(device)
+    if name == "LSTM":
+        return LSTMSeparator(in_ch=in_ch, out_ch=4, dropout=dropout).to(device)
+    if name == "Linear":
+        return LinearSeparator(in_ch=in_ch, out_ch=4).to(device)
+    if name == "IQ_CNN":
+        return IQCNNSeparator(in_ch=in_ch, out_ch=4, dropout=dropout).to(device)
+    if name == "HTDemucs":
+        return RFHTDemucsWrapper(in_ch=in_ch, out_ch=4).to(device)
+    raise ValueError(f"Unknown model: {config.model_name}")
 
-def run_experiment(config: ExperimentConfig, ui_callback=None):
-    """Bridge function called by the Streamlit UI."""
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+def artifact_dir_for(config):
+    save_dir = resolve_path(config.save_dir)
+    if save_dir.name.endswith("-channel"):
+        return save_dir
+    return save_dir / f"{config.n_rx}-channel"
+
+
+def build_signal_configs(config):
     estimated_signal_power = 1.0 + config.alpha**2
-    
-    # 1. Pipeline Setup
-    gen = RFMixtureGenerator(seed=0)
     qpsk_cfg = QPSKConfig(
-        n_symbols=config.n_symbols, samples_per_symbol=config.samples_per_symbol,
-        rolloff=config.rolloff, rrc_span_symbols=config.rrc_span_symbols
+        n_symbols=config.num_symbols,
+        samples_per_symbol=config.samples_per_symbol,
+        rolloff=config.rolloff,
+        rrc_span_symbols=config.rrc_span_symbols,
+        normalize_power=config.normalize_power,
+        num_channels=config.n_rx,
     )
-    # --- Resolve noise parameters cleanly ---
+
     if not config.noise_enabled:
         snr_db = None
-        variance = None
+        sigma2 = None
+    elif config.noise_variance is not None:
+        sigma2 = config.noise_variance
+        snr_db = variance_to_snr_db(estimated_signal_power, sigma2)
     else:
-        if config.noise_variance is not None:
-            variance = config.noise_variance
-            snr_db = variance_to_snr_db(estimated_signal_power, variance)
-        else:
-            snr_db = config.snr_db
-            variance = None
+        snr_db = config.snr_db
+        sigma2 = None
 
     noise_cfg = NoiseConfig(
         enabled=config.noise_enabled,
         snr_db=snr_db,
-        variance=variance
+        sigma2=sigma2,
+    )
+    mix_cfg = MixtureConfig(
+        alpha=config.alpha,
+        snr_db=snr_db,
+        n_rx=config.n_rx,
+        random_phase=config.random_phase,
+        phase_shift_deg=config.phase_shift_deg,
+        interference_phase_shift=config.interference_phase_shift,
+    )
+    return qpsk_cfg, noise_cfg, mix_cfg, snr_db
+
+
+def build_synthetic_loader(config, num_examples, generator, qpsk_cfg, noise_cfg, mix_cfg, shuffle=False):
+    dataset = SyntheticRFDataset(
+        num_examples=num_examples,
+        generator=generator,
+        qpsk_cfg_soi=qpsk_cfg,
+        qpsk_cfg_int=qpsk_cfg,
+        noise_cfg=noise_cfg,
+        mix_cfg=mix_cfg,
+        custom_symbols=config.custom_symbols,
+    )
+    return DataLoader(dataset, batch_size=config.batch_size, shuffle=shuffle)
+
+
+def collect_artifacts(config, model_name):
+    plot_dir = artifact_dir_for(config)
+    snapshot_prefixes = {
+        "Hybrid": "HybridSeparator",
+        "LSTM": "LSTMSeparator",
+        "Linear": "LinearSeparator",
+        "IQ_CNN": "IQCNNSeparator",
+        "HTDemucs": "RFHTDemucsWrapper",
+    }
+    snapshot_prefix = snapshot_prefixes.get(model_name, model_name)
+    return {
+        "plot_dir": str(plot_dir),
+        "data_pipeline": str(plot_dir / "data_pipeline_waves.png"),
+        "separation": str(plot_dir / f"{model_name}_separation.png"),
+        "source_a_symbols": str(plot_dir / f"{model_name}_SourceA_symbol_recovery.png"),
+        "source_b_symbols": str(plot_dir / f"{model_name}_SourceB_symbol_recovery.png"),
+        "training_snapshots": [
+            str(path)
+            for path in sorted(plot_dir.glob(f"{snapshot_prefix}_Train_Epoch_*_separation.png"))
+        ],
+    }
+
+def run_experiment(config: ExperimentConfig, ui_callback=None):
+    """Bridge function called by the Streamlit UI."""
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    config.model_name = normalize_model_name(config.model_name)
+    if config.model_name == "FastICA" and config.n_rx < 2:
+        raise ValueError("FastICA needs at least 2 receive antennas (4 I/Q channels).")
+
+    # 1. Pipeline Setup
+    gen = RFMixtureGenerator(seed=0)
+    qpsk_cfg, noise_cfg, mix_cfg, resolved_snr_db = build_signal_configs(config)
+    plot_dir = artifact_dir_for(config)
+    log_dir = resolve_path(config.log_dir)
+    model_dir = resolve_path(config.model_dir)
+    plotter = BeautifulRFPlotter(save_dir=str(plot_dir))
+    rrc = rrc_taps(
+        sps=config.samples_per_symbol,
+        beta=config.rolloff,
+        span_symbols=config.rrc_span_symbols,
     )
 
-    mix_cfg = MixtureConfig(alpha=config.alpha, snr_db=snr_db)
-
-
-    # 2. Evaluator Setup
-    plotter = BeautifulRFPlotter(save_dir="../visualizations")
-    rrc = rrc_taps(sps=config.samples_per_symbol, beta=config.rolloff, span_symbols=config.rrc_span_symbols)
-    
-    val_ds = SyntheticRFDataset(
-        num_examples=200, generator=gen, qpsk_cfg_soi=qpsk_cfg, 
-        qpsk_cfg_int=qpsk_cfg, noise_cfg=noise_cfg, mix_cfg=mix_cfg
+    val_loader = build_synthetic_loader(
+        config,
+        num_examples=config.val_examples,
+        generator=gen,
+        qpsk_cfg=qpsk_cfg,
+        noise_cfg=noise_cfg,
+        mix_cfg=mix_cfg,
+        shuffle=False,
     )
-    val_loader = DataLoader(val_ds, batch_size=config.batch_size, shuffle=False)
-    
-    evaluator = ModelEvaluator(val_loader, plotter, rrc_taps=rrc, sps=config.samples_per_symbol, device=device, log_dir="../logs")
+
+    if config.mode == "train":
+        train_loader = build_synthetic_loader(
+            config,
+            num_examples=config.train_examples,
+            generator=gen,
+            qpsk_cfg=qpsk_cfg,
+            noise_cfg=noise_cfg,
+            mix_cfg=mix_cfg,
+            shuffle=True,
+        )
+    else:
+        train_loader = val_loader
+
+    evaluator = ModelEvaluator(
+        train_loader=train_loader,
+        val_loader=val_loader,
+        plotter=plotter,
+        rrc_taps=rrc,
+        sps=config.samples_per_symbol,
+        device=device,
+        log_dir=str(log_dir),
+    )
     model = get_model(config, device)
-
     model.ui_callback = ui_callback
 
     # 3. Execution
     if config.mode == "evaluate":
-        model.load_state_dict(torch.load(config.model_path, map_location=device))
+        loaded_checkpoint = None
+        if model_is_trainable(config.model_name):
+            model_path = config.model_path or default_checkpoint_path(config.model_name, model_dir)
+            loaded_checkpoint = load_model_weights(model, model_path, device)
         results = evaluator.run_full_evaluation(model, train_hist=[], val_hist=[], model_name=config.model_name)
-        
+
         # Grab a signal sample for the interactive UI plots
         with torch.no_grad():
             sample_batch = next(iter(val_loader))
-            pred = model(sample_batch["x"].to(device)).cpu().numpy()
-            results["sample_signal"] = pred[0, 0, :] + 1j * pred[0, 1, :] 
+            pred = model(sample_batch["x"].to(device)).detach().cpu().numpy()
+            results["sample_signal"] = pred[0, 0, :] + 1j * pred[0, 1, :]
+        results["model_name"] = config.model_name
+        results["mode"] = "evaluate"
+        results["device"] = device
+        results["n_rx"] = config.n_rx
+        results["snr_db"] = resolved_snr_db
+        results["checkpoint_path"] = str(loaded_checkpoint) if loaded_checkpoint else None
+        results["artifacts"] = collect_artifacts(config, config.model_name)
         return results
 
     elif config.mode == "train":
-        train_ds = SyntheticRFDataset(
-            num_examples=2000, generator=gen, qpsk_cfg_soi=qpsk_cfg, 
-            qpsk_cfg_int=qpsk_cfg, noise_cfg=noise_cfg, mix_cfg=mix_cfg
-        )
-        train_loader = DataLoader(train_ds, batch_size=config.batch_size, shuffle=True)
+        if not model_is_trainable(config.model_name):
+            raise ValueError(f"{config.model_name} is a baseline and does not have trainable weights.")
 
+        model_dir.mkdir(parents=True, exist_ok=True)
+        save_path = model_dir / f"{config.model_name.lower()}_model.pt"
         trained_model, t_hist, v_hist = train_model(
-            model, train_loader, val_loader, plotter, 
-            epochs=config.epochs, device=device, lr=config.lr
-            # Add ui_callback=ui_callback to your train_model signature in train.py if you want live charts!
+            model,
+            train_loader,
+            val_loader,
+            plotter,
+            epochs=config.epochs,
+            device=device,
+            lr=config.lr,
+            save_path=str(save_path),
         )
-        
-        os.makedirs("../pytorch_models", exist_ok=True)
-        torch.save(trained_model.state_dict(), f"../pytorch_models/{config.model_name.lower()}_model.pt")
-        
+
         results = evaluator.run_full_evaluation(trained_model, t_hist, v_hist, config.model_name)
         with torch.no_grad():
             sample_batch = next(iter(val_loader))
-            pred = trained_model(sample_batch["x"].to(device)).cpu().numpy()
-            results["sample_signal"] = pred[0, 0, :] + 1j * pred[0, 1, :] 
+            pred = trained_model(sample_batch["x"].to(device)).detach().cpu().numpy()
+            results["sample_signal"] = pred[0, 0, :] + 1j * pred[0, 1, :]
+        results["model_name"] = config.model_name
+        results["mode"] = "train"
+        results["device"] = device
+        results["n_rx"] = config.n_rx
+        results["snr_db"] = resolved_snr_db
+        results["checkpoint_path"] = str(save_path)
+        results["artifacts"] = collect_artifacts(config, config.model_name)
         return results
+
+    raise ValueError(f"Unsupported experiment mode: {config.mode}")
 
 
 

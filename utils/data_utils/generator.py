@@ -60,6 +60,7 @@ class RFMixtureGenerator:
         qpsk_cfg_int: QPSKConfig,
         noise_cfg: NoiseConfig,
         mix_cfg: MixtureConfig,
+        soi_message: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Method: generate_example
@@ -67,7 +68,7 @@ class RFMixtureGenerator:
                 noise_cf - config parameters for interference signal generation,
                 mix_cfg - config parameters for the mixed signals,
         """
-        s_soi, s_soi_symbols, soi_meta = self.generate_qpsk(qpsk_cfg_soi)
+        s_soi, s_soi_symbols, soi_meta = self.generate_qpsk(qpsk_cfg_soi, message=soi_message)
         s_int, s_int_symbols, int_meta = self.generate_qpsk(qpsk_cfg_int)
 
         # If the two generated waveforms do not have the same length,
@@ -142,7 +143,11 @@ class RFMixtureGenerator:
             total_symbols = cfg.n_symbols
             bits = self.rng.integers(0, 2, size=(2 * total_symbols,), endpoint=False)
         else:
-            bits = self.symbols_to_bits(message)
+            cleaned = message.strip()
+            if cleaned and set(cleaned).issubset({"0", "1"}):
+                bits = np.array([int(bit) for bit in cleaned], dtype=int)
+            else:
+                bits = self.symbols_to_bits(message)
             # make sure even number of bits (QPSK requirement)
             if len(bits) % 2 != 0:
                 bits = np.append(bits, 0)

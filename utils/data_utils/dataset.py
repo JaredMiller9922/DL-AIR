@@ -45,6 +45,7 @@ class SyntheticRFDataset(Dataset):
         qpsk_cfg_int,
         noise_cfg,
         mix_cfg,
+        custom_symbols: Optional[str] = None,
     ):
         self.num_examples = num_examples
         self.generator = generator
@@ -52,6 +53,7 @@ class SyntheticRFDataset(Dataset):
         self.qpsk_cfg_int = qpsk_cfg_int
         self.noise_cfg = noise_cfg
         self.mix_cfg = mix_cfg
+        self.custom_symbols = custom_symbols
 
     def __len__(self) -> int:
         return self.num_examples
@@ -62,6 +64,7 @@ class SyntheticRFDataset(Dataset):
             qpsk_cfg_int=self.qpsk_cfg_int,
             noise_cfg = self.noise_cfg,
             mix_cfg=self.mix_cfg,
+            soi_message=self.custom_symbols,
         )
 
         mixture = ex["mixture"]      # (n_rx, T) complex
@@ -69,7 +72,7 @@ class SyntheticRFDataset(Dataset):
         source_b = ex["source_b"]    # (T,) complex
 
         # 1 channel case
-        if ExperimentConfig.n_rx == 1:
+        if self.mix_cfg.n_rx == 1:
             x = complex_to_2ch(mixture)     # (2*n_rx, T)
         else:
             x = complex_matrix_to_iq_channels(mixture)
