@@ -1,11 +1,11 @@
 {
-    "train_mse": 1.4135515689849854,
-    "train_sdr_db": -4.413912773132324,
-    "train_symbol_accuracy": 0.30091796875000015,
-    "final_mse": 1.4133344739675522,
-    "final_sdr_db": -4.411977231502533,
-    "final_symbol_accuracy": 0.29729492187500006,
-    "val_symbol_accuracy": 0.29729492187500006,
+    "train_mse": 1.2904901963013868,
+    "train_sdr_db": -4.03994791324322,
+    "train_symbol_accuracy": 0.34764999999999996,
+    "final_mse": 1.3000942010145922,
+    "final_sdr_db": -4.0655735822824335,
+    "final_symbol_accuracy": 0.3532875000000001,
+    "val_symbol_accuracy": 0.3532875000000001,
     "train_history": [],
     "val_history": []
 }

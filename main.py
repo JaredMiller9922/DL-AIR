@@ -236,7 +236,7 @@ def build_family_config(config):
     return family_cfg
 
 
-def build_synthetic_loader(config, num_examples, generator, qpsk_cfg, noise_cfg, mix_cfg, shuffle=False):
+def build_source_configs(config):
     source_a_cfg = SourceConfig(
         source_type=config.source_a_type,
         n_symbols=config.num_symbols,
@@ -255,6 +255,11 @@ def build_synthetic_loader(config, num_examples, generator, qpsk_cfg, noise_cfg,
         normalize_power=config.normalize_power,
         num_channels=config.n_rx,
     )
+    return source_a_cfg, source_b_cfg
+
+
+def build_synthetic_loader(config, num_examples, generator, qpsk_cfg, noise_cfg, mix_cfg, shuffle=False):
+    source_a_cfg, source_b_cfg = build_source_configs(config)
     family_cfg = build_family_config(config)
     dataset = SyntheticRFDataset(
         num_examples=num_examples,

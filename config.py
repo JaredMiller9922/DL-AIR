@@ -203,6 +203,15 @@ BENCHMARK_PRESETS = {
 }
 
 
+BENCHMARK_DESCRIPTIONS = {
+    "benchmark_qpsk_baseline": "Original QPSK-vs-QPSK synthetic benchmark with fixed two-receiver phase-only mixing.",
+    "benchmark_modulation_diverse": "Mixed digital-modulation benchmark that samples source/interferer waveform families and random complex mixing.",
+    "benchmark_multichannel_phase_only": "Four-receiver benchmark with structured phase-only mixing and a wider interferer family.",
+    "benchmark_mit_aligned": "MIT-style synthetic mode with four receivers, QPSK SOI, phase-only mixing, and short-frame difficulty sweeps.",
+    "benchmark_interferer_diverse": "QPSK SOI benchmark with a broader interferer set including multitone, colored-noise, chirp, and bursty regimes.",
+}
+
+
 def benchmark_config(name: str, **overrides) -> ExperimentConfig:
     if name not in BENCHMARK_PRESETS:
         raise ValueError(f"Unknown benchmark preset '{name}'. Available: {sorted(BENCHMARK_PRESETS)}")
