@@ -1,0 +1,82 @@
+model,checkpoint_path,n_alpha,n_frames,status,returncode,stdout_tail,stderr_tail,frame_success_rate,mean_ber,n_scored_alpha
+LSTM,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\lstm_model.pt,1,5,ok,0,"--frameLen 4 --setIndex 1 --nFrames 5 --model_name ""LSTM"" --checkpoint_path ""D:/CS 6955/CS-6955/DL-AIR/pytorch_models/lstm_model.pt"" --n_rx 4
+MIT learned inference: model=LSTM, checkpoint=D:\CS 6955\CS-6955\DL-AIR\pytorch_models\lstm_model.pt, MIT n_rx=4, model receivers=2
+Using first 2 of 4 MIT receiver streams for this checkpoint.
+Wrote 10 MIT-compatible separated .iqdata files to ..\sepOutput_learned_LSTM
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame1iqdata
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame1iqdata
+Number of errors 7
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame2iqdata
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame2iqdata
+Number of errors 9
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame3iqdata
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame3iqdata
+Number of errors 11
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame4iqdata
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame4iqdata
+Number of errors 11
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame5iqdata
+Finished reading IQ file ..\sepOutput_learned_LSTM\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame5iqdata
+Number of errors 12
+Saved debug MAT file to ..\debugEval_learned_LSTM\frameLen_4_setIndex_1_alphaIndex_1_debug.mat
+Saved per-frame CSV to ..\debugEval_learned_LSTM\frameLen_4_setIndex_1_alphaIndex_1_perFrame.csv
+Saved per-output CSV to ..\debugEval_learned_LSTM\frameLen_4_setIndex_1_alphaIndex_1_perOutput.csv
+Bit Error Rate is 0.5
+Frame Success Rate is 0
+Saved learned debug run summary to ..\debugEval_learned_LSTM\debug_run_summary.csv
+","error: ignoring const execution_exception& while preparing to exit
+",0.0,0.5,1
+IQ_CNN,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\iq_cnn_model.pt,1,5,ok,0,"-model_name ""IQ_CNN"" --checkpoint_path ""D:/CS 6955/CS-6955/DL-AIR/pytorch_models/iq_cnn_model.pt"" --n_rx 4
+MIT learned inference: model=IQ_CNN, checkpoint=D:\CS 6955\CS-6955\DL-AIR\pytorch_models\iq_cnn_model.pt, MIT n_rx=4, model receivers=2
+Using first 2 of 4 MIT receiver streams for this checkpoint.
+Wrote 10 MIT-compatible separated .iqdata files to ..\sepOutput_learned_IQ_CNN
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame1iqdata
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame1iqdata
+Number of errors 8
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame2iqdata
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame2iqdata
+Number of errors 11
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame3iqdata
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame3iqdata
+Number of errors 11
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame4iqdata
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame4iqdata
+Number of errors 8
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame5iqdata
+Finished reading IQ file ..\sepOutput_learned_IQ_CNN\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame5iqdata
+Number of errors 11
+Saved debug MAT file to ..\debugEval_learned_IQ_CNN\frameLen_4_setIndex_1_alphaIndex_1_debug.mat
+Saved per-frame CSV to ..\debugEval_learned_IQ_CNN\frameLen_4_setIndex_1_alphaIndex_1_perFrame.csv
+Saved per-output CSV to ..\debugEval_learned_IQ_CNN\frameLen_4_setIndex_1_alphaIndex_1_perOutput.csv
+Bit Error Rate is 0.49
+Frame Success Rate is 0
+Saved learned debug run summary to ..\debugEval_learned_IQ_CNN\debug_run_summary.csv
+","error: ignoring const execution_exception& while preparing to exit
+",0.0,0.49,1
+HTDemucs,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\htdemucs_model.pt,1,5,ok,0,"ath ""D:/CS 6955/CS-6955/DL-AIR/pytorch_models/htdemucs_model.pt"" --n_rx 4
+MIT learned inference: model=HTDemucs, checkpoint=D:\CS 6955\CS-6955\DL-AIR\pytorch_models\htdemucs_model.pt, MIT n_rx=4, model receivers=2
+Using first 2 of 4 MIT receiver streams for this checkpoint.
+Wrote 10 MIT-compatible separated .iqdata files to ..\sepOutput_learned_HTDemucs
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame1iqdata
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame1iqdata
+Number of errors 10
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame2iqdata
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame2iqdata
+Number of errors 10
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame3iqdata
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame3iqdata
+Number of errors 4
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame4iqdata
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame4iqdata
+Number of errors 4
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputA_frameLen_4_setIndex_1_alphaIndex_1_frame5iqdata
+Finished reading IQ file ..\sepOutput_learned_HTDemucs\outputB_frameLen_4_setIndex_1_alphaIndex_1_frame5iqdata
+Number of errors 7
+Saved debug MAT file to ..\debugEval_learned_HTDemucs\frameLen_4_setIndex_1_alphaIndex_1_debug.mat
+Saved per-frame CSV to ..\debugEval_learned_HTDemucs\frameLen_4_setIndex_1_alphaIndex_1_perFrame.csv
+Saved per-output CSV to ..\debugEval_learned_HTDemucs\frameLen_4_setIndex_1_alphaIndex_1_perOutput.csv
+Bit Error Rate is 0.35
+Frame Success Rate is 0
+Saved learned debug run summary to ..\debugEval_learned_HTDemucs\debug_run_summary.csv
+","error: ignoring const execution_exception& while preparing to exit
+",0.0,0.35,1

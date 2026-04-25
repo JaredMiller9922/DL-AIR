@@ -1,12 +1,23 @@
 data/
+logs/
+
 mit_challenge/mixtureData
 mit_challenge/sepOutput
+mit_challenge/sepOutput_debug
+mit_challenge/sepOutput_learned_*/
+mit_challenge/debugEval
+mit_challenge/debugEval_learned_*/
 mit_challenge/soiParamFiles
+mit_challenge/dataset/
+mit_challenge/rfchallenge_multichannel_starter-main/mixtureData
+
 reporting_pipeline/outputs/datasets/
 reporting_pipeline/outputs/phase1_fastica
+
 __pycache__/
 *.pyc
 *.pt
+
 Final Report/*.aux
 Final Report/*.bbl
 Final Report/*.blg
@@ -14,3 +25,22 @@ Final Report/*.log
 Final Report/*.out
 Final Report/*.pdf
 Final Report/*.synctex.gz
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles.zip
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams10.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams12.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams128.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams16.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams32.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams4.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams6.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams64.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/soiParams8.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats10.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats12.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats128.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats16.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats32.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats4.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats6.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats64.mat
+mit_challenge/rfchallenge_multichannel_starter-main/soiParamFiles/stats8.mat
