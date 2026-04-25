@@ -43,7 +43,7 @@ class ExperimentConfig:
     # ----- MixtureConfig -------- #
     noise_alpha: float = 0.8
     random_phase: bool = False
-    phase_shift_deg: int = 5
+    phase_shift_deg: int = 10
     interference_phase_shift: int = 0
 
     # --- Data Management ---
