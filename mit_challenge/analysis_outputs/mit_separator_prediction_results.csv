@@ -1,0 +1,15 @@
+scope,task,model,mean_cv_score,std_cv_score,metric,status,mean_rmse
+pooled,success,LDA,0.8605459057071959,0.009337413261651018,accuracy,ok,
+pooled,success,QDA,0.8620347394540943,0.0029776674937965243,accuracy,ok,
+pooled,success,Logistic Regression,0.8550868486352357,0.012613662557954194,accuracy,ok,
+pooled,best_num_errors,Linear Regression,0.7756598935971516,0.014392450196235468,r2,ok,1.8877732248852752
+pooled,best_num_errors,Ridge,0.7742823926275031,0.016243429948883645,r2,ok,1.8933393771587497
+pooled,ber,Linear Regression,0.9957261486691493,0.0005025102495619309,r2,ok,0.01150449381548075
+pooled,ber,Ridge,0.9957659773230174,0.0005203872704475552,r2,ok,0.011449091551517252
+FastICA,success,LDA,0.806,0.014360439485692008,accuracy,ok,
+FastICA,success,QDA,0.79,0.01032795558988647,accuracy,ok,
+FastICA,success,Logistic Regression,0.7233333333333334,0.030184617127124717,accuracy,ok,
+Learned: HTDemucs,success,LDA / QDA / Logistic,,,accuracy,skipped: one-class or too imbalanced,
+Learned: Hybrid,success,LDA / QDA / Logistic,,,accuracy,skipped: one-class or too imbalanced,
+Learned: IQ_CNN,success,LDA / QDA / Logistic,,,accuracy,skipped: one-class or too imbalanced,
+Learned: LSTM,success,LDA / QDA / Logistic,,,accuracy,skipped: one-class or too imbalanced,

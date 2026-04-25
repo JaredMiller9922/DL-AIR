@@ -1,0 +1,5 @@
+method,status,n_clusters
+kmeans,"skipped: ""Column(s) ['best_num_errors', 'success'] do not exist""",0
+gmm,"skipped: ""Column(s) ['best_num_errors', 'success'] do not exist""",0
+agglomerative,"skipped: ""Column(s) ['best_num_errors', 'success'] do not exist""",0
+dbscan,skipped: returned one cluster only,0

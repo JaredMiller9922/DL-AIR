@@ -1,0 +1,7 @@
+benchmark,model,model_type,mode,n_rx,num_examples,mse,sdr_db,symbol_accuracy,checkpoint_path,status
+benchmark_modulation_diverse,FastICA,classical_separator,evaluate,2,4,1.24807408452034,-3.8856866359710693,,,ok
+benchmark_modulation_diverse,Hybrid,neural,evaluate,2,4,0.6253570914268494,-0.9166556410491467,,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\hybrid_model.pt,ok
+benchmark_modulation_diverse,LSTM,neural,evaluate,2,4,0.5983007252216339,-0.7233718931674957,,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\lstm_model.pt,ok
+benchmark_modulation_diverse,Linear,neural,evaluate,2,4,,,,,missing_checkpoint
+benchmark_modulation_diverse,IQ_CNN,neural,evaluate,2,4,0.659113734960556,-1.1280649080872536,,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\iq_cnn_model.pt,ok
+benchmark_modulation_diverse,HTDemucs,neural,evaluate,2,4,0.5546436160802841,-0.4516414403915405,,D:\CS 6955\CS-6955\DL-AIR\pytorch_models\htdemucs_model.pt,ok
